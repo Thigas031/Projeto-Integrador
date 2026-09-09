@@ -3,50 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Chaves</title>
+    <title>Lista de chaves</title>
+    <link rel="stylesheet" href="../css/listadechaves.css">
 </head>
 <body>
-    <aside>
-        <div>
-            <span>Menu</div>span>
-        </div>
+    <aside class="menu-lateral">
+        <button class="botao-menu" type="button" aria-label="Abrir menu">
+            <span class="icone-menu" aria-hidden="true">Icone menu</span>
+        </button>
 
         <nav>
-            <a href="">Dashboard</a>
-            <a href="">Chaves</a>
-            <a href="">Devolução</a>
-            <a href="">Usuários</a>
-            <a href="">Salas</a>
-            <a href="">Relatórios</a>
-            <a href="">Configurações</a>
+            <a href="#inicio">
+                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
+                Início
+            </a>
+            <a href="listadechaves.html">
+                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
+                Chaves
+            </a>
+            <a href="#retiradas">
+                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
+                Retiradas
+            </a>
+            <a href="#usuarios">
+                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
+                Usuários
+            </a>
+            <a href="#salas">
+                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
+                Salas
+            </a>
+            <a href="#relatorios">
+                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
+                Relatórios
+            </a>
+            <a href="#configuracoes">
+                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
+                Configurações
+            </a>
         </nav>
-        <a href="">Sair</a>
+
+        <button class="botao-sair" type="button">Sair</button>
     </aside>
 
     <main>
-        <header>
-            <div>
-                <span>Buscar</span>
-                <input type="text" placeholder="Buscar...">
-            </div>
-            <button>
-                + Nova chave
-            </button>
+        <header class="cabecalho">
+            <form id="form-busca">
+                <label for="busca">Pesquisar sala ou chave</label>
+                <input type="search" id="busca" name="busca" placeholder="Pesquisar sala ou chave...">
+            </form>
+
+            <button id="nova-chave" type="button">Nova chave</button>
         </header>
 
-        <section>
-            <table>
+        <section class="lista-chaves">
+            <h1>Lista de chaves</h1>
+
+            <table id="tabela-chaves">
                 <thead>
                     <tr>
                         <th>Sala</th>
-                        <th>Numero da chave</th>
+                        <th>Número da chave</th>
                         <th>Status</th>
-                        <th>Responsavel</th>
-                        <th></th>
+                        <th>Responsável</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
+                <tbody id="corpo-tabela">
+                    <tr data-chave="1">
+                        <td>Sala 01</td>
+                        <td>001</td>
+                        <td><span class="disponivel">Disponível</span></td>
+                        <td>-</td>
+                        <td><button type="button" aria-label="Ações da chave 001">menu<span class="icone-acoes" aria-hidden="true"></span></button></td>
+                    </tr>
+                    <tr data-chave="2">
+                        <td>Sala 02</td>
+                        <td>002</td>
+                        <td><span class="emprestada">Emprestada</span></td>
+                        <td>Carlos Nogueira</td>
+                        <td><button type="button" aria-label="Ações da chave 002">menu<span class="icone-acoes" aria-hidden="true"></span></button></td>
+                    </tr>
+                    <tr data-chave="3">
+                        <td>Laboratório</td>
+                        <td>003</td>
+                        <td><span class="atrasada">Atrasada</span></td>
+                        <td>Vinícius Dantos</td>
+                        <td><button type="button" aria-label="Ações da chave 003">menu<span class="icone-acoes" aria-hidden="true"></span></button></td>
+                    </tr>
+                    <tr data-chave="4">
+                        <td>Sala 01</td>
+                        <td>004</td>
+                        <td><span class="disponivel">Disponível</span></td>
+                        <td>-</td>
+                        <td><button type="button" aria-label="Ações da chave 004">menu<span class="icone-acoes" aria-hidden="true"></span></button></td>
+                    </tr>
+                    <tr data-chave="5">
+                        <td>Inovaê</td>
+                        <td>005</td>
+                        <td><span class="emprestada">Emprestada</span></td>
+                        <td>Jamilton Neto</td>
+                        <td><button type="button" aria-label="Ações da chave 005">menu<span class="icone-acoes" aria-hidden="true"></span></button></td>
+                    </tr>
+                </tbody>
             </table>
+
+            <div class="rodape-tabela">
+                <p id="quantidade">Mostrando 1 a 5 chaves de 25</p>
+                <nav class="paginacao" aria-label="Paginação">
+                    <button type="button" aria-label="Página anterior">Anterior</button>
+                    <button type="button">1</button>
+                    <button type="button">2</button>
+                    <button type="button">3</button>
+                    <button type="button">4</button>
+                    <button type="button">5</button>
+                    <button type="button" aria-label="Próxima página">Próxima</button>
+                </nav>
+            </div>
+        </section>
+
+        <section class="acoes-rapidas">
+            <button id="retirar-chave" type="button">
+                <span class="icone-retirar" aria-hidden="true"></span>
+                <strong>Retirar a chave</strong>
+                <small>Registrar a retirada de uma chave</small>
+            </button>
+            <button id="devolver-chave" type="button">
+                <span class="icone-devolver" aria-hidden="true"></span>
+                <strong>Devolver chave</strong>
+                <small>Registrar a devolução de uma chave</small>
+            </button>
         </section>
     </main>
+
+    <nav class="menu-mobile" aria-label="Menu mobile">
+        <button type="button" aria-label="Abrir menu"><span class="icone-menu" aria-hidden="true"></span></button>
+        <a href="listadechaves.html" aria-label="Chaves"><span class="icone-chave" aria-hidden="true"></span></a>
+        <a href="#inicio" aria-label="Início"><span class="icone-inicio" aria-hidden="true"></span></a>
+        <a href="#usuarios" aria-label="Usuários"><span class="icone-usuario" aria-hidden="true"></span></a>
+        <a href="#configuracoes" aria-label="Configurações"><span class="icone-configuracoes" aria-hidden="true"></span></a>
+    </nav>
+
+    <script src="../js/listadechaves.js"></script>
 </body>
 </html>
