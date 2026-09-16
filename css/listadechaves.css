@@ -1,8 +1,3 @@
-/* =========================================================
-   Lista de chaves — melhoria visual (somente front-end)
-   Estrutura HTML original preservada.
-   ========================================================= */
-
 :root {
     --azul-950: #07325a;
     --azul-900: #064b82;
@@ -67,9 +62,6 @@ input:focus-visible {
     outline-offset: 2px;
 }
 
-/* ========================
-   Menu lateral
-   ======================== */
 .menu-lateral {
     position: fixed;
     inset: 0 auto 0 0;
@@ -200,9 +192,6 @@ input:focus-visible {
     background: rgba(255,255,255,0.10);
 }
 
-/* ========================
-   Conteúdo
-   ======================== */
 main {
     margin-left: 78px;
     padding: 48px clamp(24px, 4vw, 64px) 64px;
@@ -287,9 +276,6 @@ main {
     transform: translateY(0);
 }
 
-/* ========================
-   Lista / tabela
-   ======================== */
 .lista-chaves {
     max-width: 1280px;
     margin: 0 auto;
@@ -463,9 +449,6 @@ main {
     color: var(--azul-800);
 }
 
-/* ========================
-   Ações rápidas
-   ======================== */
 .acoes-rapidas {
     max-width: 1280px;
     margin: 22px auto 0;
@@ -534,16 +517,10 @@ main {
     line-height: 1.35;
 }
 
-/* ========================
-   Menu mobile
-   ======================== */
 .menu-mobile {
     display: none;
 }
 
-/* ========================
-   Responsividade
-   ======================== */
 @media (max-width: 900px) {
     .menu-lateral {
         display: none;
