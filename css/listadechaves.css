@@ -517,98 +517,206 @@ main {
     line-height: 1.35;
 }
 
-.menu-mobile {
-    display: none;
-}
-
 @media (max-width: 900px) {
     .menu-lateral {
+        position: fixed;
+        z-index: 30;
+        inset: auto 0 0;
+        width: 100%;
+        height: clamp(60px, 9vh, 67px);
+        padding: 0 13px env(safe-area-inset-bottom);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        overflow: visible;
+        background: var(--azul-800);
+        box-shadow: none;
+    }
+
+    .menu-lateral:hover,
+    .menu-lateral:focus-within {
+        width: 100%;
+    }
+
+    .menu-lateral nav {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    .menu-lateral nav a,
+    .menu-lateral:hover nav a,
+    .menu-lateral:focus-within nav a {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        min-height: 40px;
+        padding: 0;
+        border-radius: 10px;
+        font-size: 0;
+    }
+
+    .menu-lateral nav img {
+        width: 28px;
+        height: 28px;
+        margin: 0;
+        object-fit: contain;
+    }
+
+    .botao-menu {
+        flex: 0 0 40px;
+        width: 40px;
+        min-height: 40px;
+        margin: 0;
+    }
+
+    /* Retiradas, Salas e Relatórios voltarão ao menu mobile quando o botão de menu receber sua função. */
+    .menu-lateral nav a:nth-child(3),
+    .menu-lateral nav a:nth-child(5),
+    .menu-lateral nav a:nth-child(6),
+    .botao-sair {
         display: none;
+    }
+
+    .menu-lateral nav a:hover,
+    .menu-lateral nav a[href="listadechaves.html"] {
+        background: rgba(255, 255, 255, 0.12);
     }
 
     main {
         margin-left: 0;
-        padding: 28px 20px 104px;
-    }
-
-    .menu-mobile {
-        position: fixed;
-        z-index: 30;
-        left: 50%;
-        bottom: 16px;
-        width: min(calc(100% - 28px), 520px);
-        height: 64px;
-        padding: 8px;
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 5px;
-        transform: translateX(-50%);
-        border: 1px solid rgba(229,234,240,0.9);
-        border-radius: 18px;
-        background: rgba(255,255,255,0.92);
-        box-shadow: 0 16px 40px rgba(16,24,40,0.16);
-        backdrop-filter: blur(14px);
-    }
-
-    .menu-mobile a,
-    .menu-mobile button {
-        display: grid;
-        place-items: center;
-        border: 0;
-        border-radius: 12px;
-        background: transparent;
-        color: var(--texto-suave);
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    .menu-mobile a:hover,
-    .menu-mobile button:hover,
-    .menu-mobile a[href="listadechaves.html"] {
-        color: var(--azul-800);
-        background: var(--azul-50);
-    }
-
-    .menu-mobile .icone-chave::before { content: "⌑"; }
-    .menu-mobile .icone-inicio::before { content: "⌂"; }
-    .menu-mobile .icone-usuario::before { content: "♙"; }
-    .menu-mobile .icone-configuracoes::before { content: "⚙"; }
-
-    .menu-mobile .icone-chave::before,
-    .menu-mobile .icone-inicio::before,
-    .menu-mobile .icone-usuario::before,
-    .menu-mobile .icone-configuracoes::before {
-        font-size: 22px;
-        line-height: 1;
+        padding: 28px 20px calc(88px + env(safe-area-inset-bottom));
     }
 }
 
 @media (max-width: 720px) {
     .cabecalho {
-        align-items: stretch;
-        flex-direction: column;
+        align-items: end;
+        flex-direction: row;
+        gap: 16px;
     }
 
-    #form-busca,
-    #nova-chave {
+    #form-busca {
         width: 100%;
     }
 
-    .lista-chaves {
-        overflow-x: auto;
+    #form-busca label,
+    .lista-chaves h1 {
+        display: none;
     }
 
-    .lista-chaves h1,
-    .rodape-tabela {
-        min-width: 700px;
+    #busca {
+        height: 47px;
+        padding-left: 44px;
+        font-size: 0;
+    }
+
+    #busca::placeholder {
+        font-size: 16px;
+    }
+
+    #nova-chave {
+        width: 46px;
+        min-width: 46px;
+        height: 42px;
+        min-height: 42px;
+        padding: 0;
+        font-size: 0;
+    }
+
+    #nova-chave::before {
+        margin: 0;
+        font-size: 28px;
+    }
+
+    .lista-chaves {
+        overflow: hidden;
+        border-radius: 10px;
     }
 
     #tabela-chaves {
-        min-width: 700px;
+        table-layout: fixed;
+    }
+
+    #tabela-chaves th,
+    #tabela-chaves td {
+        padding: 16px 5px;
+        font-size: 11px;
+        line-height: 1.2;
+        text-align: left;
+        overflow-wrap: normal;
+        word-break: normal;
+    }
+
+    #tabela-chaves th {
+        padding-block: 20px;
+        font-size: 12px;
+        text-transform: none;
+        letter-spacing: 0;
+        color: var(--texto);
+        background: #c9cbcd;
+    }
+
+    #tabela-chaves th:nth-child(1), #tabela-chaves td:nth-child(1) { width: 26%; padding-left: 13px; }
+    #tabela-chaves th:nth-child(2), #tabela-chaves td:nth-child(2) { width: 18%; }
+    #tabela-chaves th:nth-child(3), #tabela-chaves td:nth-child(3) { width: 27%; }
+    #tabela-chaves th:nth-child(4), #tabela-chaves td:nth-child(4) { width: 21%; }
+    #tabela-chaves th:nth-child(5), #tabela-chaves td:nth-child(5) { width: 8%; }
+
+    #tabela-chaves th:last-child {
+        font-size: 0;
+    }
+
+    #tabela-chaves th:nth-child(4) {
+        font-size: 10px;
+    }
+
+    #tabela-chaves td:last-child {
+        padding: 0;
+    }
+
+    .disponivel,
+    .emprestada,
+    .atrasada {
+        justify-content: center;
+        width: 100%;
+        padding: 7px 3px;
+        font-size: 10px;
+    }
+
+    .disponivel { color: #1c9616; background: #a6d27f; }
+    .emprestada { color: #ad7815; background: #efe27c; }
+    .atrasada { color: #961616; background: #ee9f9f; }
+
+    .disponivel::before,
+    .emprestada::before,
+    .atrasada::before {
+        display: none;
     }
 
     .acoes-rapidas {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .acoes-rapidas button {
+        min-height: 75px;
+        padding: 10px;
+        grid-template-columns: 46px 1fr;
+        grid-template-rows: 1fr;
+        column-gap: 7px;
+    }
+
+    .acoes-rapidas small {
+        display: none;
+    }
+
+    .acoes-rapidas strong {
+        align-self: center;
+        font-size: 14px;
     }
 }
 
