@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retirada de Chave</title>
+
+    <link rel="stylesheet" href="../css/retiradadechaves.css">
+
+    <!-- Ícones -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- =========================
+         MENU LATERAL
+    ========================== -->
+    <aside class="sidebar">
+
+        <div class="menu-top">
+            <button class="menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <nav class="menu">
+
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-house"></i>
+            </a>
+
+            <a href="#" class="menu-item active">
+                <i class="fa-solid fa-key"></i>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-door-open"></i>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-users"></i>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-calendar"></i>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-chart-column"></i>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-gear"></i>
+            </a>
+
+        </nav>
+
+        <div class="menu-bottom">
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </a>
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         CONTEÚDO
+    ========================== -->
+    <main class="main">
+
+        <!-- TÍTULO -->
+        <div class="page-header">
+
+            <div>
+                <h1>Retirada de Chave</h1>
+
+                <p>
+                    Preencha os dados para registrar a retirada da chave.
+                </p>
+            </div>
+
+            <div class="header-icon">
+                <i class="fa-solid fa-key"></i>
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             CARD DO FORMULÁRIO
+        ========================== -->
+        <section class="card">
+
+            <div class="card-title">
+                <h2>Dados da retirada</h2>
+            </div>
+
+
+            <form>
+
+                <div class="form-grid">
+
+                    <!-- SALA -->
+                    <div class="form-group">
+
+                        <label for="sala">
+                            Sala
+                        </label>
+
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-door-open"></i>
+
+                            <select id="sala">
+
+                                <option value="">
+                                    Selecione uma sala
+                                </option>
+
+                                <option>
+                                    Sala 01
+                                </option>
+
+                                <option>
+                                    Sala 02
+                                </option>
+
+                                <option>
+                                    Laboratório
+                                </option>
+
+                                <option>
+                                    Inovaê
+                                </option>
+
+                            </select>
+                        </div>
+
+                    </div>
+
+
+                    <!-- USUÁRIO -->
+                    <div class="form-group">
+
+                        <label for="usuario">
+                            Usuário
+                        </label>
+
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-user"></i>
+
+                            <select id="usuario">
+
+                                <option value="">
+                                    Selecione o usuário
+                                </option>
+
+                                <option>
+                                    Professor Taty
+                                </option>
+
+                                <option>
+                                    Carlos Nogueira
+                                </option>
+
+                                <option>
+                                    Vinícius Dantos
+                                </option>
+
+                                <option>
+                                    Jamilton Neto
+                                </option>
+
+                            </select>
+                        </div>
+
+                    </div>
+
+
+                    <!-- NÚMERO DA CHAVE -->
+                    <div class="form-group">
+
+                        <label for="chave">
+                            Número da chave
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-key"></i>
+
+                            <select id="chave">
+
+                                <option value="">
+                                    Selecione a chave
+                                </option>
+
+                                <option>
+                                    001
+                                </option>
+
+                                <option>
+                                    002
+                                </option>
+
+                                <option>
+                                    003
+                                </option>
+
+                                <option>
+                                    004
+                                </option>
+
+                                <option>
+                                    005
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DATA -->
+                    <div class="form-group">
+
+                        <label for="data">
+                            Data
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-calendar"></i>
+
+                            <input
+                                type="date"
+                                id="data"
+                                value="2026-08-18"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- HORA -->
+                    <div class="form-group">
+
+                        <label for="hora">
+                            Hora
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-clock"></i>
+
+                            <input
+                                type="time"
+                                id="hora"
+                                value="13:30"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- OBSERVAÇÕES -->
+                <div class="form-group observacoes">
+
+                    <label for="observacoes">
+                        Observações
+                    </label>
+
+                    <textarea
+                        id="observacoes"
+                        placeholder="Digite alguma observação..."
+                    ></textarea>
+
+                </div>
+
+
+                <!-- BOTÕES -->
+                <div class="form-actions">
+
+                    <button
+                        type="button"
+                        class="btn btn-cancelar"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-confirmar"
+                    >
+                        <i class="fa-solid fa-check"></i>
+
+                        Confirmar retirada
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
