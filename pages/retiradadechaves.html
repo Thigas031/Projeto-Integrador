@@ -6,6 +6,7 @@
     <title>Retirada de Chave</title>
 
     <link rel="stylesheet" href="../css/retiradadechaves.css">
+    <link rel="stylesheet" href="../css/menu-lateral.css">
 
     <!-- Ícones -->
     <link
@@ -21,52 +22,22 @@
     <!-- =========================
          MENU LATERAL
     ========================== -->
-    <aside class="sidebar">
+    <aside class="menu-lateral">
+        <button class="botao-menu" type="button" aria-label="Abrir menu">
+            <span class="icone-menu" aria-hidden="true">Icone menu</span>
+        </button>
 
-        <div class="menu-top">
-            <button class="menu-toggle">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-        </div>
-
-        <nav class="menu">
-
-            <a href="#" class="menu-item">
-                <i class="fa-solid fa-house"></i>
-            </a>
-
-            <a href="#" class="menu-item active">
-                <i class="fa-solid fa-key"></i>
-            </a>
-
-            <a href="#" class="menu-item">
-                <i class="fa-solid fa-door-open"></i>
-            </a>
-
-            <a href="#" class="menu-item">
-                <i class="fa-solid fa-users"></i>
-            </a>
-
-            <a href="#" class="menu-item">
-                <i class="fa-solid fa-calendar"></i>
-            </a>
-
-            <a href="#" class="menu-item">
-                <i class="fa-solid fa-chart-column"></i>
-            </a>
-
-            <a href="#" class="menu-item">
-                <i class="fa-solid fa-gear"></i>
-            </a>
-
+        <nav aria-label="Navegação principal">
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Início</a>
+            <a href="#" aria-current="page"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Chaves</a>
+            <a href="#" data-role="porteiro"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Retiradas</a>
+            <a href="#" data-role="gerente" data-permission="gerenciar-usuarios"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Usuários</a>
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Salas</a>
+            <a href="#" data-role="gerente"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Relatórios</a>
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Configurações</a>
         </nav>
 
-        <div class="menu-bottom">
-            <a href="#" class="menu-item">
-                <i class="fa-solid fa-right-from-bracket"></i>
-            </a>
-        </div>
-
+        <button class="botao-sair" type="button">Sair</button>
     </aside>
 
 

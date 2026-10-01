@@ -1,0 +1,141 @@
+/*
+ * Estilo oficial do menu lateral.
+ */
+.menu-lateral {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 20;
+    width: 78px;
+    height: 100vh;
+    padding: 28px 12px;
+    display: flex;
+    flex-direction: column;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--azul-900, #064b82);
+    box-shadow: 8px 0 30px rgba(7, 50, 90, 0.12);
+    overflow: hidden;
+    transition: width 260ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.menu-lateral:hover,
+.menu-lateral:focus-within { width: 230px; }
+
+.botao-menu,
+.botao-sair {
+    border: 0;
+    background: transparent;
+    color: var(--branco, #ffffff);
+    cursor: pointer;
+}
+
+.botao-menu {
+    width: 48px;
+    min-height: 44px;
+    margin: 0 3px 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+}
+
+.botao-menu:hover { background: rgba(255,255,255,0.10); }
+.icone-menu { font-size: 0; }
+.icone-menu::before { content: "\2630"; font-size: 24px; line-height: 1; }
+
+.menu-lateral nav { display: grid; gap: 7px; }
+
+.menu-lateral nav a {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 10px 13px;
+    border-radius: 12px;
+    color: rgba(255,255,255,0.80);
+    text-decoration: none;
+    white-space: nowrap;
+    font-size: 0;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.menu-lateral nav img {
+    width: 23px;
+    height: 23px;
+    flex: 0 0 23px;
+    margin-right: 16px;
+    object-fit: contain;
+    vertical-align: middle;
+    filter: brightness(0) invert(1);
+    opacity: 0.78;
+}
+
+.menu-lateral:hover nav a,
+.menu-lateral:focus-within nav a { font-size: 15px; }
+
+.menu-lateral nav a:hover,
+.menu-lateral nav a[aria-current="page"] {
+    color: var(--branco, #ffffff);
+    background: rgba(255,255,255,0.12);
+}
+
+.menu-lateral nav a:hover img,
+.menu-lateral nav a[aria-current="page"] img { opacity: 1; }
+
+.botao-sair {
+    position: absolute;
+    left: 15px;
+    bottom: 28px;
+    min-width: 48px;
+    height: 44px;
+    padding: 0 14px;
+    border-radius: 12px;
+    color: rgba(255,255,255,0.82);
+    font-size: 0;
+    text-align: left;
+}
+
+.botao-sair::before {
+    content: "\21aa";
+    display: inline-block;
+    width: 24px;
+    font-size: 22px;
+    vertical-align: middle;
+}
+
+.menu-lateral:hover .botao-sair,
+.menu-lateral:focus-within .botao-sair { width: calc(100% - 30px); font-size: 14px; font-weight: 600; }
+
+.botao-sair:hover { color: var(--branco, #ffffff); background: rgba(255,255,255,0.10); }
+
+@media (max-width: 900px) {
+    .menu-lateral {
+        position: fixed;
+        z-index: 30;
+        inset: auto 0 0;
+        width: 100%;
+        height: clamp(60px, 9vh, 67px);
+        padding: 0 13px env(safe-area-inset-bottom);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        overflow: visible;
+        background: var(--azul-800, #075d9e);
+        box-shadow: none;
+    }
+
+    .menu-lateral:hover,
+    .menu-lateral:focus-within { width: 100%; }
+
+    .menu-lateral nav { flex: 1; display: flex; align-items: center; justify-content: space-around; }
+    .menu-lateral nav a,
+    .menu-lateral:hover nav a,
+    .menu-lateral:focus-within nav a { display: grid; place-items: center; width: 40px; height: 40px; min-height: 40px; padding: 0; border-radius: 10px; font-size: 0; }
+    .menu-lateral nav img { width: 28px; height: 28px; margin: 0; object-fit: contain; }
+    .botao-menu { flex: 0 0 40px; width: 40px; min-height: 40px; margin: 0; }
+    .menu-lateral nav a:nth-child(3),
+    .menu-lateral nav a:nth-child(5),
+    .menu-lateral nav a:nth-child(6),
+    .botao-sair { display: none; }
+    .menu-lateral nav a:hover,
+    .menu-lateral nav a[href="listadechaves.html"] { background: rgba(255, 255, 255, 0.12); }
+}
