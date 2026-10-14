@@ -8,44 +8,7 @@
     <link rel="stylesheet" href="../css/listadechaves.css">
 </head>
 <body>
-    <aside class="menu-lateral">
-        <button class="botao-menu" type="button" aria-label="Abrir menu">
-            <span class="icone-menu" aria-hidden="true">Icone menu</span>
-        </button>
-
-        <nav>
-            <a href="#inicio">
-                <img src="https://cdn-icons-png.    flaticon.com/512/25/25694.png" alt="">
-                Início
-            </a>
-            <a href="listadechaves.html" aria-current="page">
-                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
-                Chaves
-            </a>
-            <a href="#retiradas" data-role="porteiro">
-                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
-                Retiradas
-            </a>
-            <a href="#usuarios" data-role="gerente" data-permission="gerenciar-usuarios">
-                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
-                Usuários
-            </a>
-            <a href="#salas">
-                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
-                Salas
-            </a>
-            <a href="#relatorios" data-role="gerente">
-                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
-                Relatórios
-            </a>
-            <a href="#configuracoes">
-                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
-                Configurações
-            </a>
-        </nav>
-
-        <button class="botao-sair" type="button">Sair</button>
-    </aside>
+    <div id="menu-lateral-container" data-page="lista-chaves" data-menu-url="menu-lateral.html"></div>
 
     <main>
         <header class="cabecalho">
@@ -76,35 +39,35 @@
                         <td>001</td>
                         <td><span class="disponivel">Disponível</span></td>
                         <td>-</td>
-                        <td><button type="button" aria-label="Ações da chave 001">menu<span class="icone-acoes" aria-hidden="true"></span></button></td>
+                        <td><button type="button" aria-label="Ações da chave 001">menu<span class="icone-acoes" aria-hidden="true"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt=""></span></button></td>
                     </tr>
                     <tr data-chave="2">
                         <td>Sala 02</td>
                         <td>002</td>
                         <td><span class="emprestada">Emprestada</span></td>
                         <td>Carlos Nogueira</td>
-                        <td><button type="button" aria-label="Ações da chave 002">menu<span class="icone-acoes" aria-hidden="true"></span></button></td>
+                        <td><button type="button" aria-label="Ações da chave 002">menu<span class="icone-acoes" aria-hidden="true"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt=""></span></button></td>
                     </tr>
                     <tr data-chave="3">
                         <td>Laboratório</td>
                         <td>003</td>
                         <td><span class="atrasada">Atrasada</span></td>
                         <td>Vinícius Dantos</td>
-                        <td><button type="button" aria-label="Ações da chave 003">menu<span class="icone-acoes" aria-hidden="true"></span></button></td>
+                        <td><button type="button" aria-label="Ações da chave 003">menu<span class="icone-acoes" aria-hidden="true"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt=""></span></button></td>
                     </tr>
                     <tr data-chave="4">
                         <td>Sala 01</td>
                         <td>004</td>
                         <td><span class="disponivel">Disponível</span></td>
                         <td>-</td>
-                        <td><button type="button" aria-label="Ações da chave 004">menu<span class="icone-acoes" aria-hidden="true"></span></button></td>
+                        <td><button type="button" aria-label="Ações da chave 004">menu<span class="icone-acoes" aria-hidden="true"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt=""></span></button></td>
                     </tr>
                     <tr data-chave="5">
                         <td>Inovaê</td>
                         <td>005</td>
                         <td><span class="emprestada">Emprestada</span></td>
                         <td>Jamilton Neto</td>
-                        <td><button type="button" aria-label="Ações da chave 005">menu<span class="icone-acoes" aria-hidden="true"></span></button></td>
+                        <td><button type="button" aria-label="Ações da chave 005">menu<span class="icone-acoes" aria-hidden="true"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt=""></span></button></td>
                     </tr>
                 </tbody>
             </table>
@@ -124,19 +87,20 @@
         </section>
 
         <section class="acoes-rapidas">
-            <button id="retirar-chave" type="button">
-                <span class="icone-retirar" aria-hidden="true"></span>
+            <button id="retirar-chave" type="button" onclick="window.location.href='retiradadechaves.html'">
+                <span class="icone-retirar" aria-hidden="true"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt=""></span>
                 <strong>Retirar a chave</strong>
                 <small>Registrar a retirada de uma chave</small>
             </button>
             <button id="devolver-chave" type="button">
-                <span class="icone-devolver" aria-hidden="true"></span>
+                <span class="icone-devolver" aria-hidden="true"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt=""></span>
                 <strong>Devolver chave</strong>
                 <small>Registrar a devolução de uma chave</small>
             </button>
         </section>
     </main>
 
+    <script src="../js/menu-lateral.js" defer></script>
     <script src="../js/listadechaves.js"></script>
 </body>
 </html>

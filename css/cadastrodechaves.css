@@ -79,11 +79,16 @@ main {
 
 .lista-chaves h1 {
     padding: 24px 26px 20px;
-    border-bottom: 1px solid var(--borda);xto);
+    border-bottom: 1px solid var(--borda);
     font-size: clamp(22px, 2vw, 28px);
     line-height: 1.2;
     letter-spacing: -0.03em;
 }
+h2{
+    font-size: 32px;
+    border-bottom: 1px solid var(--borda);
+}
+
 
 .cabecalho {
     max-width: 1280px;
@@ -130,4 +135,13 @@ main {
     border-color: var(--azul-600);
     box-shadow: 0 0 0 4px rgba(11, 132, 214, 0.10), var(--sombra-sm);
     outline: 0;
+}
+
+h3 {
+    position: relative;
+    right: 1157px;
+    top: 40px;
+    border-bottom: 1px solid var(--borda);
+    font-size: 32px;
+    line-height: 1.2;
 }

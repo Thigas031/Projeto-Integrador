@@ -72,12 +72,14 @@
 .menu-lateral:focus-within nav a { font-size: 15px; }
 
 .menu-lateral nav a:hover,
+.menu-lateral nav a.active,
 .menu-lateral nav a[aria-current="page"] {
     color: var(--branco, #ffffff);
     background: rgba(255,255,255,0.12);
 }
 
 .menu-lateral nav a:hover img,
+.menu-lateral nav a.active img,
 .menu-lateral nav a[aria-current="page"] img { opacity: 1; }
 
 .botao-sair {
@@ -106,6 +108,21 @@
 
 .botao-sair:hover { color: var(--branco, #ffffff); background: rgba(255,255,255,0.10); }
 
+@media (min-width: 901px) {
+    .menu-lateral:not(:hover):not(:focus-within) nav a {
+        width: 48px;
+        height: 48px;
+        min-height: 48px;
+        align-self: center;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .menu-lateral:not(:hover):not(:focus-within) nav img {
+        margin-right: 0;
+    }
+}
+
 @media (max-width: 900px) {
     .menu-lateral {
         position: fixed;
@@ -132,10 +149,10 @@
     .menu-lateral:focus-within nav a { display: grid; place-items: center; width: 40px; height: 40px; min-height: 40px; padding: 0; border-radius: 10px; font-size: 0; }
     .menu-lateral nav img { width: 28px; height: 28px; margin: 0; object-fit: contain; }
     .botao-menu { flex: 0 0 40px; width: 40px; min-height: 40px; margin: 0; }
-    .menu-lateral nav a:nth-child(3),
+    .menu-lateral:not([data-page="retirada-chaves"]) nav a:nth-child(3),
     .menu-lateral nav a:nth-child(5),
     .menu-lateral nav a:nth-child(6),
     .botao-sair { display: none; }
     .menu-lateral nav a:hover,
-    .menu-lateral nav a[href="listadechaves.html"] { background: rgba(255, 255, 255, 0.12); }
+    .menu-lateral nav a.active { background: rgba(255, 255, 255, 0.12); }
 }

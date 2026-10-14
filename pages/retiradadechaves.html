@@ -18,27 +18,7 @@
 <body>
 
 <div class="app">
-
-    <!-- =========================
-         MENU LATERAL
-    ========================== -->
-    <aside class="menu-lateral">
-        <button class="botao-menu" type="button" aria-label="Abrir menu">
-            <span class="icone-menu" aria-hidden="true">Icone menu</span>
-        </button>
-
-        <nav aria-label="Navegação principal">
-            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Início</a>
-            <a href="#" aria-current="page"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Chaves</a>
-            <a href="#" data-role="porteiro"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Retiradas</a>
-            <a href="#" data-role="gerente" data-permission="gerenciar-usuarios"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Usuários</a>
-            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Salas</a>
-            <a href="#" data-role="gerente"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Relatórios</a>
-            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Configurações</a>
-        </nav>
-
-        <button class="botao-sair" type="button">Sair</button>
-    </aside>
+    <div id="menu-lateral-container" data-page="retirada-chaves" data-menu-url="menu-lateral.html"></div>
 
 
     <!-- =========================
@@ -58,7 +38,7 @@
             </div>
 
             <div class="header-icon">
-                <i class="fa-solid fa-key"></i>
+                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
             </div>
 
         </div>
@@ -288,5 +268,6 @@
 
 </div>
 
+<script src="../js/menu-lateral.js" defer></script>
 </body>
 </html>

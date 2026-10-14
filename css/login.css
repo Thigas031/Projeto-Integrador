@@ -5,9 +5,9 @@
 }
  
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    background-color: #f0f0f0;
-    color: #1a1a1a;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background-color: #f5f7fa;
+    color: #17202b;
 }
  
 .login-container {
@@ -23,7 +23,8 @@ body {
     max-width: 500px;
     background-color: #ffffff;
     border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e5eaf0;
+    box-shadow: 0 2px 8px rgba(16, 24, 40, 0.06);
     padding: 48px 56px;
     display: flex;
     flex-direction: column;
@@ -54,7 +55,7 @@ body {
 }
  
 .login-card h1 span {
-    color: #1d4ed8;
+    color: #075d9e;
 }
  
 .login-form {
@@ -76,12 +77,13 @@ body {
 .input-group input[type="text"],
 .input-group input[type="password"] {
     width: 100%;
+    min-height: 46px;
     padding: 12px 16px;
     font-size: 14px;
     color: #1a1a1a;
     background-color: #ffffff;
-    border: 1px solid #d9d9d9;
-    border-radius: 8px;
+    border: 1px solid #e5eaf0;
+    border-radius: 10px;
     outline: none;
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
@@ -91,8 +93,8 @@ body {
 }
  
 .input-group input:focus {
-    border-color: #1d4ed8;
-    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+    border-color: #0b84d6;
+    box-shadow: 0 0 0 3px rgba(11, 132, 214, 0.12);
 }
  
 .password-container {
@@ -179,7 +181,7 @@ body {
  
 .login-options a {
     font-size: 14px;
-    color: #1d4ed8;
+    color: #075d9e;
     text-decoration: none;
 }
  
@@ -191,22 +193,22 @@ body {
     width: 100%;
     padding: 14px;
     margin-top: 6px;
-    background-color: #16447a;
+    background-color: #075d9e;
     color: #ffffff;
     font-size: 15px;
     font-weight: 600;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.15s ease;
 }
  
 .login-form button[type="submit"]:hover {
-    background-color: #123863;
+    background-color: #064b82;
 }
  
 .login-form button[type="submit"]:focus-visible {
-    outline: 3px solid rgba(22, 68, 122, 0.35);
+    outline: 3px solid rgba(7, 93, 158, 0.35);
     outline-offset: 2px;
 }
  
@@ -229,6 +231,12 @@ body {
  
     .login-card h1 {
         font-size: 22px;
+    }
+
+    .login-options {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
     }
 }
  

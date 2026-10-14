@@ -8,43 +8,7 @@
     <link rel="stylesheet" href="../css/cadastrodechaves.css">
 </head>
 <body>
-    <aside class="menu-lateral">
-        <button class="botao-menu" type="button" aria-label="Abrir menu">
-            <span class="icone-menu" aria-hidden="true">Icone menu</span>
-        </button>
-
-        <nav>
-            <a href="#inicio">
-                <img src="https://cdn-icons-png.    flaticon.com/512/25/25694.png" alt="">
-                Início
-            </a>
-            <a href="listadechaves.html">
-                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
-                Chaves
-            </a>
-            <a href="#retiradas" data-role="porteiro">
-                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
-                Retiradas
-            </a>
-            <a href="#usuarios" data-role="gerente" data-permission="gerenciar-usuarios">
-                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
-                Usuários
-            </a>
-            <a href="#salas">
-                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
-                Salas
-            </a>
-            <a href="#relatorios" data-role="gerente">
-                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
-                Relatórios
-            </a>
-            <a href="#configuracoes">
-                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
-                Configurações
-            </a>
-        </nav>   
-        <button class="botao-sair" type="button">Sair</button>
-    </aside> 
+    <div id="menu-lateral-container" data-page="cadastro-chaves" data-menu-url="menu-lateral.html"></div>
     <section class="lista-chaves">
             <h1>Lista de chaves</h1>
             <h2> Nome da Sala</h2>
@@ -52,6 +16,10 @@
             <form id="form-busca">
                 <input type="search" id="busca" name="busca" placeholder="Digite o nome da sala">
             </form>
+            <h3>Número</h3>
+        </header>
+    </section>
 
+    <script src="../js/menu-lateral.js" defer></script>
 </body>
 </html>
