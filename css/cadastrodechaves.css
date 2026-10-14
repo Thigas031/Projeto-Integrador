@@ -27,6 +27,7 @@
 }
 
 * {
+    border:1px solid #b4233a;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -73,20 +74,21 @@ main {
 .lista-chaves {
     max-width: 1280px;
     margin: 0 auto;
-    overflow: hidden;
-   
+    padding: 24px 26px 500px;
 }
 
 .lista-chaves h1 {
-    padding: 24px 26px 20px;
+    padding: 24px 26px 50px;
     border-bottom: 1px solid var(--borda);
-    font-size: clamp(22px, 2vw, 28px);
+    font-size: 35px;
     line-height: 1.2;
     letter-spacing: -0.03em;
 }
 h2{
     font-size: 32px;
     border-bottom: 1px solid var(--borda);
+    display: flex;
+    justify-content:;
 }
 
 
@@ -139,9 +141,23 @@ h2{
 
 h3 {
     position: relative;
-    right: 1157px;
-    top: 40px;
+    right: 1152px;
+    top: 70px;
     border-bottom: 1px solid var(--borda);
     font-size: 32px;
     line-height: 1.2;
+}
+
+#form-busca2 {
+    width: min(480px, 100%);
+    position: relative;
+    top: 100px;
+}
+
+#form-busca2 label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--texto-suave);
+    font-size: 13px;
+    font-weight: 600;
 }
