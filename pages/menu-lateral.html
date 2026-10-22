@@ -1,17 +1,13 @@
-<aside class="menu-lateral">
-    <button class="botao-menu" type="button" aria-label="Abrir menu">
+<aside class="menu-lateral" id="menu-principal">
+    <button class="botao-menu" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="navegacao-principal">
         <span class="icone-menu" aria-hidden="true">Icone menu</span>
     </button>
 
-    <nav aria-label="Navegação principal">
-        <a href="#inicio"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Início</a>
-        <a href="listadechaves.html" data-page="lista-chaves" data-page-alias="cadastro-chaves"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Chaves</a>
-        <a href="retiradadechaves.html" data-page="retirada-chaves" data-role="porteiro"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Retiradas</a>
-        <a href="#usuarios" data-role="gerente" data-permission="gerenciar-usuarios"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Usuários</a>
-        <a href="#salas"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Salas</a>
-        <a href="#relatorios" data-role="gerente"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Relatórios</a>
-        <a href="#configuracoes"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Configurações</a>
+    <nav id="navegacao-principal" aria-label="Navegação principal">
+        <a href="dashboard.html" data-page="dashboard" aria-label="Início"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Início</a>
+        <a href="listadechaves.html" data-page="lista-chaves" data-page-alias="cadastro-chaves" aria-label="Chaves"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Chaves</a>
+        <a href="retiradadechaves.html" data-page="retirada-chaves" aria-label="Retiradas"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Retiradas</a>
+        <a href="cadastrodeusuario.html" data-page="usuarios" aria-label="Usuários"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Usuários</a>
+        <a href="devolucaodechaves.html" data-page="devolucao-chaves" aria-label="Devoluções"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Devoluções</a>
     </nav>
-
-    <button class="botao-sair" type="button">Sair</button>
 </aside>

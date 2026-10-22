@@ -1,0 +1,71 @@
+:root {
+    --azul-950: #07325a;
+    --azul-900: #064b82;
+    --azul-800: #075d9e;
+    --azul-600: #0b84d6;
+    --texto: #17202b;
+    --texto-suave: #667085;
+    --borda: #e5eaf0;
+    --fundo: #f5f7fa;
+    --branco: #ffffff;
+    --verde: #18794e;
+    --verde-bg: #e9f8ef;
+    --amarelo: #8a6200;
+    --amarelo-bg: #fff6d8;
+    --vermelho: #b4233a;
+    --vermelho-bg: #feecef;
+    --raio: 16px;
+    --sombra-sm: 0 2px 8px rgba(16, 24, 40, 0.06);
+}
+
+.app-page {
+    min-height: 100vh;
+    margin-left: 78px;
+    padding: 42px clamp(24px, 4vw, 64px) 64px;
+    color: var(--texto);
+    background: var(--fundo);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.app-page *,
+.app-page *::before,
+.app-page *::after {
+    box-sizing: border-box;
+}
+
+.app-page button,
+.app-page input,
+.app-page select {
+    font: inherit;
+}
+
+.app-page button:focus-visible,
+.app-page input:focus-visible,
+.app-page select:focus-visible,
+.app-page a:focus-visible {
+    outline: 3px solid rgba(11, 132, 214, 0.25);
+    outline-offset: 2px;
+}
+
+html body select.select-control {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 42px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none' stroke='%23667085' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px 16px;
+}
+
+@media (max-width: 900px) {
+    .app-page {
+        margin-left: 0;
+        padding: 26px 20px calc(88px + env(safe-area-inset-bottom));
+    }
+}
+
+@media (max-width: 480px) {
+    .app-page {
+        padding: 22px 14px calc(88px + env(safe-area-inset-bottom));
+    }
+}

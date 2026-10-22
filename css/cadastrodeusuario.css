@@ -1,0 +1,173 @@
+.user-wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+}
+
+.user-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.brand-logo {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+}
+
+.user-header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.user-icon {
+    width: 52px;
+    height: 52px;
+    margin-left: auto;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--branco);
+    background: #00346e;
+}
+
+.user-icon img {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) invert(1);
+}
+
+.user-form {
+    width: min(520px, 100%);
+    margin: 0 auto;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 16px;
+}
+
+.field label {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.field input,
+.field select {
+    height: 46px;
+    padding: 0 14px;
+    border: 1px solid var(--borda);
+    border-radius: 9px;
+    color: var(--texto);
+    background: var(--branco);
+    font-size: 15px;
+}
+
+.field input::placeholder {
+    color: #8f8f8f;
+}
+
+.form-feedback {
+    display: none;
+    margin: 0 0 18px;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.form-feedback.show {
+    display: block;
+}
+
+.form-feedback.error {
+    color: var(--vermelho);
+    background: var(--vermelho-bg);
+}
+
+.form-feedback.success {
+    color: var(--verde);
+    background: var(--verde-bg);
+}
+
+.user-actions {
+    margin-top: 28px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.button {
+    min-width: 140px;
+    height: 46px;
+    border: 1px solid #d0d5dd;
+    border-radius: 8px;
+    background: #eeeeee;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.button--primary {
+    border-color: #00346e;
+    color: var(--branco);
+    background: #003b78;
+}
+
+@media (max-width: 900px) {
+    .app-page {
+        padding-top: 22px;
+    }
+
+    .user-header {
+        gap: 10px;
+        margin-bottom: 28px;
+    }
+
+    .brand-logo {
+        width: 42px;
+        height: 42px;
+    }
+
+    .user-header h1 {
+        font-size: 22px;
+    }
+
+    .user-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .user-icon img {
+        width: 22px;
+        height: 22px;
+    }
+
+    .field {
+        margin-bottom: 15px;
+    }
+
+    .user-actions {
+        margin-top: 24px;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    .button {
+        min-width: 120px;
+        height: 44px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-header h1 {
+        font-size: 20px;
+    }
+
+    .user-actions .button {
+        flex: 1;
+        min-width: 0;
+    }
+}

@@ -1,0 +1,341 @@
+.dashboard-wrap {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--borda);
+}
+
+.brand-logo {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+}
+
+.dashboard-header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.header-icon {
+    width: 48px;
+    height: 48px;
+    margin-left: auto;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--azul-900);
+}
+
+.header-icon img {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1);
+}
+
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+    margin: 30px 0 28px;
+}
+
+.metric {
+    min-height: 164px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #d5d8dc;
+    border-radius: 12px;
+    background: var(--branco);
+}
+
+.metric strong {
+    font-size: 56px;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.metric span {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.metric--available strong {
+    color: #005ca0;
+}
+
+.metric--borrowed strong {
+    color: #ff9401;
+}
+
+.metric--late strong {
+    color: #d40000;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+    gap: 24px;
+}
+
+.panel {
+    border: 1px solid #d5d8dc;
+    border-radius: 12px;
+    background: var(--branco);
+}
+
+.panel-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 22px;
+    border-bottom: 1px solid #d5d8dc;
+}
+
+.panel h2 {
+    margin: 0;
+    font-size: 19px;
+}
+
+.panel-title a {
+    color: #005ca0;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.movement {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    border-bottom: 1px solid #d5d8dc;
+}
+
+.movement:last-child {
+    border-bottom: 0;
+}
+
+.movement-avatar {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: #006c75;
+    background: #eeeeee;
+}
+
+.movement-avatar img {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) saturate(100%) invert(27%) sepia(23%) saturate(1434%) hue-rotate(137deg) brightness(91%) contrast(91%);
+}
+
+.movement strong {
+    font-size: 16px;
+}
+
+.movement p {
+    margin: 4px 0 0;
+    font-size: 14px;
+}
+
+.movement-status {
+    padding: 7px 14px;
+    border-radius: 6px;
+    color: #66b975;
+    background: #d9f4db;
+}
+
+.movement time {
+    color: #858585;
+}
+
+.dashboard-side {
+    display: grid;
+    gap: 20px;
+}
+
+.side-panel {
+    min-height: 220px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+}
+
+.side-panel h2 {
+    font-size: 18px;
+}
+
+.due-count {
+    margin-top: 26px;
+    color: #72d982;
+    font-size: 56px;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.side-panel p {
+    color: #858585;
+}
+
+.details-button {
+    width: 100%;
+    min-height: 46px;
+    margin-top: auto;
+    display: grid;
+    place-items: center;
+    border: 1px solid #70899a;
+    border-radius: 8px;
+    color: #005ca0;
+    background: #cfe5f3;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+@media (max-width: 900px) {
+    .app-page {
+        padding-top: 22px;
+    }
+
+    .dashboard-header {
+        padding-bottom: 8px;
+    }
+
+    .brand-logo {
+        width: 42px;
+        height: 42px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 22px;
+    }
+
+    .header-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .metrics {
+        gap: 8px;
+        margin: 24px 0 20px;
+    }
+
+    .metric {
+        min-height: 82px;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .metric strong {
+        font-size: 27px;
+    }
+
+    .metric span {
+        font-size: 11px;
+        line-height: 1.2;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .panel-title {
+        padding: 16px;
+    }
+
+    .panel h2 {
+        font-size: 16px;
+    }
+
+    .panel-title a {
+        font-size: 14px;
+    }
+
+    .movement {
+        grid-template-columns: 34px minmax(0, 1fr) auto;
+        grid-template-rows: auto auto;
+        gap: 4px 10px;
+        padding: 12px;
+    }
+
+    .movement-avatar {
+        grid-row: 1 / 3;
+        width: 32px;
+        height: 32px;
+    }
+
+    .movement-avatar img {
+        width: 18px;
+        height: 18px;
+    }
+
+    .movement > div {
+        grid-column: 2;
+        grid-row: 1 / 3;
+    }
+
+    .movement strong {
+        font-size: 14px;
+    }
+
+    .movement p,
+    .movement time {
+        font-size: 12px;
+    }
+
+    .movement-status {
+        grid-column: 3;
+        grid-row: 1;
+        justify-self: end;
+        padding: 5px 9px;
+        font-size: 10px;
+    }
+
+    .movement time {
+        grid-column: 3;
+        grid-row: 2;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .dashboard-side {
+        gap: 20px;
+    }
+
+    .side-panel {
+        min-height: 0;
+        padding: 16px;
+    }
+
+    .side-panel h2 {
+        font-size: 15px;
+    }
+
+    .due-count {
+        margin-top: 14px;
+        font-size: 42px;
+    }
+
+    .side-panel p {
+        margin: 0;
+        font-size: 13px;
+    }
+
+    .details-button {
+        min-height: 42px;
+        margin-top: 20px;
+        font-size: 14px;
+    }
+}

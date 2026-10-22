@@ -1,0 +1,210 @@
+.return-wrap {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.return-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.brand-logo {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+}
+
+.return-header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.return-icon {
+    width: 52px;
+    height: 52px;
+    margin-left: auto;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--branco);
+    background: #00346e;
+}
+
+.return-icon img {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) invert(1);
+}
+
+.return-form {
+    width: min(680px, 100%);
+    margin: 0 auto;
+}
+
+.return-section {
+    margin-bottom: 20px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--borda);
+}
+
+.return-section h2 {
+    margin-bottom: 12px;
+    color: var(--texto-suave);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.return-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.return-fields--single {
+    grid-template-columns: 1fr;
+}
+
+.return-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.return-field label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.return-field input,
+.return-field select {
+    width: 100%;
+    height: 46px;
+    padding: 0 12px;
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    color: var(--texto);
+    background: var(--branco);
+    font-size: 15px;
+}
+
+.return-field input[readonly] {
+    background: var(--branco);
+}
+
+.return-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.return-actions button {
+    height: 46px;
+    padding: 0 18px;
+    border: 1px solid #d0d5dd;
+    border-radius: 8px;
+    background: #eeeeee;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.return-actions .confirm {
+    border-color: #003b78;
+    color: var(--branco);
+    background: #003b78;
+}
+
+.return-feedback {
+    display: none;
+    margin: 0 0 14px;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.return-feedback.show {
+    display: block;
+}
+
+.return-feedback.error {
+    color: var(--vermelho);
+    background: var(--vermelho-bg);
+}
+
+.return-feedback.success {
+    color: var(--verde);
+    background: var(--verde-bg);
+}
+
+@media (max-width: 900px) {
+    .app-page {
+        padding-top: 22px;
+    }
+
+    .return-header {
+        margin-bottom: 26px;
+    }
+
+    .brand-logo {
+        width: 42px;
+        height: 42px;
+    }
+
+    .return-header h1 {
+        font-size: 22px;
+    }
+
+    .return-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .return-icon img {
+        width: 22px;
+        height: 22px;
+    }
+
+    .return-form {
+        width: 100%;
+    }
+
+    .return-field {
+        gap: 7px;
+    }
+
+    .return-field label {
+        font-size: 14px;
+    }
+
+    .return-field input,
+    .return-field select {
+        height: 46px;
+        font-size: 15px;
+    }
+
+    .return-actions {
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .return-actions button {
+        height: 44px;
+        padding: 0 14px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 560px) {
+    .return-fields {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .return-actions button {
+        flex: 1;
+        min-width: 0;
+    }
+}

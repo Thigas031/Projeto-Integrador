@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cadastro de Usuário</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/cadastrodeusuario.css">
+    <link rel="stylesheet" href="../css/menu-lateral.css">
+</head>
+<body>
+    <div id="menu-lateral-container" data-page="usuarios" data-menu-url="menu-lateral.html"></div>
+
+    <main class="app-page">
+        <div class="user-wrap">
+            <header class="user-header">
+                <img class="brand-logo" src="../assets/icons/Logo%20sistema%20de%20chaves.svg" alt="Sistema de gerenciamento de chaves">
+                <h1>Cadastro de Usuário</h1>
+                <span class="user-icon" aria-hidden="true">
+                    <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
+                </span>
+            </header>
+
+            <form id="user-form" class="user-form" novalidate>
+                <p id="user-feedback" class="form-feedback" role="status"></p>
+
+                <div class="field">
+                    <label for="user-name">Nome</label>
+                    <input id="user-name" type="text" required minlength="3" placeholder="Digite o nome" autocomplete="name">
+                </div>
+
+                <div class="field">
+                    <label for="user-role">Cargo</label>
+                    <select id="user-role" class="select-control" required>
+                        <option value="">Selecione o cargo</option>
+                        <option value="GERENTE">GERENTE</option>
+                        <option value="PORTEIRO">PORTEIRO</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="user-phone">Telefone</label>
+                    <input id="user-phone" type="tel" required placeholder="(00) 00000-0000" autocomplete="tel">
+                </div>
+
+                <div class="field">
+                    <label for="user-email">Email</label>
+                    <input id="user-email" type="email" required placeholder="email@escola.com" autocomplete="email">
+                </div>
+
+                <div class="user-actions">
+                    <button class="button" type="button" data-cancel>Cancelar</button>
+                    <button class="button button--primary" type="submit">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="../js/menu-lateral.js" defer></script>
+    <script src="../js/cadastrodeusuario.js"></script>
+</body>
+</html>

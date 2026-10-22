@@ -11,19 +11,18 @@
     <main class="login-container">
         <section class="login-card">
             <div class="logo-principal">
-                <span>LOGO-sistema</span>
+                <img src="../assets/icons/Logo%20sistema%20de%20chaves.svg" alt="Sistema de gerenciamento de chaves">
             </div>
             <h1>
                 Sistema de
                 <span>Gerenciamento de<br>Chaves</span>
             </h1>
-             <form class="login-form" action="../controllers/controller_user_login.php" method="post">
+             <form class="login-form" action="../pages/dashboard.html" method="get">
                 <div class="input-group">
                     <label for="usuario">Usuário</label>
                     <input
                         type="text"
                         id="usuario"
-                        name="usuario"
                         placeholder="Digite a senha do seu usuário"
                         required
                     >
@@ -34,7 +33,6 @@
                         <input
                             type="password"
                             id="senha"
-                            name="senha"
                             placeholder="Digite sua senha"
                             required
                         >
@@ -53,7 +51,7 @@
                 </button>
             </form>
             <div class="logo-footer">
-                <span>logo Senac</span>
+                <img src="../assets/icons/80anos_oficial.svg" alt="SENAC e 80 anos">
             </div>
         </section>
     </main>

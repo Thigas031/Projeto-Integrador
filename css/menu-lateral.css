@@ -17,8 +17,16 @@
     transition: width 260ms cubic-bezier(.2, .8, .2, 1);
 }
 
+.menu-lateral,
+.menu-lateral *,
+.menu-lateral *::before,
+.menu-lateral *::after {
+    box-sizing: border-box;
+}
+
 .menu-lateral:hover,
-.menu-lateral:focus-within { width: 230px; }
+.menu-lateral:focus-within,
+.menu-lateral.is-open { width: 230px; }
 
 .botao-menu,
 .botao-sair {
@@ -69,7 +77,8 @@
 }
 
 .menu-lateral:hover nav a,
-.menu-lateral:focus-within nav a { font-size: 15px; }
+.menu-lateral:focus-within nav a,
+.menu-lateral.is-open nav a { font-size: 15px; }
 
 .menu-lateral nav a:hover,
 .menu-lateral nav a.active,
@@ -141,18 +150,31 @@
     }
 
     .menu-lateral:hover,
-    .menu-lateral:focus-within { width: 100%; }
+    .menu-lateral:focus-within,
+    .menu-lateral.is-open { width: 100%; }
 
     .menu-lateral nav { flex: 1; display: flex; align-items: center; justify-content: space-around; }
     .menu-lateral nav a,
     .menu-lateral:hover nav a,
-    .menu-lateral:focus-within nav a { display: grid; place-items: center; width: 40px; height: 40px; min-height: 40px; padding: 0; border-radius: 10px; font-size: 0; }
+    .menu-lateral:focus-within nav a,
+    .menu-lateral.is-open nav a { display: grid; place-items: center; width: 40px; height: 40px; min-height: 40px; padding: 0; border-radius: 10px; font-size: 0; }
     .menu-lateral nav img { width: 28px; height: 28px; margin: 0; object-fit: contain; }
     .botao-menu { flex: 0 0 40px; width: 40px; min-height: 40px; margin: 0; }
-    .menu-lateral:not([data-page="retirada-chaves"]) nav a:nth-child(3),
-    .menu-lateral nav a:nth-child(5),
-    .menu-lateral nav a:nth-child(6),
     .botao-sair { display: none; }
     .menu-lateral nav a:hover,
     .menu-lateral nav a.active { background: rgba(255, 255, 255, 0.12); }
+
+    .menu-lateral.is-open {
+        height: auto;
+        padding: 12px 13px calc(12px + env(safe-area-inset-bottom));
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 8px;
+    }
+
+    .menu-lateral.is-open .botao-menu { margin: 0 0 4px; }
+    .menu-lateral.is-open nav { flex-direction: column; align-items: stretch; gap: 4px; }
+    .menu-lateral.is-open nav a { display: flex; width: 100%; height: 44px; min-height: 44px; justify-content: flex-start; padding: 8px 12px; font-size: 14px; }
+    .menu-lateral.is-open nav img { width: 22px; height: 22px; margin-right: 14px; }
 }
