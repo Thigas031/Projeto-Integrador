@@ -1,25 +1,11 @@
 :root {
-    --azul-950: #07325a;
-    --azul-900: #064b82;
     --azul-800: #075d9e;
-    --azul-700: #0872be;
     --azul-600: #0b84d6;
-    --azul-100: #dceefe;
-    --azul-50: #f0f8ff;
-
     --texto: #17202b;
     --texto-suave: #667085;
     --borda: #e5eaf0;
     --fundo: #f5f7fa;
     --branco: #ffffff;
-
-    --verde-bg: #e9f8ef;
-    --verde: #18794e;
-    --amarelo-bg: #fff6d8;
-    --amarelo: #8a6200;
-    --vermelho-bg: #feecef;
-    --vermelho: #b4233a;
-
     --sombra-sm: 0 2px 8px rgba(16, 24, 40, 0.06);
     --sombra-md: 0 12px 30px rgba(16, 24, 40, 0.10);
     --raio: 16px;
@@ -27,14 +13,9 @@
 }
 
 * {
-    border:1px solid #b4233a;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-html {
-    color-scheme: light;
 }
 
 body {
@@ -45,67 +26,42 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-button,
-input {
-    font: inherit;
-}
-
-button,
-a,
-input {
-    transition: background-color var(--transicao), color var(--transicao), border-color var(--transicao), box-shadow var(--transicao), transform var(--transicao), opacity var(--transicao);
-}
-
-button:focus-visible,
-a:focus-visible,
-input:focus-visible {
-    outline: 3px solid rgba(11, 132, 214, 0.25);
-    outline-offset: 2px;
-}
-
-
-
 main {
     margin-left: 78px;
     padding: 48px clamp(24px, 4vw, 64px) 64px;
     transition: margin-left 260ms cubic-bezier(.2, .8, .2, 1);
 }
 
-.lista-chaves {
+.cadastro-chaves {
     max-width: 1280px;
     margin: 0 auto;
-    padding: 24px 26px 500px;
+    overflow: hidden;
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+    background: var(--branco);
+    box-shadow: var(--sombra-md);
 }
 
-.lista-chaves h1 {
-    padding: 24px 26px 50px;
+.cadastro-chaves h1 {
+    padding: 24px 26px 20px;
     border-bottom: 1px solid var(--borda);
-    font-size: 35px;
+    color: var(--texto);
+    font-size: clamp(22px, 2vw, 28px);
     line-height: 1.2;
     letter-spacing: -0.03em;
 }
-h2{
-    font-size: 32px;
-    border-bottom: 1px solid var(--borda);
-    display: flex;
-    justify-content:center;
+
+.form-cadastro-chaves {
+    display: grid;
+    gap: 22px;
+    padding: 26px;
 }
 
-
-.cabecalho {
-    max-width: 1280px;
-    margin: 0 auto 28px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-#form-busca {
+.campo-formulario {
     width: min(480px, 100%);
 }
 
-#form-busca label {
+.campo-formulario label {
     display: block;
     margin-bottom: 8px;
     color: var(--texto-suave);
@@ -113,51 +69,51 @@ h2{
     font-weight: 600;
 }
 
-#busca {
+.campo-formulario input {
     width: 100%;
     height: 46px;
-    padding: 0 16px 0 43px;
+    padding: 0 16px;
     border: 1px solid var(--borda);
     border-radius: 12px;
     color: var(--texto);
-    background-color: var(--branco);
-    background-position: 15px center;
+    background: var(--branco);
     box-shadow: var(--sombra-sm);
+    font: inherit;
+    transition: border-color var(--transicao), box-shadow var(--transicao);
 }
 
-#busca::placeholder {
+.campo-formulario input::placeholder {
     color: #98a2b3;
 }
 
-#busca:hover {
+.campo-formulario input:hover {
     border-color: #cbd5e1;
 }
 
-#busca:focus {
+.campo-formulario input:focus {
     border-color: var(--azul-600);
     box-shadow: 0 0 0 4px rgba(11, 132, 214, 0.10), var(--sombra-sm);
     outline: 0;
 }
 
-h3 {
-    position: relative;
-    right: 1152px;
-    top: 70px;
-    border-bottom: 1px solid var(--borda);
-    font-size: 32px;
-    line-height: 1.2;
+@media (max-width: 900px) {
+    main {
+        margin-left: 0;
+        padding: 28px 20px calc(88px + env(safe-area-inset-bottom));
+    }
 }
 
-#form-busca2 {
-    width: min(480px, 100%);
-    position: relative;
-    top: 100px;
-}
+@media (max-width: 720px) {
+    .cadastro-chaves {
+        border-radius: 10px;
+    }
 
-#form-busca2 label {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--texto-suave);
-    font-size: 13px;
-    font-weight: 600;
+    .cadastro-chaves h1 {
+        padding: 20px;
+        font-size: 22px;
+    }
+
+    .form-cadastro-chaves {
+        padding: 20px;
+    }
 }

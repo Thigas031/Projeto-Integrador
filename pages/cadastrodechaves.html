@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,19 +9,24 @@
 </head>
 <body>
     <div id="menu-lateral-container" data-page="cadastro-chaves" data-menu-url="menu-lateral.html"></div>
-    <section class="lista-chaves">
+
+    <main>
+        <section class="cadastro-chaves">
             <h1>Cadastro de chaves</h1>
-            <h2> Nome da Sala</h2>
-        <header class="cabecalho">
-            <form id="form-busca">
-                <input type="search" id="busca" name="busca" placeholder="Digite o nome da sala">
+
+            <form class="form-cadastro-chaves">
+                <div class="campo-formulario">
+                    <label for="nome-sala">Nome da sala</label>
+                    <input type="text" id="nome-sala" name="nome-sala" placeholder="Digite o nome da sala">
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="numero-chave">Número</label>
+                    <input type="text" id="numero-chave" name="numero-chave" placeholder="Ex.: 12">
+                </div>
             </form>
-            <h3>Número</h3>
-            <form id="form-busca2">
-                <input type="search" id="busca" name="busca" placeholder="Digite o nome da sala">
-            </form>
-        </header>
-    </section>
+        </section>
+    </main>
 
     <script src="../js/menu-lateral.js" defer></script>
 </body>
