@@ -1,4 +1,26 @@
 (function () {
+    const perfisSuportados = new Set(["GERENTE", "PORTEIRO"]);
+
+    function aplicarPerfil(menu, links, container) {
+        const perfil = (container.dataset.profile || "").trim().toUpperCase();
+        if (!perfisSuportados.has(perfil)) {
+            return;
+        }
+
+        menu.dataset.profile = perfil;
+        links.forEach(function (link) {
+            const perfisPermitidos = link.dataset.profiles;
+            if (!perfisPermitidos) {
+                return;
+            }
+
+            const lista = perfisPermitidos.split(",").map(function (item) {
+                return item.trim().toUpperCase();
+            });
+            link.hidden = !lista.includes(perfil);
+        });
+    }
+
     async function carregarMenu() {
         const container = document.getElementById("menu-lateral-container");
 
@@ -36,6 +58,7 @@
         const paginaAtual = container.dataset.page;
         menu.dataset.page = paginaAtual;
         const botaoMenu = menu.querySelector(".botao-menu");
+        aplicarPerfil(menu, links, container);
 
         botaoMenu.addEventListener("click", function () {
             const aberto = menu.classList.toggle("is-open");

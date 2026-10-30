@@ -1,4 +1,5 @@
 :root {
+    --azul-900: #064b82;
     --azul-800: #075d9e;
     --azul-600: #0b84d6;
     --texto: #17202b;
@@ -6,6 +7,10 @@
     --borda: #e5eaf0;
     --fundo: #f5f7fa;
     --branco: #ffffff;
+    --verde: #18794e;
+    --verde-bg: #e9f8ef;
+    --vermelho: #b4233a;
+    --vermelho-bg: #feecef;
     --sombra-sm: 0 2px 8px rgba(16, 24, 40, 0.06);
     --sombra-md: 0 12px 30px rgba(16, 24, 40, 0.10);
     --raio: 16px;
@@ -42,23 +47,50 @@ main {
     box-shadow: var(--sombra-md);
 }
 
-.cadastro-chaves h1 {
+.cadastro-chaves-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
     padding: 24px 26px 20px;
     border-bottom: 1px solid var(--borda);
+}
+
+.brand-logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.cadastro-chaves-header h1 {
+    flex: 1;
+    margin: 0;
     color: var(--texto);
     font-size: clamp(22px, 2vw, 28px);
     line-height: 1.2;
-    letter-spacing: -0.03em;
+}
+
+.key-icon {
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 46px;
+    border-radius: 50%;
+    color: var(--branco);
+    background: var(--azul-900);
+    font-size: 22px;
 }
 
 .form-cadastro-chaves {
+    width: min(560px, 100%);
+    margin: 0 auto;
     display: grid;
     gap: 22px;
     padding: 26px;
 }
 
 .campo-formulario {
-    width: min(480px, 100%);
+    width: 100%;
 }
 
 .campo-formulario label {
@@ -74,7 +106,7 @@ main {
     height: 46px;
     padding: 0 16px;
     border: 1px solid var(--borda);
-    border-radius: 12px;
+    border-radius: 10px;
     color: var(--texto);
     background: var(--branco);
     box-shadow: var(--sombra-sm);
@@ -96,6 +128,79 @@ main {
     outline: 0;
 }
 
+.form-feedback {
+    display: none;
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.form-feedback.show {
+    display: block;
+}
+
+.form-feedback.error {
+    color: var(--vermelho);
+    background: var(--vermelho-bg);
+}
+
+.form-feedback.success {
+    color: var(--verde);
+    background: var(--verde-bg);
+}
+
+.acoes-cadastro-chaves {
+    margin-top: 6px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.button {
+    min-width: 124px;
+    height: 46px;
+    padding: 0 20px;
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+    color: var(--texto);
+    background: var(--branco);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--transicao), color var(--transicao), border-color var(--transicao), box-shadow var(--transicao), transform var(--transicao);
+}
+
+.button:hover {
+    border-color: #cbd5e1;
+    background: #f8fafc;
+}
+
+.button--primary {
+    border-color: var(--azul-800);
+    color: var(--branco);
+    background: var(--azul-800);
+    box-shadow: 0 8px 20px rgba(7, 93, 158, 0.20);
+}
+
+.button--primary:hover {
+    border-color: var(--azul-900);
+    color: var(--branco);
+    background: var(--azul-900);
+    box-shadow: 0 10px 24px rgba(7, 93, 158, 0.26);
+    transform: translateY(-1px);
+}
+
+.button:active {
+    transform: translateY(0);
+}
+
+.button:focus-visible {
+    outline: 3px solid rgba(11, 132, 214, 0.25);
+    outline-offset: 2px;
+}
+
 @media (max-width: 900px) {
     main {
         margin-left: 0;
@@ -108,12 +213,39 @@ main {
         border-radius: 10px;
     }
 
-    .cadastro-chaves h1 {
+    .cadastro-chaves-header {
         padding: 20px;
+        gap: 10px;
+    }
+
+    .cadastro-chaves-header h1 {
         font-size: 22px;
+    }
+
+    .brand-logo {
+        width: 42px;
+        height: 42px;
+    }
+
+    .key-icon {
+        width: 40px;
+        height: 40px;
+        flex-basis: 40px;
+        font-size: 19px;
     }
 
     .form-cadastro-chaves {
         padding: 20px;
+    }
+
+    .acoes-cadastro-chaves {
+        gap: 10px;
+    }
+
+    .button {
+        min-width: 0;
+        height: 44px;
+        flex: 1;
+        font-size: 14px;
     }
 }

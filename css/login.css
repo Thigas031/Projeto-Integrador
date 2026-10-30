@@ -128,7 +128,7 @@ body {
 .login-options {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     margin-top: 2px;
 }
  
@@ -179,16 +179,6 @@ body {
  
 .remember input[type="checkbox"]:focus-visible + .checkbox {
     box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.25);
-}
- 
-.login-options a {
-    font-size: 14px;
-    color: #075d9e;
-    text-decoration: none;
-}
- 
-.login-options a:hover {
-    text-decoration: underline;
 }
  
 .login-form button[type="submit"] {
@@ -242,11 +232,6 @@ body {
         height: 74px;
     }
 
-    .login-options {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 10px;
-    }
 }
  
 @media (prefers-reduced-motion: reduce) {

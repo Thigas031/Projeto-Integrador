@@ -22,22 +22,6 @@
     font-size: 28px;
 }
 
-.header-icon {
-    width: 48px;
-    height: 48px;
-    margin-left: auto;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    background: var(--azul-900);
-}
-
-.header-icon img {
-    width: 24px;
-    height: 24px;
-    filter: brightness(0) invert(1);
-}
-
 .metrics {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -51,8 +35,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border: 1px solid #d5d8dc;
-    border-radius: 12px;
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
     background: var(--branco);
 }
 
@@ -86,8 +70,8 @@
 }
 
 .panel {
-    border: 1px solid #d5d8dc;
-    border-radius: 12px;
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
     background: var(--branco);
 }
 
@@ -96,7 +80,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 20px 22px;
-    border-bottom: 1px solid #d5d8dc;
+    border-bottom: 1px solid var(--borda);
 }
 
 .panel h2 {
@@ -117,7 +101,7 @@
     align-items: center;
     gap: 14px;
     padding: 18px 20px;
-    border-bottom: 1px solid #d5d8dc;
+    border-bottom: 1px solid var(--borda);
 }
 
 .movement:last-child {
@@ -219,11 +203,6 @@
 
     .dashboard-header h1 {
         font-size: 22px;
-    }
-
-    .header-icon {
-        width: 40px;
-        height: 40px;
     }
 
     .metrics {

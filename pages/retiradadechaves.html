@@ -38,10 +38,6 @@
                 </p>
             </div>
 
-            <div class="header-icon">
-                <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
-            </div>
-
         </div>
 
 
@@ -55,7 +51,9 @@
             </div>
 
 
-            <form>
+            <form id="withdrawal-form" novalidate>
+
+                <p id="withdrawal-feedback" class="withdrawal-feedback" role="status"></p>
 
                 <div class="form-grid">
 
@@ -69,7 +67,7 @@
                         <div class="input-wrapper">
                             <i class="fa-solid fa-door-open"></i>
 
-                            <select id="sala" class="select-control">
+                            <select id="sala" class="select-control" required>
 
                                 <option value="">
                                     Selecione uma sala
@@ -107,7 +105,7 @@
                         <div class="input-wrapper">
                             <i class="fa-solid fa-user"></i>
 
-                            <select id="usuario" class="select-control">
+                            <select id="usuario" class="select-control" required>
 
                                 <option value="">
                                     Selecione o usuário
@@ -146,7 +144,7 @@
 
                             <i class="fa-solid fa-key"></i>
 
-                            <select id="chave" class="select-control">
+                            <select id="chave" class="select-control" required>
 
                                 <option value="">
                                     Selecione a chave
@@ -194,6 +192,7 @@
                                 type="date"
                                 id="data"
                                 value="2026-08-18"
+                                required
                             >
 
                         </div>
@@ -216,6 +215,7 @@
                                 type="time"
                                 id="hora"
                                 value="13:30"
+                                required
                             >
 
                         </div>
@@ -246,6 +246,7 @@
                     <button
                         type="button"
                         class="btn btn-cancelar"
+                        data-cancel
                     >
                         Cancelar
                     </button>
@@ -270,5 +271,7 @@
 </div>
 
 <script src="../js/menu-lateral.js" defer></script>
+<script src="../js/form-feedback.js"></script>
+<script src="../js/retiradadechaves.js"></script>
 </body>
 </html>

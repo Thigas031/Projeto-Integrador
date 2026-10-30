@@ -66,33 +66,6 @@ body {
 }
 
 
-.header-icon {
-    width: 48px;
-    height: 48px;
-
-    background: #0b69a3;
-
-    border-radius: 12px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    color: white;
-
-    font-size: 20px;
-}
-
-.header-icon img {
-    width: 24px;
-    height: 24px;
-    object-fit: contain;
-    filter: brightness(0) invert(1);
-}
-
-
-
 .card {
     max-width: 900px;
 
@@ -151,7 +124,7 @@ form {
 
     font-weight: 600;
 
-    color: #475467;
+    color: var(--texto-suave);
 
     margin-bottom: 8px;
 }
@@ -193,9 +166,9 @@ textarea {
 
     background: #ffffff;
 
-    border: 1px solid #d0d5dd;
+    border: 1px solid var(--borda);
 
-    border-radius: 9px;
+    border-radius: 10px;
 
     outline: none;
 
@@ -229,7 +202,7 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus {
-    border-color: #0b84d6;
+    border-color: var(--azul-600);
 
     box-shadow: 0 0 0 3px rgba(11, 132, 214, 0.10);
 }
@@ -258,13 +231,35 @@ select {
     border-top: 1px solid #eaecf0;
 }
 
+.withdrawal-feedback {
+    display: none;
+    margin-bottom: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.withdrawal-feedback.show {
+    display: block;
+}
+
+.withdrawal-feedback.error {
+    color: var(--vermelho);
+    background: var(--vermelho-bg);
+}
+
+.withdrawal-feedback.success {
+    color: var(--verde);
+    background: var(--verde-bg);
+}
+
 
 .btn {
-    height: 43px;
+    height: 46px;
 
     padding: 0 22px;
 
-    border-radius: 8px;
+    border-radius: 10px;
 
     font-family: inherit;
 
@@ -290,37 +285,42 @@ select {
 
 
 .btn:active {
-    transform: scale(0.97);
+    transform: translateY(0);
+}
+
+.btn:focus-visible {
+    outline: 3px solid rgba(11, 132, 214, 0.25);
+    outline-offset: 2px;
 }
 
 
 .btn-cancelar {
     background: white;
 
-    color: #475467;
+    color: var(--texto);
 
-    border: 1px solid #d0d5dd;
+    border: 1px solid var(--borda);
 }
 
 
 .btn-cancelar:hover {
-    background: #f9fafb;
+    background: #f8fafc;
 }
 
 
 .btn-confirmar {
-    background: #075d9e;
+    background: var(--azul-800);
 
     color: white;
 
-    border: 1px solid #075d9e;
+    border: 1px solid var(--azul-800);
 
     box-shadow: 0 4px 10px rgba(7, 93, 158, 0.18);
 }
 
 
 .btn-confirmar:hover {
-    background: #064b82;
+    background: var(--azul-900);
 
     box-shadow: 0 6px 14px rgba(7, 93, 158, 0.25);
 }
@@ -381,12 +381,6 @@ select {
 
     .page-header {
         align-items: flex-start;
-    }
-
-    .header-icon {
-        flex: 0 0 42px;
-        width: 42px;
-        height: 42px;
     }
 
     .card-title {

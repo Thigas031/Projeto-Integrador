@@ -1,73 +1,80 @@
 .user-wrap {
-    max-width: 1120px;
+    max-width: 1280px;
     margin: 0 auto;
+    overflow: hidden;
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+    background: var(--branco);
+    box-shadow: 0 12px 30px rgba(16, 24, 40, 0.10);
 }
 
 .user-header {
     display: flex;
     align-items: center;
     gap: 16px;
-    margin-bottom: 32px;
+    padding: 24px 26px 20px;
+    border-bottom: 1px solid var(--borda);
 }
 
 .brand-logo {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     object-fit: contain;
 }
 
 .user-header h1 {
     margin: 0;
-    font-size: 28px;
-}
-
-.user-icon {
-    width: 52px;
-    height: 52px;
-    margin-left: auto;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    color: var(--branco);
-    background: #00346e;
-}
-
-.user-icon img {
-    width: 28px;
-    height: 28px;
-    filter: brightness(0) invert(1);
+    color: var(--texto);
+    font-size: clamp(22px, 2vw, 28px);
+    line-height: 1.2;
 }
 
 .user-form {
-    width: min(520px, 100%);
+    width: min(560px, 100%);
     margin: 0 auto;
+    padding: 26px;
 }
 
 .field {
     display: flex;
     flex-direction: column;
-    gap: 7px;
-    margin-bottom: 16px;
+    gap: 8px;
+    margin-bottom: 20px;
 }
 
 .field label {
-    font-size: 15px;
+    color: var(--texto-suave);
+    font-size: 13px;
     font-weight: 600;
 }
 
 .field input,
 .field select {
     height: 46px;
-    padding: 0 14px;
+    padding: 0 16px;
     border: 1px solid var(--borda);
-    border-radius: 9px;
+    border-radius: 10px;
     color: var(--texto);
     background: var(--branco);
     font-size: 15px;
+    box-shadow: var(--sombra-sm);
+    transition: border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .field input::placeholder {
-    color: #8f8f8f;
+    color: #98a2b3;
+}
+
+.field input:hover,
+.field select:hover {
+    border-color: #cbd5e1;
+}
+
+.field input:focus,
+.field select:focus {
+    border-color: var(--azul-600);
+    box-shadow: 0 0 0 4px rgba(11, 132, 214, 0.10), var(--sombra-sm);
+    outline: 0;
 }
 
 .form-feedback {
@@ -92,27 +99,48 @@
 }
 
 .user-actions {
-    margin-top: 28px;
+    margin-top: 26px;
     display: flex;
     justify-content: flex-end;
     gap: 12px;
 }
 
 .button {
-    min-width: 140px;
+    min-width: 124px;
     height: 46px;
-    border: 1px solid #d0d5dd;
-    border-radius: 8px;
-    background: #eeeeee;
+    padding: 0 20px;
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+    color: var(--texto);
+    background: var(--branco);
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
+    transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.button:hover {
+    border-color: #cbd5e1;
+    background: #f8fafc;
 }
 
 .button--primary {
-    border-color: #00346e;
+    border-color: var(--azul-800);
     color: var(--branco);
-    background: #003b78;
+    background: var(--azul-800);
+    box-shadow: 0 8px 20px rgba(7, 93, 158, 0.20);
+}
+
+.button--primary:hover {
+    border-color: var(--azul-900);
+    color: var(--branco);
+    background: var(--azul-900);
+    box-shadow: 0 10px 24px rgba(7, 93, 158, 0.26);
+    transform: translateY(-1px);
+}
+
+.button:active {
+    transform: translateY(0);
 }
 
 @media (max-width: 900px) {
@@ -122,7 +150,7 @@
 
     .user-header {
         gap: 10px;
-        margin-bottom: 28px;
+        padding: 20px;
     }
 
     .brand-logo {
@@ -134,22 +162,12 @@
         font-size: 22px;
     }
 
-    .user-icon {
-        width: 40px;
-        height: 40px;
-    }
-
-    .user-icon img {
-        width: 22px;
-        height: 22px;
-    }
-
     .field {
-        margin-bottom: 15px;
+        margin-bottom: 18px;
     }
 
     .user-actions {
-        margin-top: 24px;
+        margin-top: 22px;
         justify-content: flex-end;
         gap: 10px;
     }
@@ -159,9 +177,18 @@
         height: 44px;
         font-size: 14px;
     }
+
+    .user-form {
+        padding: 22px 20px;
+    }
 }
 
 @media (max-width: 480px) {
+    .brand-logo {
+        width: 38px;
+        height: 38px;
+    }
+
     .user-header h1 {
         font-size: 20px;
     }
@@ -169,5 +196,9 @@
     .user-actions .button {
         flex: 1;
         min-width: 0;
+    }
+
+    .user-form {
+        padding: 20px 16px;
     }
 }

@@ -39,55 +39,56 @@
                         <td>001</td>
                         <td><span class="disponivel">Disponível</span></td>
                         <td>-</td>
-                        <td><button type="button" aria-label="Ações da chave 001">menu<span class="icone-acoes" aria-hidden="true"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt=""></span></button></td>
+                        <td><button type="button" data-key-action aria-label="Registrar ação para a chave 001"><span class="icone-acoes" aria-hidden="true">&#8942;</span></button></td>
                     </tr>
                     <tr data-chave="2">
                         <td>Sala 02</td>
                         <td>002</td>
                         <td><span class="emprestada">Emprestada</span></td>
                         <td>Carlos Nogueira</td>
-                        <td><button type="button" aria-label="Ações da chave 002">menu<span class="icone-acoes" aria-hidden="true"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt=""></span></button></td>
+                        <td><button type="button" data-key-action aria-label="Registrar ação para a chave 002"><span class="icone-acoes" aria-hidden="true">&#8942;</span></button></td>
                     </tr>
                     <tr data-chave="3">
                         <td>Laboratório</td>
                         <td>003</td>
                         <td><span class="atrasada">Atrasada</span></td>
                         <td>Vinícius Dantos</td>
-                        <td><button type="button" aria-label="Ações da chave 003">menu<span class="icone-acoes" aria-hidden="true"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt=""></span></button></td>
+                        <td><button type="button" data-key-action aria-label="Registrar ação para a chave 003"><span class="icone-acoes" aria-hidden="true">&#8942;</span></button></td>
                     </tr>
                     <tr data-chave="4">
                         <td>Sala 01</td>
                         <td>004</td>
                         <td><span class="disponivel">Disponível</span></td>
                         <td>-</td>
-                        <td><button type="button" aria-label="Ações da chave 004">menu<span class="icone-acoes" aria-hidden="true"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt=""></span></button></td>
+                        <td><button type="button" data-key-action aria-label="Registrar ação para a chave 004"><span class="icone-acoes" aria-hidden="true">&#8942;</span></button></td>
                     </tr>
                     <tr data-chave="5">
                         <td>Inovaê</td>
                         <td>005</td>
                         <td><span class="emprestada">Emprestada</span></td>
                         <td>Jamilton Neto</td>
-                        <td><button type="button" aria-label="Ações da chave 005">menu<span class="icone-acoes" aria-hidden="true"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt=""></span></button></td>
+                        <td><button type="button" data-key-action aria-label="Registrar ação para a chave 005"><span class="icone-acoes" aria-hidden="true">&#8942;</span></button></td>
+                    </tr>
+                    <tr id="linha-sem-resultados" hidden>
+                        <td colspan="5">Nenhuma chave encontrada.</td>
                     </tr>
                 </tbody>
             </table>
 
             <div class="rodape-tabela">
-                <p id="quantidade">Mostrando 1 a 5 chaves de 25</p>
+                <p id="quantidade">Mostrando 1 a 5 chaves de 5</p>
                 <nav class="paginacao" aria-label="Paginação">
-                    <button type="button" aria-label="Página anterior">Anterior</button>
-                    <button type="button">1</button>
-                    <button type="button">2</button>
-                    <button type="button">3</button>
-                    <button type="button">4</button>
-                    <button type="button">5</button>
-                    <button type="button" aria-label="Próxima página">Próxima</button>
+                    <button type="button" data-page-action="previous" aria-label="Página anterior" disabled>Anterior</button>
+                    <div class="paginas" id="paginas">
+                        <button type="button" aria-current="page">1</button>
+                    </div>
+                    <button type="button" data-page-action="next" aria-label="Próxima página" disabled>Próxima</button>
                 </nav>
             </div>
         </section>
 
         <section class="acoes-rapidas">
-            <button id="retirar-chave" type="button" onclick="window.location.href='retiradadechaves.html'">
+            <button id="retirar-chave" type="button">
                 <span class="icone-retirar" aria-hidden="true"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt=""></span>
                 <strong>Retirar a chave</strong>
                 <small>Registrar a retirada de uma chave</small>
@@ -100,6 +101,7 @@
         </section>
     </main>
 
+    <script src="../js/demo-data.js"></script>
     <script src="../js/menu-lateral.js" defer></script>
     <script src="../js/listadechaves.js"></script>
 </body>
