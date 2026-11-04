@@ -2,26 +2,25 @@
 session_start();
 require_once("../config/config.php");
 
-$email = $_POST['email'];
+$usuario = $_POST['usuario'];
 $senha = $_POST['senha'];
 
-$sql = "SELECT * FROM cadastros WHERE mail_user = :email";
+$sql = "SELECT * FROM usuario WHERE nome = :usuario";
 
 $stmt = $pdo->prepare($sql);
 
-$stmt->execute([':email' => $email]);
+$stmt->execute([':usuario' => $usuario]);
 
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if($usuario && password_verify($senha, $usuario['senha_user'])) {
-    $_SESSION['id'] = $usuario['id_user'];
-    $_SESSION['nome'] = $usuario['nome_user'];
-    $_SESSION['email'] = $usuario['mail_user'];
+if($usuario && password_verify($senha, $usuario['senha'])) {
+    $_SESSION['id'] = $usuario['id_usuario'];
+    $_SESSION['usuario'] = $usuario['nome'];
 
-    require("../views/tela_principal.php");
+    header("Location: ../pages/listaschaves.html");
 } else{
     $_SESSION['erro_login'] = "E-mail ou senha incorretos.";
 
-    header("Location: ..");
+    header("Location: ../pages/login.html");
     exit;
 }
