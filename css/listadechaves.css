@@ -254,31 +254,36 @@ main {
 }
 
 #tabela-chaves td:last-child {
-    width: 74px;
-    text-align: center;
+    width: 1%;
+    text-align: left;
 }
 
-#tabela-chaves td:last-child button {
-    width: 36px;
-    height: 36px;
-    border: 1px solid transparent;
-    border-radius: 10px;
-    background: transparent;
+#tabela-chaves td.key-actions {
+    width: auto;
+}
+
+#tabela-chaves td.key-actions button {
+    min-height: 34px;
+    padding: 6px 9px;
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    background: var(--branco);
     color: var(--texto-suave);
     cursor: pointer;
-    font-size: 0;
+    font-size: 12px;
+    white-space: nowrap;
+    margin: 2px;
 }
 
-#tabela-chaves td:last-child button:hover {
-    border-color: var(--borda);
+#tabela-chaves td.key-actions button:hover {
+    border-color: #cbd5e1;
     background: #f8fafc;
     color: var(--azul-800);
 }
 
-.icone-acoes {
-    display: block;
-    font-size: 24px;
-    line-height: 1;
+#tabela-chaves td.key-actions button.danger,
+.users-table button.danger {
+    color: var(--vermelho);
 }
 
 .rodape-tabela {
@@ -344,6 +349,39 @@ main {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
 }
+
+.acoes-rapidas[hidden] { display: none; }
+
+.list-feedback {
+    margin: 10px auto;
+    color: var(--texto-suave);
+}
+
+.list-feedback.show {
+    padding: 10px 12px;
+    border-radius: 8px;
+}
+
+.list-feedback.error { color: var(--vermelho); background: var(--vermelho-bg); }
+.list-feedback.success { color: var(--verde); background: var(--verde-bg); }
+
+#manager-movement-dialog {
+    width: min(460px, calc(100% - 28px));
+    margin: auto;
+    padding: 24px;
+    border: 1px solid var(--borda);
+    border-radius: 14px;
+    color: var(--texto);
+    box-shadow: var(--sombra-md);
+}
+
+#manager-movement-dialog::backdrop { background: rgba(15, 23, 42, .42); }
+#manager-movement-dialog form { display: grid; gap: 14px; }
+#manager-movement-dialog h2 { font-size: 20px; }
+#manager-movement-dialog select { min-height: 42px; padding: 8px; border: 1px solid var(--borda); border-radius: 8px; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: 10px; }
+.dialog-actions button { min-height: 40px; padding: 0 14px; border: 1px solid var(--borda); border-radius: 8px; background: white; cursor: pointer; }
+.dialog-actions button.primary { color: white; background: var(--azul-800); border-color: var(--azul-800); }
 
 .acoes-rapidas button {
     min-height: 116px;
@@ -445,12 +483,13 @@ main {
     }
 
     .lista-chaves {
-        overflow: hidden;
+        overflow-x: auto;
         border-radius: 10px;
     }
 
     #tabela-chaves {
-        table-layout: fixed;
+        min-width: 760px;
+        table-layout: auto;
     }
 
     #tabela-chaves th,
@@ -494,9 +533,12 @@ main {
         padding: 0;
     }
 
-    #tabela-chaves td:last-child button {
-        width: 30px;
-        height: 30px;
+    #tabela-chaves td.key-actions button {
+        width: auto;
+        height: auto;
+        min-height: 30px;
+        padding: 5px 7px;
+        font-size: 11px;
     }
 
     .acoes-rapidas {

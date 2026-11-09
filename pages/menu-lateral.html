@@ -4,10 +4,20 @@
     </button>
 
     <nav id="navegacao-principal" aria-label="Navegação principal">
-        <a href="dashboard.html" data-page="dashboard" aria-label="Início"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Início</a>
-        <a href="listadechaves.html" data-page="lista-chaves" data-page-alias="cadastro-chaves" aria-label="Chaves"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Chaves</a>
-        <a href="retiradadechaves.html" data-page="retirada-chaves" aria-label="Retiradas"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Retiradas</a>
-        <a href="cadastrodeusuario.html" data-page="usuarios" aria-label="Usuários"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Usuários</a>
-        <a href="devolucaodechaves.html" data-page="devolucao-chaves" aria-label="Devoluções"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Devoluções</a>
+        <a href="dashboard.php" data-page="dashboard" data-profiles="GERENTE,PORTEIRO" aria-label="Dashboard" hidden><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Dashboard</a>
+        <a href="listadechaves.php" data-page="lista-chaves" data-profiles="GERENTE,PORTEIRO" aria-label="Lista de chaves" hidden><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Lista de Chaves</a>
+        <a href="cadastrodechaves.php" data-page="cadastro-chaves" data-profiles="GERENTE,PORTEIRO" aria-label="Cadastrar chave" hidden><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Cadastrar Chave</a>
+        <a href="retiradadechaves.php" data-page="retirada-chaves" data-profiles="PORTEIRO" aria-label="Retirada de chaves" hidden><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Retirada de Chaves</a>
+        <a href="devolucaodechaves.php" data-page="devolucao-chaves" data-profiles="PORTEIRO" aria-label="Devolução de chaves" hidden><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Devolução de Chaves</a>
+        <a href="cadastrodeusuario.php" data-page="usuarios" data-profiles="GERENTE" aria-label="Usuários" hidden><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Usuários</a>
+        <a href="ocorrencias.php" data-page="ocorrencias" data-profiles="GERENTE,PORTEIRO" aria-label="Ocorrências" hidden><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Ocorrências</a>
     </nav>
+
+    <div class="menu-user" aria-label="Usuário autenticado">
+        <img class="menu-user-avatar" data-user-avatar src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
+        <div class="menu-user-info">
+            <span class="menu-user-name" data-user-name></span>
+            <span class="menu-user-role" data-user-role></span>
+        </div>
+    </div>
 </aside>

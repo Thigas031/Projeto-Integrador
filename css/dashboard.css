@@ -3,6 +3,28 @@
     margin: 0 auto;
 }
 
+.dashboard-feedback {
+    margin-top: 12px;
+}
+
+.dashboard-feedback.show {
+    padding: 10px 12px;
+    border-radius: 8px;
+}
+
+.dashboard-feedback.error {
+    color: var(--vermelho);
+    background: var(--vermelho-bg);
+}
+
+.data-state {
+    padding: 20px;
+    color: var(--texto-suave);
+    font-size: 14px;
+}
+
+.data-state.error { color: var(--vermelho); }
+
 .dashboard-header {
     display: flex;
     align-items: center;

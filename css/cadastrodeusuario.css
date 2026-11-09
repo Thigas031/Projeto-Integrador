@@ -35,6 +35,89 @@
     padding: 26px;
 }
 
+.user-form[hidden] { display: none; }
+.user-form h2 { margin: 0 0 20px; color: var(--texto); font-size: 19px; }
+
+.user-list-section {
+    padding: 24px 26px 8px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.section-heading h2 {
+    color: var(--texto);
+    font-size: 19px;
+}
+
+.table-wrap { width: 100%; overflow-x: auto; }
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+
+.users-table th,
+.users-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--borda);
+    text-align: left;
+    font-size: 13px;
+}
+
+.users-table th {
+    color: var(--texto-suave);
+    background: #f8fafc;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.users-table tbody tr td[colspan] {
+    padding: 24px;
+    color: var(--texto-suave);
+    text-align: center;
+}
+
+.users-table button {
+    margin-right: 6px;
+    padding: 6px 9px;
+    border: 1px solid var(--borda);
+    border-radius: 7px;
+    background: #fff;
+    color: var(--azul-800);
+    cursor: pointer;
+}
+
+.field-hint {
+    color: var(--texto-suave);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.field textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px 16px;
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+    color: var(--texto);
+    background: var(--branco);
+    font: inherit;
+    resize: vertical;
+}
+
+.field textarea:focus {
+    border-color: var(--azul-600);
+    box-shadow: 0 0 0 4px rgba(11, 132, 214, 0.10), var(--sombra-sm);
+    outline: 0;
+}
+
 .field {
     display: flex;
     flex-direction: column;
@@ -181,6 +264,9 @@
     .user-form {
         padding: 22px 20px;
     }
+
+    .user-list-section { padding: 20px 20px 6px; }
+    .section-heading { align-items: flex-start; flex-direction: column; }
 }
 
 @media (max-width: 480px) {
@@ -201,4 +287,6 @@
     .user-form {
         padding: 20px 16px;
     }
+
+    .user-list-section { padding: 18px 16px 4px; }
 }

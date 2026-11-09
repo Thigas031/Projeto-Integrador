@@ -67,6 +67,17 @@ body {
     gap: 18px;
     text-align: left;
 }
+
+.login-feedback {
+    display: none;
+    padding: 11px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.login-feedback.show { display: block; }
+.login-feedback.error { color: #b4233a; background: #feecef; }
+.login-feedback.success { color: #18794e; background: #e9f8ef; }
  
 .input-group label {
     display: block;

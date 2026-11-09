@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../controllers/controller_page_access.php'; requirePageAccess(['PORTEIRO']); ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -16,7 +17,7 @@
     <link rel="stylesheet" href="../css/global.css">
 </head>
 
-<body>
+<body data-profiles="PORTEIRO" data-auth-state="pending">
 
 <div class="app">
     <div id="menu-lateral-container" data-page="retirada-chaves" data-menu-url="menu-lateral.html"></div>
@@ -67,29 +68,7 @@
                         <div class="input-wrapper">
                             <i class="fa-solid fa-door-open"></i>
 
-                            <select id="sala" class="select-control" required>
-
-                                <option value="">
-                                    Selecione uma sala
-                                </option>
-
-                                <option>
-                                    Sala 01
-                                </option>
-
-                                <option>
-                                    Sala 02
-                                </option>
-
-                                <option>
-                                    Laboratório
-                                </option>
-
-                                <option>
-                                    Inovaê
-                                </option>
-
-                            </select>
+                            <input id="sala" type="text" readonly placeholder="Será preenchido pela chave selecionada" required>
                         </div>
 
                     </div>
@@ -106,27 +85,7 @@
                             <i class="fa-solid fa-user"></i>
 
                             <select id="usuario" class="select-control" required>
-
-                                <option value="">
-                                    Selecione o usuário
-                                </option>
-
-                                <option>
-                                    Professor Taty
-                                </option>
-
-                                <option>
-                                    Carlos Nogueira
-                                </option>
-
-                                <option>
-                                    Vinícius Dantos
-                                </option>
-
-                                <option>
-                                    Jamilton Neto
-                                </option>
-
+                                <option value="">Selecione o usuário cadastrado</option>
                             </select>
                         </div>
 
@@ -146,30 +105,7 @@
 
                             <select id="chave" class="select-control" required>
 
-                                <option value="">
-                                    Selecione a chave
-                                </option>
-
-                                <option>
-                                    001
-                                </option>
-
-                                <option>
-                                    002
-                                </option>
-
-                                <option>
-                                    003
-                                </option>
-
-                                <option>
-                                    004
-                                </option>
-
-                                <option>
-                                    005
-                                </option>
-
+                                <option value="">Selecione uma chave disponível</option>
                             </select>
 
                         </div>
@@ -191,8 +127,7 @@
                             <input
                                 type="date"
                                 id="data"
-                                value="2026-08-18"
-                                required
+                                readonly
                             >
 
                         </div>
@@ -214,8 +149,7 @@
                             <input
                                 type="time"
                                 id="hora"
-                                value="13:30"
-                                required
+                                readonly
                             >
 
                         </div>
@@ -270,6 +204,9 @@
 
 </div>
 
+<script src="../js/app-profile.js"></script>
+<script src="../js/app-services.js"></script>
+<script src="../js/page-access.js"></script>
 <script src="../js/menu-lateral.js" defer></script>
 <script src="../js/form-feedback.js"></script>
 <script src="../js/retiradadechaves.js"></script>

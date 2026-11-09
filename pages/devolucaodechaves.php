@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../controllers/controller_page_access.php'; requirePageAccess(['PORTEIRO']); ?>
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -8,7 +9,7 @@
     <link rel="stylesheet" href="../css/devolucaodechaves.css">
     <link rel="stylesheet" href="../css/menu-lateral.css">
 </head>
-<body>
+<body data-profiles="PORTEIRO" data-auth-state="pending">
     <div id="menu-lateral-container" data-page="devolucao-chaves" data-menu-url="menu-lateral.html"></div>
 
     <main class="app-page">
@@ -64,7 +65,9 @@
         </div>
     </main>
 
-    <script src="../js/demo-data.js"></script>
+    <script src="../js/app-profile.js"></script>
+    <script src="../js/app-services.js"></script>
+    <script src="../js/page-access.js"></script>
     <script src="../js/menu-lateral.js" defer></script>
     <script src="../js/form-feedback.js"></script>
     <script src="../js/devolucaodechaves.js"></script>
