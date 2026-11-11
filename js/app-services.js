@@ -138,6 +138,18 @@
                 body: body.toString(),
                 credentials: "same-origin"
             });
+        },
+        async logout() {
+            const body = new URLSearchParams({ acao: "logout" });
+            return request("../controllers/controller_user_login.php", {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+                },
+                body: body.toString(),
+                credentials: "same-origin"
+            });
         }
     };
 

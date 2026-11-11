@@ -27,6 +27,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && empty($_SESSION['id'])) {
     responderLogin(401, ['ok' => false, 'message' => 'Autenticação necessária.']);
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'logout') {
+    $_SESSION = [];
+    if (!session_destroy()) {
+        responderLogin(500, ['ok' => false, 'message' => 'Não foi possível encerrar a sessão.']);
+    }
+
+    $cookie = session_get_cookie_params();
+    if (!setcookie(session_name(), '', time() - 42000, $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly'])) {
+        responderLogin(500, ['ok' => false, 'message' => 'A sessão foi encerrada, mas não foi possível limpar o cookie do navegador.']);
+    }
+    responderLogin(200, ['ok' => true, 'message' => 'Sessão encerrada.']);
+}
+
 require_once("../config/config.php");
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {

@@ -48,6 +48,7 @@
             const paginaAtual = container.dataset.page;
             menu.dataset.page = paginaAtual;
             const botaoMenu = menu.querySelector(".botao-menu");
+            const botaoSair = menu.querySelector(".botao-sair");
             aplicarPerfil(menu, links, container, usuario);
 
             botaoMenu.addEventListener("click", function () {
@@ -62,6 +63,18 @@
                     botaoMenu.setAttribute("aria-expanded", "false");
                     botaoMenu.setAttribute("aria-label", "Abrir menu");
                     botaoMenu.focus();
+                }
+            });
+
+            botaoSair.addEventListener("click", async function () {
+                botaoSair.disabled = true;
+                try {
+                    await window.AppServices.auth.logout();
+                    window.location.replace("login.html");
+                } catch (error) {
+                    console.error("Não foi possível encerrar a sessão.", error);
+                    window.alert(error.message || "Não foi possível encerrar a sessão.");
+                    botaoSair.disabled = false;
                 }
             });
 

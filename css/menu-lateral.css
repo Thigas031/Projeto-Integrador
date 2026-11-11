@@ -88,7 +88,7 @@
     justify-content: center;
     gap: 11px;
     min-width: 0;
-    margin: auto 0 0;
+    margin: 0;
     padding: 12px 0 4px;
     color: var(--branco, #ffffff);
     border-top: 1px solid rgba(255,255,255,0.18);
@@ -158,11 +158,12 @@
 .menu-lateral nav a[aria-current="page"] img { opacity: 1; }
 
 .botao-sair {
-    position: absolute;
-    left: 15px;
-    bottom: 28px;
+    position: static;
+    align-self: stretch;
+    width: auto;
     min-width: 48px;
     height: 44px;
+    margin: auto 3px 8px;
     padding: 0 14px;
     border-radius: 12px;
     color: rgba(255,255,255,0.82);
@@ -179,7 +180,7 @@
 }
 
 .menu-lateral:hover .botao-sair,
-.menu-lateral:focus-within .botao-sair { width: calc(100% - 30px); font-size: 14px; font-weight: 600; }
+.menu-lateral:focus-within .botao-sair { font-size: 14px; font-weight: 600; }
 
 .botao-sair:hover { color: var(--branco, #ffffff); background: rgba(255,255,255,0.10); }
 
@@ -226,7 +227,18 @@
     .menu-lateral.is-open nav a { display: grid; place-items: center; width: 40px; height: 40px; min-height: 40px; padding: 0; border-radius: 10px; font-size: 0; }
     .menu-lateral nav img { width: 28px; height: 28px; margin: 0; object-fit: contain; }
     .botao-menu { flex: 0 0 40px; width: 40px; min-height: 40px; margin: 0; }
-    .botao-sair { display: none; }
+    .botao-sair {
+        position: static;
+        align-self: auto;
+        flex: 0 0 40px;
+        width: 40px;
+        min-width: 40px;
+        height: 40px;
+        margin: 0;
+        padding: 0;
+        font-size: 0;
+        text-align: center;
+    }
     .menu-user {
         flex: 0 0 40px;
         margin: 0 0 0 5px;

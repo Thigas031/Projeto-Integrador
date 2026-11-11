@@ -68,6 +68,35 @@ body {
     text-align: left;
 }
 
+.login-session {
+    width: 100%;
+    margin: -14px 0 20px;
+    padding: 12px;
+    border: 1px solid #d5e8f5;
+    border-radius: 10px;
+    background: #f0f7fc;
+    color: #17496b;
+    font-size: 14px;
+    text-align: left;
+}
+
+.login-session[hidden] { display: none; }
+
+.login-session button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border: 1px solid #075d9e;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #075d9e;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.login-session button:hover { background: #e6f2fa; }
+.login-session button:disabled { cursor: wait; opacity: 0.65; }
+
 .login-feedback {
     display: none;
     padding: 11px 12px;

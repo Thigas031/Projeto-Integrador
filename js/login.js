@@ -2,10 +2,15 @@
     const form = document.getElementById("login-form");
     const feedback = document.getElementById("login-feedback");
     const submitButton = form.querySelector('[type="submit"]');
+    const sessionActions = document.getElementById("login-session");
+    const sessionMessage = document.getElementById("login-session-message");
+    const logoutButton = document.getElementById("login-logout");
 
     window.AppProfile.ready.then(function (user) {
         if (user) {
-            window.location.replace("dashboard.php");
+            sessionMessage.textContent = "Você já está conectado como " + user.name +
+                ". Saia desta conta ou entre com outra.";
+            sessionActions.hidden = false;
         }
     }).catch(function (error) {
         window.AppFeedback.show(
@@ -13,6 +18,23 @@
             error.message || "Não foi possível verificar a sessão com o servidor.",
             "error"
         );
+    });
+
+    logoutButton.addEventListener("click", async function () {
+        logoutButton.disabled = true;
+        try {
+            await window.AppServices.auth.logout();
+            sessionActions.hidden = true;
+            window.AppFeedback.show(feedback, "Sessão encerrada. Você já pode entrar.", "success");
+        } catch (error) {
+            window.AppFeedback.show(
+                feedback,
+                error.message || "Não foi possível encerrar a sessão.",
+                "error"
+            );
+        } finally {
+            logoutButton.disabled = false;
+        }
     });
 
     form.addEventListener("submit", async function (event) {

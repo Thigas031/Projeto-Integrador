@@ -2,7 +2,7 @@
 
 ## Login e sessão
 
-O acesso ao sistema exige uma sessão PHP válida. A tela `pages/login.html` envia CPF ou e-mail e senha por `POST` para `controllers/controller_user_login.php`; o controller consulta `usuarios`, valida o hash com `password_verify`, regenera o ID da sessão e retorna o nome e o cargo. Uma solicitação `GET` ao mesmo controller devolve os dados do usuário da sessão ou HTTP 401.
+O acesso ao sistema exige uma sessão PHP válida. A tela `pages/login.html` envia CPF ou e-mail e senha por `POST` para `controllers/controller_user_login.php`; o controller consulta `usuarios`, valida o hash com `password_verify`, regenera o ID da sessão e retorna o nome e o cargo. Uma solicitação `GET` ao mesmo controller devolve os dados do usuário da sessão ou HTTP 401. Ao abrir o Login com uma sessão ativa, a tela continua disponível para autenticar outra conta ou encerrar a sessão. O botão "Sair" no menu e o botão na tela de Login encerram a sessão no servidor.
 
 As páginas administrativas e operacionais agora usam PHP e validam sessão, usuário ativo e cargo no servidor antes de entregar o HTML. O frontend também confirma a sessão para obter nome e cargo e configurar o menu; os controles no navegador complementam, mas não substituem, autorização em cada endpoint de dados.
 
@@ -20,7 +20,7 @@ As páginas administrativas e operacionais agora usam PHP e validam sessão, usu
 
 O dump SQL não contém usuários cadastrados e, portanto, não há credencial de teste disponível nele. Nenhum usuário foi criado durante esta alteração. Para testar, o responsável pelo banco precisa provisionar uma conta ativa `Gerente` ou `Porteiro`, com CPF de 11 dígitos, e-mail válido e senha armazenada com `password_hash`. Não grave a senha em texto puro no SQL. A integração depende do banco local estar acessível; executar as páginas via `file://` ou servidor estático não executa PHP e não autentica.
 
-O `index.html` da raiz redireciona por caminho relativo a `pages/dashboard.php`, preservando prefixos de publicação como `/nome-do-repositorio/`. O Dashboard exige uma sessão e, sem login, encaminha ao Login. Live Server e GitHub Pages são servidores estáticos e não executam PHP; para exibir o Dashboard e validar sessão nesses ambientes é necessário publicar também o backend em um servidor PHP. O redirecionamento de URL pode ser conferido em hosting estático, mas isso não significa que a página PHP será executada.
+O `index.html` da raiz redireciona por caminho relativo a `pages/login.html`, preservando prefixos de publicação como `/nome-do-repositorio/`. Live Server e GitHub Pages são servidores estáticos e não executam PHP; a página de Login poderá ser exibida, mas a autenticação depende do backend em um servidor PHP. Para usar o sistema completo, inicie o PHP e o banco conforme as instruções acima.
 
 ## Perfil do usuário e menu
 
