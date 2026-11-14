@@ -24,7 +24,9 @@ window.AppAccess.run(function () {
     }
 
     function fillMovementDetails() {
-        const movement = openMovements.find(function (item) { return item.keyId === select.value; });
+        const movement = openMovements.find(function (item) {
+            return String(item.keyId) === select.value;
+        });
         fields.user.value = movement ? movement.userName : "";
         fields.date.value = movement ? formatDate(movement.withdrawnAt) : "";
         fields.time.value = movement ? formatTime(movement.withdrawnAt) : "";
@@ -50,7 +52,9 @@ window.AppAccess.run(function () {
                 select.appendChild(option);
             });
 
-            if (requestedKey && openKeys.some(function (key) { return key.id === requestedKey; })) {
+            if (requestedKey && openKeys.some(function (key) {
+                return String(key.id) === requestedKey;
+            })) {
                 select.value = requestedKey;
             }
             submitButton.disabled = openKeys.length === 0;

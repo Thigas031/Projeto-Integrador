@@ -2,14 +2,14 @@
 
 ## Login e sessão
 
-O acesso ao sistema exige uma sessão PHP válida. A tela `pages/login.html` envia CPF ou e-mail e senha por `POST` para `controllers/controller_user_login.php`; o controller consulta `usuarios`, valida o hash com `password_verify`, regenera o ID da sessão e retorna o nome e o cargo. Uma solicitação `GET` ao mesmo controller devolve os dados do usuário da sessão ou HTTP 401. Ao abrir o Login com uma sessão ativa, a tela continua disponível para autenticar outra conta ou encerrar a sessão. O botão "Sair" no menu e o botão na tela de Login encerram a sessão no servidor.
+O acesso ao sistema exige uma sessão PHP válida. A tela `pages/login.html` envia CPF de 11 dígitos e senha por `POST` para `controllers/controller_user_login.php`; o controller consulta `usuarios`, valida o hash com `password_verify`, regenera o ID da sessão e grava nome e cargo. A opção "Lembrar de mim" mantém o cookie por sete dias. Uma solicitação `GET` ao mesmo controller devolve os dados do usuário ativo da sessão ou HTTP 401. O endpoint `controller_sessao.php` devolve nome, cargo e mensagens flash de uso único. O menu encerra a sessão por `controller_user_logout.php`.
 
-As páginas administrativas e operacionais agora usam PHP e validam sessão, usuário ativo e cargo no servidor antes de entregar o HTML. O frontend também confirma a sessão para obter nome e cargo e configurar o menu; os controles no navegador complementam, mas não substituem, autorização em cada endpoint de dados.
+As páginas administrativas e operacionais usam PHP e validam sessão, usuário ativo e cargo no servidor antes de entregar o HTML. O frontend confirma a sessão para obter nome e cargo e configurar o menu; os controles no navegador complementam, mas não substituem, autorização em cada endpoint de dados.
 
 ### Executar localmente
 
 1. Instale PHP com `pdo_mysql` e inicie MariaDB/MySQL.
-2. Importe `gerenciamento_chaves.sql` e ajuste as credenciais de conexão em `config/config.php`.
+2. Configure o banco `gerenciamento_chaves` e as credenciais em `config/config.php`. O dump `gerenciamento_chaves.sql` é antigo e difere do schema real: os controllers usam `chaves.status_chaves`, `usuarios.ativo` e `movimentacoes.data_prevista`. Use as definições reais confirmadas via `SHOW CREATE TABLE`; não importe o dump sem alinhá-lo.
 3. Na raiz do projeto, inicie o servidor PHP embutido:
 
    ```sh
@@ -26,50 +26,27 @@ O `index.html` da raiz redireciona por caminho relativo a `pages/login.html`, pr
 
 `js/app-profile.js` obtém a sessão do controller PHP em cada carregamento, sem aceitar cargo de `localStorage`, `sessionStorage` ou configuração global. Páginas protegidas aguardam essa validação e redirecionam sessões ausentes ou incompatíveis. A identificação inferior do menu reutiliza o ícone de casa já usado nas opções de navegação e exibe nome e cargo recebidos da sessão quando expandida.
 
-As permissões de interface permanecem: GERENTE administra usuários e chaves, movimenta pela lista e consulta ocorrências; PORTEIRO cadastra/consulta chaves, usa retirada/devolução e registra/consulta ocorrências. As páginas `.php` também verificam os cargos permitidos no servidor. Os endpoints de dados ainda precisam aplicar autorização no próprio backend.
+O valor armazenado no ENUM `usuarios.cargo` como `Gerente` representa GERENTE (Gerente Geral); a sessão e a interface usam `GERENTE`. GERENTE administra usuários, salas e chaves, registra movimentações e consulta histórico, observações e dashboard. PORTEIRO consulta chaves/salas, registra retirada/devolução e observações. As páginas `.php` e os endpoints validam os cargos no servidor.
 
 ## Serviços e integração de dados
 
-`js/app-services.js` centraliza as chamadas HTTP. Não há mais modo demonstrativo, dados locais, perfis simulados ou fallback sem backend. Os endpoints de listagem e CRUD abaixo ainda não existem no projeto; até serem configurados e implementados, as operações de dados exibem erros em vez de aparentar sucesso.
+`js/app-services.js` centraliza as chamadas HTTP e aponta para os controllers PHP. As respostas seguem `{ "ok": true, "data": ... }`; erros usam status HTTP apropriado e `{ "ok": false, "message": "..." }`. As listas de chaves recebem `busca`, `status` e `pagina` e retornam cinco itens, `total` e `pagina`. As escritas são enviadas como formulário codificado para preencher `$_POST`.
 
-O frontend espera configurar `window.APP_CONFIG.endpoints` antes de `app-services.js`:
-
-```js
-window.APP_CONFIG = {
-    endpoints: {
-        listUsers: "/api/users",
-        listMovementUsers: "/api/users/for-key-movement",
-        createUser: "/api/users",
-        updateUser: "/api/users/{id}",
-        deleteUser: "/api/users/{id}",
-        listKeys: "/api/keys",
-        listReturnableKeys: "/api/keys/returnable",
-        createKey: "/api/keys",
-        getKey: "/api/keys/{id}",
-        updateKey: "/api/keys/{id}",
-        deleteKey: "/api/keys/{id}",
-        withdrawKey: "/api/keys/withdraw",
-        returnKey: "/api/keys/{id}/return",
-        listMovements: "/api/movements",
-        listOccurrences: "/api/occurrences",
-        createOccurrence: "/api/occurrences"
-    }
-};
-```
-
-As respostas devem ser JSON `{ "ok": true, "data": ... }`; erros devem usar status HTTP apropriado e `{ "ok": false, "message": "..." }`. Listagens retornam `data` como array. Os campos consumidos pela interface são:
+Os campos consumidos pela interface são:
 
 - Usuário: `id`, `name`, `cpf`, `role`, `phone`, `email`.
-- Chave: `id`, `name`, `number`, `block`, `status`, `responsible`.
+- Chave: `id`, `salaId`, `name`, `number`, `block`, `status`, `responsible`.
 - Movimentação: `id`, `keyId`, `keyName`, `keyNumber`, `userId`, `userName`, `withdrawnAt`, `returnedAt`, `notes`.
 - Ocorrência: `id`, `text`, `createdAt`, `createdBy`.
 
-O backend precisa aplicar autorização de sessão em cada operação, unicidade, transições de estado e preservação do histórico. A tabela `chaves` usa `id_sala` e `numero_chave`; o nome e bloco vêm de `salas`. `movimentacoes.id_porteiro` é obrigatório mesmo para movimentações feitas por GERENTE, e a regra de `data_prevista` ainda precisa ser definida. O controller de cadastro de usuários existente e o esquema SQL precisam ser alinhados pelo responsável pelo backend antes de habilitar esses endpoints.
+O backend aplica autorização de sessão em cada operação, unicidade, transições de estado e preservação do histórico. A tabela `chaves` usa `id_sala`, `numero_chave`, `status_chaves` e `ativo`; o nome e bloco vêm de `salas`. `movimentacoes.id_porteiro` recebe o usuário autenticado que registra a retirada, inclusive GERENTE. A data/hora prevista de devolução é informada no formulário de retirada e armazenada em `movimentacoes.data_prevista`; o horário efetivo da retirada é gerado pelo servidor. O status de movimentação é derivado de `data_devolucao`, sem coluna ou trigger.
 
-O Login só aceita os cargos GERENTE e PORTEIRO. A senha inicial pelos quatro primeiros dígitos do CPF, assim como uma possível troca obrigatória no primeiro acesso, deve ser implementada no backend; o navegador não gera nem armazena essa senha.
+Os controllers de salas e relatórios estão disponíveis no backend; o projeto ainda não inclui telas próprias de administração de salas ou relatórios.
 
 ## Cadastro de chaves e salas
 
-O cadastro de uma chave exige uma sala já cadastrada e o envio do ID da sala ao backend. A solução recomendada para evitar a mensagem “Selecione uma sala cadastrada na lista.” é escolher a sala em uma lista que mostre nome, número e bloco, em vez de depender de texto digitado. O formulário deve manter as validações de sala existente e número de chave único.
+Uma chave precisa estar associada a uma sala já cadastrada. No cadastro, use uma das sugestões com nome, número e bloco para que o formulário identifique o ID da sala; digitar apenas o nome funciona somente quando ele corresponde exatamente a uma sala única. O número da chave também precisa ser único. Não é necessário criar uma nova sala para cadastrar outra chave em uma sala existente.
 
-Uma tela separada de cadastro de salas não é necessária quando a sala já existe. Se for criada futuramente, a especificação prevê acesso de GERENTE, campos de nome, número e bloco, listagem com ações de criar/editar/excluir, unicidade de número + bloco e bloqueio de exclusão quando houver chaves vinculadas. Os critérios completos estão em [#1](https://github.com/Thigas031/Projeto-Integrador/issues/1).
+O backend já oferece operações de cadastro, edição, listagem e exclusão de salas, mas ainda não existe uma tela de administração de salas. A especificação recomendada para melhorar a seleção da sala no cadastro de chaves e, opcionalmente, criar essa tela está em [#1](https://github.com/Thigas031/Projeto-Integrador/issues/1).
+
+O Login só aceita os cargos GERENTE e PORTEIRO. A senha inicial pelos quatro primeiros dígitos do CPF, assim como uma possível troca obrigatória no primeiro acesso, deve ser implementada no backend; o navegador não gera nem armazena essa senha.

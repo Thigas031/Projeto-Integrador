@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . '/../controllers/controller_page_access.php'; requirePageAccess(['GERENTE', 'PORTEIRO']); ?>
+<?php require_once __DIR__ . '/../controllers/controller_page_access.php'; requirePageAccess(['GERENTE']); ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../css/cadastrodechaves.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
-<body data-profiles="GERENTE,PORTEIRO" data-auth-state="pending">
+<body data-profiles="GERENTE" data-auth-state="pending">
     <div id="menu-lateral-container" data-page="cadastro-chaves" data-menu-url="menu-lateral.html"></div>
 
     <main>
@@ -25,8 +25,8 @@
                 <p id="key-feedback" class="form-feedback" role="status"></p>
 
                 <div class="campo-formulario">
-                    <label for="nome-sala">Nome da chave ou sala</label>
-                    <input type="text" id="nome-sala" name="name" placeholder="Digite o nome da sala ou local" maxlength="100" required>
+                    <label for="nome-sala">Sala cadastrada</label>
+                    <input type="text" id="nome-sala" name="name" placeholder="Digite ou selecione uma sala cadastrada" maxlength="100" required>
                 </div>
 
                 <div class="campo-formulario">
@@ -52,6 +52,6 @@
     <script src="../js/page-access.js"></script>
     <script src="../js/menu-lateral.js" defer></script>
     <script src="../js/form-feedback.js"></script>
-    <script src="../js/cadastrodechaves.js"></script>
+    <script src="../js/cadastrodechaves.js?v=key-room-selection-1"></script>
 </body>
 </html>

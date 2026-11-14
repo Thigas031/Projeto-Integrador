@@ -8,8 +8,12 @@
         container.dataset.profile = perfil;
         menu.dataset.profile = perfil;
         links.forEach(function (link) {
-            const perfisPermitidos = (link.dataset.profiles || "").split(",")
+            const roles = link.dataset.role || link.dataset.profiles || "";
+            let perfisPermitidos = roles.split(",")
                 .map(function (item) { return item.trim().toUpperCase(); });
+            if (link.dataset.page === "cadastro-chaves") {
+                perfisPermitidos = ["GERENTE"];
+            }
             link.hidden = !perfisPermitidos.includes(perfil);
         });
 
@@ -32,7 +36,8 @@
 
             if (!container.querySelector(".menu-lateral")) {
                 const resposta = await fetch(container.dataset.menuUrl, {
-                    credentials: "same-origin"
+                    credentials: "same-origin",
+                    cache: "no-cache"
                 });
                 if (!resposta.ok) throw new Error("HTTP " + resposta.status);
                 const html = await resposta.text();
@@ -44,12 +49,24 @@
             const menu = container.querySelector(".menu-lateral");
             if (!menu) throw new Error("O arquivo carregado não contém o menu lateral.");
 
+            const respostaSessao = await fetch("../controllers/controller_sessao.php", {
+                credentials: "same-origin",
+                headers: { "Accept": "application/json" }
+            });
+            const sessao = await respostaSessao.json();
+            if (!respostaSessao.ok) {
+                throw new Error(sessao.message || "Não foi possível confirmar a sessão.");
+            }
+            const usuarioSessao = {
+                name: sessao.nome,
+                role: sessao.cargo
+            };
             const links = menu.querySelectorAll("nav a");
             const paginaAtual = container.dataset.page;
             menu.dataset.page = paginaAtual;
             const botaoMenu = menu.querySelector(".botao-menu");
             const botaoSair = menu.querySelector(".botao-sair");
-            aplicarPerfil(menu, links, container, usuario);
+            aplicarPerfil(menu, links, container, usuarioSessao);
 
             botaoMenu.addEventListener("click", function () {
                 const aberto = menu.classList.toggle("is-open");
@@ -66,16 +83,8 @@
                 }
             });
 
-            botaoSair.addEventListener("click", async function () {
-                botaoSair.disabled = true;
-                try {
-                    await window.AppServices.auth.logout();
-                    window.location.replace("login.html");
-                } catch (error) {
-                    console.error("Não foi possível encerrar a sessão.", error);
-                    window.alert(error.message || "Não foi possível encerrar a sessão.");
-                    botaoSair.disabled = false;
-                }
+            botaoSair.addEventListener("click", function () {
+                window.location.href = "../controllers/controller_user_logout.php";
             });
 
             const linksDaPagina = Array.from(links).filter(function (link) {

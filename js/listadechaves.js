@@ -22,8 +22,30 @@ window.AppAccess.run(function (user) {
     };
     const pageSize = 5;
     let keys = [];
+    let totalKeys = 0;
+    let pageCount = 0;
     let currentPage = 1;
     let movementKeyId = "";
+    let searchTimeout = null;
+    const dueFields = document.createElement("div");
+    const dueDateLabel = document.createElement("label");
+    const dueDate = document.createElement("input");
+    const dueTimeLabel = document.createElement("label");
+    const dueTime = document.createElement("input");
+
+    dueFields.className = "manager-due-fields";
+    dueDateLabel.textContent = "Data prevista de devolução";
+    dueDateLabel.htmlFor = "manager-movement-due-date";
+    dueDate.type = "date";
+    dueDate.id = "manager-movement-due-date";
+    dueDate.required = true;
+    dueTimeLabel.textContent = "Hora prevista de devolução";
+    dueTimeLabel.htmlFor = "manager-movement-due-time";
+    dueTime.type = "time";
+    dueTime.id = "manager-movement-due-time";
+    dueTime.required = true;
+    dueFields.append(dueDateLabel, dueDate, dueTimeLabel, dueTime);
+    movementForm.insertBefore(dueFields, movementForm.querySelector(".dialog-actions"));
 
     function setFeedback(element, message, type) {
         if (!message) {
@@ -48,7 +70,7 @@ window.AppAccess.run(function (user) {
             cell.append(
                 button("Editar", "edit", key.id),
                 button(key.status === "Disponivel" ? "Movimentar" : "Registrar devolução", "move", key.id),
-                button("Excluir", "delete", key.id, "danger")
+                button("Desativar", "delete", key.id, "danger")
             );
             return;
         }
@@ -58,24 +80,20 @@ window.AppAccess.run(function (user) {
     }
 
     function renderTable() {
-        const term = search.value.trim().toLocaleLowerCase("pt-BR");
-        const matches = keys.filter(function (key) {
-            return [key.name, key.number, key.block, key.status, key.responsible]
-                .join(" ").toLocaleLowerCase("pt-BR").includes(term);
-        });
-        const pageCount = Math.ceil(matches.length / pageSize);
+        pageCount = Math.ceil(totalKeys / pageSize);
         currentPage = Math.min(currentPage, Math.max(pageCount, 1));
         const firstIndex = (currentPage - 1) * pageSize;
-        const visible = matches.slice(firstIndex, firstIndex + pageSize);
 
         body.replaceChildren();
-        if (!matches.length) {
+        if (!keys.length) {
             emptyRow.hidden = false;
-            emptyRow.cells[0].textContent = term ? "Nenhuma chave encontrada." : "Nenhuma chave cadastrada.";
+            emptyRow.cells[0].textContent = search.value.trim()
+                ? "Nenhuma chave encontrada."
+                : "Nenhuma chave cadastrada.";
             body.appendChild(emptyRow);
         } else {
             emptyRow.hidden = true;
-            visible.forEach(function (key) {
+            keys.forEach(function (key) {
                 const row = document.createElement("tr");
                 row.dataset.keyId = key.id;
                 const name = document.createElement("td");
@@ -97,9 +115,9 @@ window.AppAccess.run(function (user) {
             });
         }
 
-        quantity.textContent = matches.length
-            ? "Mostrando " + (firstIndex + 1) + " a " + Math.min(firstIndex + pageSize, matches.length) + " chaves de " + matches.length
-            : matches.length === 0 && term ? "Nenhuma chave encontrada." : "Nenhuma chave cadastrada.";
+        quantity.textContent = totalKeys
+            ? "Mostrando " + (firstIndex + 1) + " a " + Math.min(firstIndex + keys.length, totalKeys) + " chaves de " + totalKeys
+            : search.value.trim() ? "Nenhuma chave encontrada." : "Nenhuma chave cadastrada.";
         pageNumbers.replaceChildren();
         for (let page = 1; page <= pageCount; page += 1) {
             const pageButton = document.createElement("button");
@@ -132,6 +150,11 @@ window.AppAccess.run(function (user) {
         const isWithdrawal = key.status === "Disponivel";
         movementUser.hidden = !isWithdrawal;
         movementUser.required = isWithdrawal;
+        dueFields.hidden = !isWithdrawal;
+        dueDate.required = isWithdrawal;
+        dueTime.required = isWithdrawal;
+        dueDate.value = "";
+        dueTime.value = "";
         if (isWithdrawal) {
             const users = await window.AppServices.users.listForMovement();
             users.forEach(function (user) {
@@ -150,7 +173,9 @@ window.AppAccess.run(function (user) {
     async function handleAction(event) {
         const actionButton = event.target.closest("button[data-action]");
         if (!actionButton) return;
-        const key = keys.find(function (item) { return item.id === actionButton.dataset.keyId; });
+        const key = keys.find(function (item) {
+            return String(item.id) === actionButton.dataset.keyId;
+        });
         if (!key) return;
 
         try {
@@ -162,9 +187,9 @@ window.AppAccess.run(function (user) {
                     await openManagerMovement(key);
                     return;
                 case "delete":
-                    if (!window.confirm("Deseja excluir a chave " + key.name + " — Nº " + key.number + "?")) return;
+                    if (!window.confirm("Deseja desativar a chave " + key.name + " — Nº " + key.number + "?")) return;
                     await window.AppServices.keys.delete(key.id);
-                    setFeedback(feedback, "Chave excluída. O histórico de movimentações foi preservado.", "success");
+                    setFeedback(feedback, "Chave desativada. O histórico de movimentações foi preservado.", "success");
                     await loadKeys(true);
                     return;
                 case "withdraw":
@@ -187,7 +212,19 @@ window.AppAccess.run(function (user) {
         loading.innerHTML = '<td colspan="5">Carregando chaves...</td>';
         body.appendChild(loading);
         try {
-            keys = await window.AppServices.keys.list();
+            const resultado = await window.AppServices.keys.listPage({
+                busca: search.value.trim(),
+                pagina: currentPage
+            });
+            const ultimaPagina = Math.max(1, Math.ceil(resultado.total / pageSize));
+            if (resultado.total > 0 && currentPage > ultimaPagina) {
+                currentPage = ultimaPagina;
+                await loadKeys(preserveFeedback);
+                return;
+            }
+            keys = resultado.items;
+            totalKeys = resultado.total;
+            currentPage = resultado.page;
             if (!preserveFeedback) setFeedback(feedback, "", "error");
             renderTable();
         } catch (error) {
@@ -205,6 +242,7 @@ window.AppAccess.run(function (user) {
     document.getElementById("nova-chave").addEventListener("click", function () {
         window.location.href = "cadastrodechaves.php";
     });
+    document.getElementById("nova-chave").hidden = profile.role !== "GERENTE";
     document.getElementById("retirar-chave").addEventListener("click", function () {
         if (profile.role === "PORTEIRO") window.location.href = "retiradadechaves.php";
     });
@@ -218,7 +256,8 @@ window.AppAccess.run(function (user) {
 
     search.addEventListener("input", function () {
         currentPage = 1;
-        renderTable();
+        window.clearTimeout(searchTimeout);
+        searchTimeout = window.setTimeout(function () { loadKeys(); }, 250);
     });
     document.getElementById("form-busca").addEventListener("submit", function (event) {
         event.preventDefault();
@@ -227,22 +266,34 @@ window.AppAccess.run(function (user) {
         const pageButton = event.target.closest("button[data-page]");
         if (pageButton) {
             currentPage = Number(pageButton.dataset.page);
-            renderTable();
+            loadKeys();
         }
     });
-    previousButton.addEventListener("click", function () { currentPage -= 1; renderTable(); });
-    nextButton.addEventListener("click", function () { currentPage += 1; renderTable(); });
+    previousButton.addEventListener("click", function () { currentPage -= 1; loadKeys(); });
+    nextButton.addEventListener("click", function () { currentPage += 1; loadKeys(); });
     document.getElementById("tabela-chaves").addEventListener("click", handleAction);
     document.querySelector("[data-manager-movement-cancel]").addEventListener("click", function () {
         dialog.close();
     });
     movementForm.addEventListener("submit", async function (event) {
         event.preventDefault();
-        const key = keys.find(function (item) { return item.id === movementKeyId; });
+        const key = keys.find(function (item) {
+            return String(item.id) === String(movementKeyId);
+        });
         if (!key) return;
         try {
             if (key.status === "Disponivel") {
-                await window.AppServices.keys.withdraw(key.id, movementUser.value, "");
+                if (!dueDate.value || !dueTime.value || !movementUser.value) {
+                    window.AppFeedback.show(movementFeedback, "Informe usuário e previsão de devolução.", "error");
+                    return;
+                }
+                await window.AppServices.keys.withdraw(
+                    key.id,
+                    movementUser.value,
+                    "",
+                    { date: dueDate.value, time: dueTime.value },
+                    key.salaId
+                );
                 setFeedback(feedback, "Retirada registrada com sucesso.", "success");
             } else {
                 await window.AppServices.keys.returnKey(key.id);

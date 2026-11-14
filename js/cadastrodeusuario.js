@@ -18,6 +18,18 @@ window.AppAccess.run(function () {
     let users = [];
     let editingId = "";
 
+    fields.role.replaceChildren();
+    [
+        { value: "", label: "Selecione o cargo" },
+        { value: "GERENTE", label: "Gerente Geral" },
+        { value: "PORTEIRO", label: "PORTEIRO" }
+    ].forEach(function (cargo) {
+        const option = document.createElement("option");
+        option.value = cargo.value;
+        option.textContent = cargo.label;
+        fields.role.appendChild(option);
+    });
+
     function formatCpf(value) {
         const digits = value.replace(/\D/g, "").slice(0, 11);
         if (digits.length <= 3) return digits;
@@ -61,7 +73,7 @@ window.AppAccess.run(function () {
             row.append(
                 createCell(user.name),
                 createCell(formatCpf(user.cpf)),
-                createCell(user.role),
+                createCell(user.role === "GERENTE" ? "Gerente Geral" : user.role),
                 createCell(user.phone),
                 createCell(user.email)
             );
@@ -72,13 +84,15 @@ window.AppAccess.run(function () {
             editButton.addEventListener("click", function () { startEditing(user); });
             const deleteButton = document.createElement("button");
             deleteButton.type = "button";
-            deleteButton.className = "danger";
-            deleteButton.textContent = "Excluir";
+            deleteButton.className = user.active ? "danger" : "";
+            deleteButton.textContent = user.active ? "Desativar" : "Ativar";
             deleteButton.addEventListener("click", async function () {
-                if (!window.confirm("Deseja excluir o usuário " + user.name + "?")) return;
+                const novoStatus = !user.active;
+                const acao = novoStatus ? "ativar" : "desativar";
+                if (!window.confirm("Deseja " + acao + " o usuário " + user.name + "?")) return;
                 try {
-                    await window.AppServices.users.delete(user.id);
-                    window.AppFeedback.show(listFeedback, "Usuário excluído com sucesso.", "success");
+                    await window.AppServices.users.setStatus(user.id, novoStatus);
+                    window.AppFeedback.show(listFeedback, "Status do usuário atualizado.", "success");
                     await loadUsers(true);
                 } catch (error) {
                     window.AppFeedback.show(listFeedback, error.message || "Não foi possível excluir o usuário.", "error");

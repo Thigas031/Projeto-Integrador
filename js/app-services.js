@@ -15,30 +15,29 @@
         });
     }
 
-    function apiData(action, method, payload) {
-        const endpoints = global.APP_CONFIG && global.APP_CONFIG.endpoints;
-        const endpoint = endpoints && endpoints[action];
-        if (!endpoint) {
-            return Promise.reject(new Error("O endpoint PHP para '" + action + "' ainda não foi configurado."));
-        }
-
-        const values = Object.assign({}, payload || {});
-        const id = values.id;
-        delete values.id;
-        const url = String(endpoint).replace("{id}", encodeURIComponent(id || ""));
+    function requestData(url, method, values) {
         const options = {
             method: method,
             credentials: "same-origin",
             headers: { "Accept": "application/json" }
         };
-        if (method !== "GET" && method !== "DELETE") {
-            options.headers["Content-Type"] = "application/json;charset=UTF-8";
-            options.body = JSON.stringify(values);
+        let endpoint = url;
+
+        if (method === "GET") {
+            const query = new URLSearchParams(values || {}).toString();
+            if (query) endpoint += "?" + query;
+        } else {
+            options.headers["Content-Type"] = "application/x-www-form-urlencoded;charset=UTF-8";
+            options.body = new URLSearchParams(values || {}).toString();
         }
 
-        return request(url, options).then(function (body) {
+        return request(endpoint, options);
+    }
+
+    function apiData(url, method, values) {
+        return requestData(url, method, values).then(function (body) {
             if (!Object.prototype.hasOwnProperty.call(body, "data")) {
-                throw new Error("A resposta do endpoint '" + action + "' não contém o campo data.");
+                throw new Error("A resposta do endpoint não contém o campo data.");
             }
             return body.data;
         });
@@ -50,85 +49,193 @@
         }
     }
 
+    function usuarioParaApi(values) {
+        return {
+            nome: values.name,
+            cargo: values.role,
+            cpf: values.cpf,
+            telefone: values.phone || "",
+            email: values.email
+        };
+    }
+
     const users = {
         async list() {
             requireProfile("GERENTE", "Somente GERENTE pode consultar a área administrativa de usuários.");
-            return apiData("listUsers", "GET");
+            return apiData("../controllers/controller_usuario_listar.php", "GET");
         },
         async listForMovement() {
             requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para identificar o responsável pela movimentação.");
-            return apiData("listMovementUsers", "GET");
+            const options = await apiData("../controllers/controller_movimentacao_opcoes.php", "GET");
+            return options.usuarios;
         },
         async create(values) {
             requireProfile("GERENTE", "Somente GERENTE pode cadastrar usuários.");
-            return apiData("createUser", "POST", values);
+            return apiData("../controllers/controller_usuario_cadastrar.php", "POST", usuarioParaApi(values));
         },
         async update(id, values) {
             requireProfile("GERENTE", "Somente GERENTE pode editar usuários.");
-            return apiData("updateUser", "PUT", Object.assign({ id: id }, values));
+            return apiData(
+                "../controllers/controller_usuario_editar.php",
+                "POST",
+                Object.assign({ id: id }, usuarioParaApi(values))
+            );
+        },
+        async setStatus(id, active) {
+            requireProfile("GERENTE", "Somente GERENTE pode alterar o status dos usuários.");
+            return apiData("../controllers/controller_usuario_status.php", "POST", {
+                id: id,
+                ativo: active ? "1" : "0"
+            });
         },
         async delete(id) {
-            requireProfile("GERENTE", "Somente GERENTE pode excluir usuários.");
-            return apiData("deleteUser", "DELETE", { id: id });
+            return users.setStatus(id, false);
         }
     };
 
     const keys = {
         async list() {
             requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar as chaves.");
-            return apiData("listKeys", "GET");
+            const result = await keys.listPage({ pagina: 1 });
+            return result.items;
+        },
+        async listPage(filters) {
+            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar as chaves.");
+            const body = await requestData(
+                "../controllers/controller_chave_listar.php",
+                "GET",
+                filters || { pagina: 1 }
+            );
+            return {
+                items: body.data,
+                total: body.total,
+                page: body.pagina,
+                pageSize: body.por_pagina
+            };
         },
         async listReturnable() {
             requireProfile("PORTEIRO", "Somente PORTEIRO pode acessar o fluxo de devolução.");
-            return apiData("listReturnableKeys", "GET");
+            const movements = await movementsService.list();
+            return movements.map(function (movement) {
+                return {
+                    id: movement.keyId,
+                    name: movement.keyName,
+                    number: movement.keyNumber,
+                    block: movement.block,
+                    status: movement.status,
+                    responsible: movement.userName
+                };
+            });
         },
         async create(values) {
-            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para cadastrar chaves.");
-            return apiData("createKey", "POST", values);
+            requireProfile("GERENTE", "Somente GERENTE pode cadastrar chaves.");
+            return apiData("../controllers/controller_chave_cadastrar.php", "POST", {
+                sala: values.roomId,
+                numero_chave: values.number
+            });
         },
         async get(id) {
             requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar esta chave.");
-            return apiData("getKey", "GET", { id: id });
+            return apiData("../controllers/controller_chave_listar.php", "GET", { chave: id });
         },
         async update(id, values) {
             requireProfile("GERENTE", "Somente GERENTE pode editar chaves.");
-            return apiData("updateKey", "PUT", Object.assign({ id: id }, values));
+            return apiData("../controllers/controller_chave_editar.php", "POST", {
+                id_chave: id,
+                sala: values.roomId,
+                numero_chave: values.number
+            });
         },
         async delete(id) {
-            requireProfile("GERENTE", "Somente GERENTE pode excluir chaves.");
-            return apiData("deleteKey", "DELETE", { id: id });
+            requireProfile("GERENTE", "Somente GERENTE pode desativar chaves.");
+            return apiData("../controllers/controller_chave_desativar.php", "POST", { id_chave: id });
         },
-        async withdraw(id, userId, notes) {
+        async withdraw(id, userId, notes, due, roomId) {
             requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para movimentar chaves.");
-            return apiData("withdrawKey", "POST", { keyId: id, userId: userId, notes: notes });
+            due = due || {};
+            return apiData("../controllers/controller_movimentacao_retirar.php", "POST", {
+                sala: roomId,
+                usuario: userId,
+                chave: id,
+                data: due.withdrawnDate || "",
+                hora: due.withdrawnTime || "",
+                data_prevista: due.date,
+                hora_prevista: due.time,
+                observacao: notes || ""
+            });
         },
         async returnKey(id) {
             requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para movimentar chaves.");
-            return apiData("returnKey", "POST", { id: id });
+            return apiData("../controllers/controller_movimentacao_devolver.php", "POST", { chave: id });
         }
     };
 
-    const movements = {
+    const movementsService = {
         async list() {
             requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar movimentações.");
-            return apiData("listMovements", "GET");
+            return apiData("../controllers/controller_movimentacao_buscar.php", "GET", { abertas: "1" });
+        },
+        async find(filters) {
+            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar movimentações.");
+            return apiData("../controllers/controller_movimentacao_buscar.php", "GET", filters || {});
+        },
+        async options() {
+            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para carregar opções de retirada.");
+            return apiData("../controllers/controller_movimentacao_opcoes.php", "GET");
         }
     };
 
     const occurrences = {
-        async list() {
-            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar ocorrências.");
-            return apiData("listOccurrences", "GET");
+        async list(date) {
+            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar observações.");
+            return apiData("../controllers/controller_observacao_listar.php", "GET", date ? { data: date } : {});
         },
         async create(values) {
-            requireProfile("PORTEIRO", "Somente o perfil PORTEIRO pode registrar ocorrências.");
-            return apiData("createOccurrence", "POST", values);
+            requireProfile("PORTEIRO", "Somente PORTEIRO pode registrar observações.");
+            return apiData("../controllers/controller_observacao_salvar.php", "POST", { texto: values.text });
+        }
+    };
+
+    const rooms = {
+        async list() {
+            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar salas.");
+            return apiData("../controllers/controller_sala_listar.php", "GET");
+        },
+        async create(values) {
+            requireProfile("GERENTE", "Somente GERENTE pode cadastrar salas.");
+            return apiData("../controllers/controller_sala_cadastrar.php", "POST", values);
+        },
+        async update(id, values) {
+            requireProfile("GERENTE", "Somente GERENTE pode editar salas.");
+            return apiData("../controllers/controller_sala_editar.php", "POST", Object.assign({ id: id }, values));
+        },
+        async delete(id) {
+            requireProfile("GERENTE", "Somente GERENTE pode excluir salas.");
+            return apiData("../controllers/controller_sala_excluir.php", "POST", { id: id });
+        }
+    };
+
+    const dashboard = {
+        async summary() {
+            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar o dashboard.");
+            return apiData("../controllers/controller_dashboard_resumo.php", "GET");
+        }
+    };
+
+    const reports = {
+        async generate(filters) {
+            requireProfile("GERENTE", "Somente GERENTE pode gerar relatórios.");
+            return apiData("../controllers/controller_relatorio_gerar.php", "GET", filters || {});
         }
     };
 
     const auth = {
-        async login(identifier, password) {
-            const body = new URLSearchParams({ identificador: identifier, senha: password });
+        async login(identifier, password, remember) {
+            const body = new URLSearchParams({
+                cpf: identifier,
+                senha: password,
+                lembrar: remember ? "1" : "0"
+            });
             return request("../controllers/controller_user_login.php", {
                 method: "POST",
                 headers: {
@@ -153,5 +260,5 @@
         }
     };
 
-    global.AppServices = { users, keys, movements, occurrences, auth };
+    global.AppServices = { users, keys, movements: movementsService, occurrences, rooms, dashboard, reports, auth };
 }(window));

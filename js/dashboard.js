@@ -19,20 +19,19 @@ window.AppAccess.run(function (user) {
         }).format(new Date(value));
     }
 
-    function addMovement(movement, keys) {
-        const key = keys.find(function (item) { return item.id === movement.keyId; });
+    function addMovement(movement) {
         const row = document.createElement("article");
         row.className = "movement";
         const detail = document.createElement("div");
         const title = document.createElement("strong");
-        const keyName = key ? key.name : movement.keyName;
-        const keyNumber = key ? key.number : movement.keyNumber;
+        const keyName = movement.keyName;
+        const keyNumber = movement.keyNumber;
         title.textContent = keyName ? keyName + (keyNumber ? " — Nº " + keyNumber : "") : "Chave";
         const person = document.createElement("p");
         person.textContent = movement.userName || "Responsável não informado";
         const status = document.createElement("span");
         status.className = "movement-status";
-        status.textContent = movement.returnedAt ? "Devolvida" : "Retirada";
+        status.textContent = movement.status || (movement.returnedAt ? "Devolvida" : "Retirada");
         const date = document.createElement("time");
         date.dateTime = movement.returnedAt || movement.withdrawnAt;
         date.textContent = formatDate(movement.returnedAt || movement.withdrawnAt);
@@ -44,34 +43,28 @@ window.AppAccess.run(function (user) {
     async function loadDashboard() {
         try {
             const results = await Promise.all([
-                window.AppServices.keys.list(),
-                window.AppServices.movements.list(),
+                window.AppServices.dashboard.summary(),
                 window.AppServices.occurrences.list()
             ]);
-            const keys = results[0];
-            const movements = results[1];
-            const occurrences = results[2];
-            const counts = { Disponivel: 0, Emprestada: 0, Atrasada: 0 };
-            keys.forEach(function (key) {
-                if (Object.prototype.hasOwnProperty.call(counts, key.status)) {
-                    counts[key.status] += 1;
-                }
-            });
+            const summary = results[0];
+            const occurrences = results[1];
+            const counts = summary.totais;
 
             document.getElementById("available").textContent = String(counts.Disponivel);
             document.getElementById("borrowed").textContent = String(counts.Emprestada);
             document.getElementById("late").textContent = String(counts.Atrasada);
-            document.getElementById("due").textContent = String(counts.Emprestada);
+            document.getElementById("due").textContent = String(summary.chaves_devolver_hoje.length);
+            document.getElementById("due").nextElementSibling.textContent = "A devolver hoje";
             document.getElementById("occurrence-summary").textContent = occurrences.length
                 ? occurrences.length + (occurrences.length === 1 ? " ocorrência registrada." : " ocorrências registradas.")
                 : "Nenhuma ocorrência registrada.";
 
             movementList.replaceChildren();
-            if (!movements.length) {
+            if (!summary.ultimas_movimentacoes.length) {
                 showState(movementList, "Nenhuma movimentação registrada.");
             } else {
-                movements.slice(0, 5).forEach(function (movement) {
-                    addMovement(movement, keys);
+                summary.ultimas_movimentacoes.slice(0, 10).forEach(function (movement) {
+                    addMovement(movement);
                 });
             }
         } catch (error) {

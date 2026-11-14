@@ -43,13 +43,14 @@
         const password = document.getElementById("senha").value;
         if (!form.checkValidity()) {
             form.reportValidity();
-            window.AppFeedback.show(feedback, "Informe seu CPF ou e-mail e sua senha.", "error");
+            window.AppFeedback.show(feedback, "Informe seu CPF e sua senha.", "error");
             return;
         }
 
         submitButton.disabled = true;
         try {
-            const response = await window.AppServices.auth.login(identifier, password);
+            const remember = document.getElementById("lembrar").checked;
+            const response = await window.AppServices.auth.login(identifier, password, remember);
             if (!response.user || !["GERENTE", "PORTEIRO"].includes(String(response.user.role).toUpperCase())) {
                 throw new Error("O servidor não retornou um perfil GERENTE ou PORTEIRO válido.");
             }

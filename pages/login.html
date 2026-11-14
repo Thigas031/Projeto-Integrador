@@ -21,16 +21,18 @@
                 <p id="login-session-message"></p>
                 <button type="button" id="login-logout">Sair da conta</button>
             </section>
-            <form class="login-form" id="login-form" novalidate>
+            <form class="login-form" id="login-form" action="../controllers/controller_user_login.php" method="post" novalidate>
                 <p id="login-feedback" class="login-feedback" role="status" aria-live="polite"></p>
                 <div class="input-group">
-                    <label for="identificador">CPF ou e-mail</label>
+                    <label for="identificador">CPF</label>
                     <input
                         type="text"
                         id="identificador"
-                        name="identificador"
+                        name="cpf"
                         autocomplete="username"
-                        placeholder="Digite seu CPF ou e-mail"
+                        placeholder="Digite seu CPF"
+                        inputmode="numeric"
+                        maxlength="11"
                         required
                     >
                 </div>
@@ -46,6 +48,13 @@
                             required
                         >
                     </div>
+                </div>
+                <div class="login-options">
+                    <label class="remember" for="lembrar">
+                        <input type="checkbox" id="lembrar" name="lembrar" value="1">
+                        <span class="checkbox" aria-hidden="true"></span>
+                        Lembrar de mim por 7 dias
+                    </label>
                 </div>
                 <button type="submit">
                     Entrar
