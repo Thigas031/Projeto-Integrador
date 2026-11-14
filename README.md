@@ -67,3 +67,9 @@ As respostas devem ser JSON `{ "ok": true, "data": ... }`; erros devem usar stat
 O backend precisa aplicar autorização de sessão em cada operação, unicidade, transições de estado e preservação do histórico. A tabela `chaves` usa `id_sala` e `numero_chave`; o nome e bloco vêm de `salas`. `movimentacoes.id_porteiro` é obrigatório mesmo para movimentações feitas por GERENTE, e a regra de `data_prevista` ainda precisa ser definida. O controller de cadastro de usuários existente e o esquema SQL precisam ser alinhados pelo responsável pelo backend antes de habilitar esses endpoints.
 
 O Login só aceita os cargos GERENTE e PORTEIRO. A senha inicial pelos quatro primeiros dígitos do CPF, assim como uma possível troca obrigatória no primeiro acesso, deve ser implementada no backend; o navegador não gera nem armazena essa senha.
+
+## Cadastro de chaves e salas
+
+O cadastro de uma chave exige uma sala já cadastrada e o envio do ID da sala ao backend. A solução recomendada para evitar a mensagem “Selecione uma sala cadastrada na lista.” é escolher a sala em uma lista que mostre nome, número e bloco, em vez de depender de texto digitado. O formulário deve manter as validações de sala existente e número de chave único.
+
+Uma tela separada de cadastro de salas não é necessária quando a sala já existe. Se for criada futuramente, a especificação prevê acesso de GERENTE, campos de nome, número e bloco, listagem com ações de criar/editar/excluir, unicidade de número + bloco e bloqueio de exclusão quando houver chaves vinculadas. Os critérios completos estão em [#1](https://github.com/Thigas031/Projeto-Integrador/issues/1).
