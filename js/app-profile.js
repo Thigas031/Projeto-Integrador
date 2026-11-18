@@ -2,7 +2,7 @@
     const profilePermissions = {
         GERENTE: ["GERENTE"],
         PORTEIRO: ["PORTEIRO"],
-        OUTRO: ["GERENTE", "PORTEIRO"]
+        OUTRO: ["GERENTE", "PORTEIRO", "OUTRO"]
     };
     let activeUser = null;
 

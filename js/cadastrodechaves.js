@@ -2,38 +2,32 @@
 window.AppAccess.run(function () {
     const form = document.getElementById("key-form");
     const feedback = document.getElementById("key-feedback");
-    const nameField = document.getElementById("nome-sala");
+    const roomSelect = document.getElementById("nome-sala");
     const numberField = document.getElementById("numero-chave");
     const blockField = document.getElementById("bloco");
     const title = document.querySelector(".cadastro-chaves-header h1");
     const formData = new URLSearchParams(window.location.search);
     const editingId = formData.get("id");
     const cancelButton = document.querySelector("[data-cancel]");
-    const roomsList = document.createElement("datalist");
+    const saveButton = form.querySelector('[type="submit"]');
+    const manageRoomsLink = document.getElementById("manage-rooms-link");
     let rooms = [];
 
-    roomsList.id = "salas-disponiveis";
-    nameField.setAttribute("list", roomsList.id);
-    nameField.maxLength = 180;
-    nameField.parentElement.appendChild(roomsList);
+    saveButton.disabled = true;
 
     function roomLabel(room) {
         return room.name + " — Nº " + (room.numero || "sem número") + " — Bloco " + (room.bloco || "sem bloco");
     }
 
     function selectedRoom() {
-        const valor = nameField.value.trim().toLocaleLowerCase();
-        const salasComMesmoNome = rooms.filter(function (room) {
-            return String(room.name).trim().toLocaleLowerCase() === valor;
-        });
-        return rooms.find(function (room) { return roomLabel(room) === nameField.value; }) ||
-            (salasComMesmoNome.length === 1 ? salasComMesmoNome[0] : null);
+        return rooms.find(function (room) {
+            return String(room.id) === roomSelect.value;
+        }) || null;
     }
 
     function updateRoomBlock() {
         const room = selectedRoom();
         blockField.value = room ? room.bloco || "" : "";
-        blockField.readOnly = Boolean(room);
     }
 
     if (editingId && !window.AppProfile.isAllowed("GERENTE")) {
@@ -44,32 +38,47 @@ window.AppAccess.run(function () {
     async function initialize() {
         try {
             rooms = await window.AppServices.rooms.list();
-            roomsList.replaceChildren();
+            roomSelect.replaceChildren();
+            const placeholder = document.createElement("option");
+            placeholder.value = "";
+            placeholder.textContent = rooms.length ? "Selecione uma sala cadastrada" : "Nenhuma sala cadastrada";
+            roomSelect.appendChild(placeholder);
+
             rooms.forEach(function (room) {
                 const option = document.createElement("option");
-                option.value = roomLabel(room);
-                roomsList.appendChild(option);
+                option.value = String(room.id);
+                option.textContent = roomLabel(room);
+                roomSelect.appendChild(option);
             });
+
             if (!rooms.length) {
-                form.querySelector('[type="submit"]').disabled = true;
-                window.AppFeedback.show(feedback, "Cadastre uma sala antes de cadastrar chaves.", "error");
+                roomSelect.disabled = true;
+                manageRoomsLink.hidden = false;
+                window.AppFeedback.show(feedback, "Cadastre uma sala na administração antes de cadastrar chaves.", "error");
                 return;
             }
 
-            if (!editingId) return;
-            title.textContent = "Editar chave";
-            const key = await window.AppServices.keys.get(editingId);
-            const room = rooms.find(function (item) { return String(item.id) === String(key.salaId); });
-            nameField.value = room ? roomLabel(room) : "";
-            numberField.value = key.number;
-            updateRoomBlock();
+            roomSelect.disabled = false;
+            if (editingId) {
+                title.textContent = "Editar chave";
+                const key = await window.AppServices.keys.get(editingId);
+                const room = rooms.find(function (item) { return String(item.id) === String(key.salaId); });
+                if (!room) {
+                    throw new Error("A sala vinculada a esta chave não está disponível.");
+                }
+                roomSelect.value = String(room.id);
+                numberField.value = key.number;
+                updateRoomBlock();
+            }
+            saveButton.disabled = false;
         } catch (error) {
             window.AppFeedback.show(feedback, error.message || "Não foi possível carregar salas ou chave.", "error");
-            form.querySelector('[type="submit"]').disabled = true;
+            roomSelect.disabled = true;
+            saveButton.disabled = true;
         }
     }
 
-    nameField.addEventListener("input", updateRoomBlock);
+    roomSelect.addEventListener("change", updateRoomBlock);
 
     cancelButton.addEventListener("click", function () {
         window.location.href = "listadechaves.php";
@@ -83,13 +92,14 @@ window.AppAccess.run(function () {
             return;
         }
 
+        const room = selectedRoom();
         const values = {
-            roomId: selectedRoom() ? selectedRoom().id : "",
+            roomId: room ? room.id : "",
             number: numberField.value.trim(),
         };
         if (!values.roomId) {
             window.AppFeedback.show(feedback, "Selecione uma sala cadastrada na lista.", "error");
-            nameField.focus();
+            roomSelect.focus();
             return;
         }
         try {

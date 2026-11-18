@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . '/../controllers/controller_page_access.php'; requirePageAccess(['GERENTE', 'PORTEIRO']); ?>
+<?php require_once __DIR__ . '/../controllers/controller_page_access.php'; requirePageAccess(['PORTEIRO']); ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="../css/global.css">
 </head>
 
-<body data-profiles="GERENTE,PORTEIRO" data-auth-state="pending">
+<body data-profiles="PORTEIRO" data-auth-state="pending">
 
 <div class="app">
     <div id="menu-lateral-container" data-page="retirada-chaves" data-menu-url="menu-lateral.html"></div>
@@ -226,10 +226,10 @@
 
 </div>
 
-<script src="../js/app-profile.js"></script>
-<script src="../js/app-services.js"></script>
+<script src="../js/app-profile.js?v=profile-matrix-2"></script>
+<script src="../js/app-services.js?v=profile-matrix-2"></script>
 <script src="../js/page-access.js"></script>
-<script src="../js/menu-lateral.js?v=withdrawal-actions-1" defer></script>
+<script src="../js/menu-lateral.js?v=profile-matrix-2" defer></script>
 <script src="../js/form-feedback.js"></script>
 <script src="../js/retiradadechaves.js?v=withdrawal-actions-1"></script>
 </body>

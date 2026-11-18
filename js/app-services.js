@@ -5,9 +5,24 @@
             try {
                 body = await response.json();
             } catch (error) {
+                if (response.redirected) {
+                    throw new Error("O servidor redirecionou a solicitação. Verifique se sua sessão ainda está ativa.");
+                }
+                if (response.status === 401) {
+                    throw new Error("Sua sessão expirou. Faça login novamente.");
+                }
+                if (response.status === 403) {
+                    throw new Error("Seu perfil não tem permissão para realizar esta operação.");
+                }
+                if (!response.ok) {
+                    throw new Error("O servidor retornou HTTP " + response.status + " sem uma resposta JSON válida.");
+                }
                 throw new Error("O servidor retornou uma resposta inválida.");
             }
 
+            if (!body || typeof body !== "object" || Array.isArray(body)) {
+                throw new Error("O servidor retornou uma resposta JSON inválida.");
+            }
             if (!response.ok || body.ok === false) {
                 throw new Error(body.message || "Não foi possível concluir a solicitação.");
             }
@@ -24,6 +39,7 @@
         let endpoint = url;
 
         if (method === "GET") {
+            options.cache = "no-store";
             const query = new URLSearchParams(values || {}).toString();
             if (query) endpoint += "?" + query;
         } else {
@@ -36,10 +52,22 @@
 
     function apiData(url, method, values) {
         return requestData(url, method, values).then(function (body) {
+            if (body.ok !== true) {
+                throw new Error(body.message || "O servidor não confirmou a operação.");
+            }
             if (!Object.prototype.hasOwnProperty.call(body, "data")) {
                 throw new Error("A resposta do endpoint não contém o campo data.");
             }
             return body.data;
+        });
+    }
+
+    function apiMutation(url, method, values) {
+        return requestData(url, method, values).then(function (body) {
+            if (body.ok !== true) {
+                throw new Error(body.message || "O servidor não confirmou a operação.");
+            }
+            return Object.prototype.hasOwnProperty.call(body, "data") ? body.data : undefined;
         });
     }
 
@@ -65,7 +93,7 @@
             return apiData("../controllers/controller_usuario_listar.php", "GET");
         },
         async listForMovement() {
-            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para identificar o responsável pela movimentação.");
+            requireProfile("PORTEIRO", "Somente PORTEIRO pode identificar o responsável pela movimentação.");
             const options = await apiData("../controllers/controller_movimentacao_opcoes.php", "GET");
             return options.usuarios;
         },
@@ -75,7 +103,7 @@
         },
         async update(id, values) {
             requireProfile("GERENTE", "Somente GERENTE pode editar usuários.");
-            return apiData(
+            return apiMutation(
                 "../controllers/controller_usuario_editar.php",
                 "POST",
                 Object.assign({ id: id }, usuarioParaApi(values))
@@ -83,7 +111,7 @@
         },
         async setStatus(id, active) {
             requireProfile("GERENTE", "Somente GERENTE pode alterar o status dos usuários.");
-            return apiData("../controllers/controller_usuario_status.php", "POST", {
+            return apiMutation("../controllers/controller_usuario_status.php", "POST", {
                 id: id,
                 ativo: active ? "1" : "0"
             });
@@ -95,12 +123,12 @@
 
     const keys = {
         async list() {
-            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar as chaves.");
+            requireProfile("GERENTE,PORTEIRO,OUTRO", "Perfil sem permissão para consultar as chaves.");
             const result = await keys.listPage({ pagina: 1 });
             return result.items;
         },
         async listPage(filters) {
-            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar as chaves.");
+            requireProfile("GERENTE,PORTEIRO,OUTRO", "Perfil sem permissão para consultar as chaves.");
             const body = await requestData(
                 "../controllers/controller_chave_listar.php",
                 "GET",
@@ -128,7 +156,7 @@
             });
         },
         async create(values) {
-            requireProfile("GERENTE", "Somente GERENTE pode cadastrar chaves.");
+            requireProfile("GERENTE,PORTEIRO", "Somente GERENTE ou PORTEIRO pode cadastrar chaves.");
             return apiData("../controllers/controller_chave_cadastrar.php", "POST", {
                 sala: values.roomId,
                 numero_chave: values.number
@@ -140,7 +168,7 @@
         },
         async update(id, values) {
             requireProfile("GERENTE", "Somente GERENTE pode editar chaves.");
-            return apiData("../controllers/controller_chave_editar.php", "POST", {
+            return apiMutation("../controllers/controller_chave_editar.php", "POST", {
                 id_chave: id,
                 sala: values.roomId,
                 numero_chave: values.number
@@ -151,7 +179,7 @@
             return apiData("../controllers/controller_chave_desativar.php", "POST", { id_chave: id });
         },
         async withdraw(id, userId, notes, due, roomId) {
-            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para movimentar chaves.");
+            requireProfile("PORTEIRO", "Somente PORTEIRO pode retirar chaves.");
             due = due || {};
             return apiData("../controllers/controller_movimentacao_retirar.php", "POST", {
                 sala: roomId,
@@ -165,22 +193,22 @@
             });
         },
         async returnKey(id) {
-            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para movimentar chaves.");
+            requireProfile("PORTEIRO", "Somente PORTEIRO pode devolver chaves.");
             return apiData("../controllers/controller_movimentacao_devolver.php", "POST", { chave: id });
         }
     };
 
     const movementsService = {
         async list() {
-            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar movimentações.");
+            requireProfile("PORTEIRO", "Somente PORTEIRO pode consultar movimentações abertas.");
             return apiData("../controllers/controller_movimentacao_buscar.php", "GET", { abertas: "1" });
         },
         async find(filters) {
-            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar movimentações.");
+            requireProfile("PORTEIRO", "Somente PORTEIRO pode consultar movimentações.");
             return apiData("../controllers/controller_movimentacao_buscar.php", "GET", filters || {});
         },
         async options() {
-            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para carregar opções de retirada.");
+            requireProfile("PORTEIRO", "Somente PORTEIRO pode carregar opções de retirada.");
             return apiData("../controllers/controller_movimentacao_opcoes.php", "GET");
         }
     };
@@ -201,13 +229,12 @@
             requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar salas.");
             return apiData("../controllers/controller_sala_listar.php", "GET");
         },
-        prepareCreate(values) {
-            requireProfile("GERENTE", "Somente GERENTE pode cadastrar salas.");
-            // Contrato do formulário; o endpoint atual ainda exige bloco e não aceita descrição.
+        prepareWrite(values) {
+            requireProfile("GERENTE", "Somente GERENTE pode administrar salas.");
             return {
-                nome_sala: String(values.name || "").trim(),
-                numero_sala: String(values.number || "").trim(),
-                descricao: String(values.description || "").trim()
+                nome: String(values.name || "").trim(),
+                numero: String(values.number || "").trim(),
+                bloco: String(values.block || "").trim()
             };
         },
         async create(values) {
@@ -216,17 +243,17 @@
         },
         async update(id, values) {
             requireProfile("GERENTE", "Somente GERENTE pode editar salas.");
-            return apiData("../controllers/controller_sala_editar.php", "POST", Object.assign({ id: id }, values));
+            return apiMutation("../controllers/controller_sala_editar.php", "POST", Object.assign({ id: id }, values));
         },
         async delete(id) {
             requireProfile("GERENTE", "Somente GERENTE pode excluir salas.");
-            return apiData("../controllers/controller_sala_excluir.php", "POST", { id: id });
+            return apiMutation("../controllers/controller_sala_excluir.php", "POST", { id: id });
         }
     };
 
     const dashboard = {
         async summary() {
-            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar o dashboard.");
+            requireProfile("GERENTE,PORTEIRO,OUTRO", "Perfil sem permissão para consultar o dashboard.");
             return apiData("../controllers/controller_dashboard_resumo.php", "GET");
         }
     };

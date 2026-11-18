@@ -28,7 +28,8 @@ $nome = trim(is_string($_POST['nome'] ?? null) ? $_POST['nome'] : '');
 $numero = trim(is_string($_POST['numero'] ?? null) ? $_POST['numero'] : '');
 $bloco = trim(is_string($_POST['bloco'] ?? null) ? $_POST['bloco'] : '');
 if ($nome === '' || $numero === '' || $bloco === '' ||
-    strlen($nome) > 100 || strlen($numero) > 20 || strlen($bloco) > 50) {
+    mb_strlen($nome, 'UTF-8') > 100 || mb_strlen($numero, 'UTF-8') > 20 ||
+    mb_strlen($bloco, 'UTF-8') > 50) {
     responderSalaCadastrar(400, ['ok' => false, 'message' => 'Informe nome, número e bloco válidos para a sala.']);
 }
 
@@ -52,5 +53,11 @@ try {
     ]);
 } catch (PDOException $erro) {
     error_log('Falha ao cadastrar sala: ' . $erro->getMessage());
-    responderSalaCadastrar(500, ['ok' => false, 'message' => 'Não foi possível cadastrar a sala.']);
+    $duplicada = isset($erro->errorInfo[1]) && (int) $erro->errorInfo[1] === 1062;
+    responderSalaCadastrar($duplicada ? 409 : 500, [
+        'ok' => false,
+        'message' => $duplicada
+            ? 'Já existe uma sala com esse número e bloco.'
+            : 'Não foi possível cadastrar a sala.',
+    ]);
 }

@@ -376,24 +376,6 @@ main {
 .list-feedback.error { color: var(--vermelho); background: var(--vermelho-bg); }
 .list-feedback.success { color: var(--verde); background: var(--verde-bg); }
 
-#manager-movement-dialog {
-    width: min(460px, calc(100% - 28px));
-    margin: auto;
-    padding: 24px;
-    border: 1px solid var(--borda);
-    border-radius: 14px;
-    color: var(--texto);
-    box-shadow: var(--sombra-md);
-}
-
-#manager-movement-dialog::backdrop { background: rgba(15, 23, 42, .42); }
-#manager-movement-dialog form { display: grid; gap: 14px; }
-#manager-movement-dialog h2 { font-size: 20px; }
-#manager-movement-dialog select { min-height: 42px; padding: 8px; border: 1px solid var(--borda); border-radius: 8px; }
-.dialog-actions { display: flex; justify-content: flex-end; gap: 10px; }
-.dialog-actions button { min-height: 40px; padding: 0 14px; border: 1px solid var(--borda); border-radius: 8px; background: white; cursor: pointer; }
-.dialog-actions button.primary { color: white; background: var(--azul-800); border-color: var(--azul-800); }
-
 .acoes-rapidas button {
     min-height: 116px;
     padding: 22px;

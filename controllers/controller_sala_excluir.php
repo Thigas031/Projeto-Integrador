@@ -45,5 +45,11 @@ try {
     responderSalaExcluir(200, ['ok' => true, 'message' => 'Sala excluída com sucesso.']);
 } catch (PDOException $erro) {
     error_log('Falha ao excluir sala: ' . $erro->getMessage());
-    responderSalaExcluir(500, ['ok' => false, 'message' => 'Não foi possível excluir a sala.']);
+    $chavesVinculadas = isset($erro->errorInfo[1]) && (int) $erro->errorInfo[1] === 1451;
+    responderSalaExcluir($chavesVinculadas ? 409 : 500, [
+        'ok' => false,
+        'message' => $chavesVinculadas
+            ? 'Não é possível excluir uma sala que possui chaves vinculadas.'
+            : 'Não foi possível excluir a sala.',
+    ]);
 }

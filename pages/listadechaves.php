@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . '/../controllers/controller_page_access.php'; requirePageAccess(['GERENTE', 'PORTEIRO']); ?>
+<?php require_once __DIR__ . '/../controllers/controller_page_access.php'; requirePageAccess(['GERENTE', 'PORTEIRO', 'OUTRO']); ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../css/menu-lateral.css">
     <link rel="stylesheet" href="../css/listadechaves.css">
 </head>
-<body data-profiles="GERENTE,PORTEIRO" data-auth-state="pending">
+<body data-profiles="GERENTE,PORTEIRO,OUTRO" data-auth-state="pending">
     <div id="menu-lateral-container" data-page="lista-chaves" data-menu-url="menu-lateral.html"></div>
     <main>
         <header class="cabecalho">
@@ -18,7 +18,7 @@
                 <input type="search" id="busca" name="busca" placeholder="Pesquisar sala ou chave...">
             </form>
 
-            <button id="nova-chave" type="button">Nova chave</button>
+            <button id="nova-chave" type="button" data-profiles="GERENTE,PORTEIRO" hidden>Nova chave</button>
         </header>
 
         <section class="lista-chaves">
@@ -66,28 +66,13 @@
 
         <p id="key-list-feedback" class="list-feedback" role="status" aria-live="polite"></p>
 
-        <dialog id="manager-movement-dialog">
-            <form id="manager-movement-form" method="dialog">
-                <h2>Movimentar chave</h2>
-                <p id="manager-movement-key"></p>
-                <label for="manager-movement-user">Responsável</label>
-                <select id="manager-movement-user" required>
-                    <option value="">Selecione um usuário cadastrado</option>
-                </select>
-                <p id="manager-movement-feedback" class="list-feedback" role="status"></p>
-                <div class="dialog-actions">
-                    <button type="button" data-manager-movement-cancel>Cancelar</button>
-                    <button type="submit" class="primary">Confirmar movimentação</button>
-                </div>
-            </form>
-        </dialog>
     </main>
 
-    <script src="../js/app-profile.js"></script>
-    <script src="../js/app-services.js"></script>
+    <script src="../js/app-profile.js?v=profile-matrix-2"></script>
+    <script src="../js/app-services.js?v=profile-matrix-2"></script>
     <script src="../js/page-access.js"></script>
     <script src="../js/form-feedback.js"></script>
-    <script src="../js/menu-lateral.js?v=withdrawal-actions-1" defer></script>
-    <script src="../js/listadechaves.js?v=withdrawal-actions-1"></script>
+    <script src="../js/menu-lateral.js?v=profile-matrix-2" defer></script>
+    <script src="../js/listadechaves.js?v=profile-matrix-2"></script>
 </body>
 </html>

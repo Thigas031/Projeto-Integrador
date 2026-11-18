@@ -4,7 +4,7 @@ require_once("../config/config.php");
 require_once("../config/auth.php");
 
 exigir_login();
-exigir_cargo(['PORTEIRO', 'GERENTE']);
+exigir_cargo(['PORTEIRO']);
 
 function responderMovimentacaoRetirar($status, $dados)
 {

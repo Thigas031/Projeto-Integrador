@@ -3,6 +3,16 @@
     margin: 0;
 }
 
+.room-edit-context {
+    margin: -8px 0 20px;
+    color: var(--texto-suave);
+    font-size: 13px;
+}
+
+.room-edit-context[hidden] {
+    display: none;
+}
+
 .room-icon {
     width: 46px;
     height: 46px;
@@ -18,6 +28,12 @@
     height: 24px;
     object-fit: contain;
     filter: brightness(0) invert(1);
+}
+
+.user-form .button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
 }
 
 @media (max-width: 720px) {

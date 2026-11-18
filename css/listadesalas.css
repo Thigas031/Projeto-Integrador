@@ -1,0 +1,134 @@
+.room-list-wrap {
+    max-width: 1280px;
+}
+
+.room-list-header {
+    flex-wrap: wrap;
+}
+
+.room-list-heading {
+    flex: 1 1 260px;
+}
+
+.room-list-heading h1 {
+    margin: 0;
+}
+
+.room-list-heading p {
+    margin-top: 6px;
+    color: var(--texto-suave);
+    font-size: 13px;
+}
+
+.room-list-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.room-list-actions .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.room-list-section {
+    padding: 24px 26px;
+}
+
+.room-search {
+    width: min(480px, 100%);
+    margin-bottom: 20px;
+}
+
+.room-search label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--texto-suave);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.room-search input {
+    width: 100%;
+    height: 46px;
+    padding: 0 16px;
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+    color: var(--texto);
+    background: var(--branco);
+    box-shadow: var(--sombra-sm);
+}
+
+.room-table {
+    min-width: 620px;
+}
+
+.room-table tbody td[colspan] {
+    padding: 24px;
+    color: var(--texto-suave);
+    text-align: center;
+}
+
+.room-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.room-actions .room-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 6px 10px;
+    border: 1px solid var(--borda);
+    border-radius: 7px;
+    color: var(--azul-800);
+    background: var(--branco);
+    font: inherit;
+    font-size: 13px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.room-actions .room-action:hover {
+    background: #f8fafc;
+}
+
+.room-actions .room-action--danger {
+    color: var(--vermelho);
+}
+
+.room-actions .room-action:disabled {
+    cursor: wait;
+    opacity: 0.6;
+}
+
+.room-count {
+    margin-top: 14px;
+    color: var(--texto-suave);
+    font-size: 13px;
+}
+
+@media (max-width: 900px) {
+    .room-list-section {
+        padding: 20px;
+    }
+
+    .room-list-actions {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .room-list-section {
+        padding: 18px 16px;
+    }
+
+    .room-list-actions .button {
+        flex: 1;
+        min-width: 0;
+    }
+}

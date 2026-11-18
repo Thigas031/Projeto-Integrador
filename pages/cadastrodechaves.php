@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . '/../controllers/controller_page_access.php'; requirePageAccess(['GERENTE']); ?>
+<?php require_once __DIR__ . '/../controllers/controller_page_access.php'; requirePageAccess(['GERENTE', 'PORTEIRO']); ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../css/menu-lateral.css">
     <link rel="stylesheet" href="../css/cadastrodechaves.css">
 </head>
-<body data-profiles="GERENTE" data-auth-state="pending">
+<body data-profiles="GERENTE,PORTEIRO" data-auth-state="pending">
     <div id="menu-lateral-container" data-page="cadastro-chaves" data-menu-url="menu-lateral.html"></div>
 
     <main>
@@ -25,7 +25,12 @@
 
                 <div class="campo-formulario">
                     <label for="nome-sala">Sala cadastrada</label>
-                    <input type="text" id="nome-sala" name="name" placeholder="Digite ou selecione uma sala cadastrada" maxlength="100" required>
+                    <select id="nome-sala" name="sala" required disabled>
+                        <option value="">Carregando salas...</option>
+                    </select>
+                    <a id="manage-rooms-link" class="room-management-link" href="listadesalas.php" hidden>
+                        Abrir administração de salas
+                    </a>
                 </div>
 
                 <div class="campo-formulario">
@@ -35,22 +40,22 @@
 
                 <div class="campo-formulario">
                     <label for="bloco">Bloco</label>
-                    <input type="text" id="bloco" name="block" placeholder="Ex.: A" maxlength="50">
+                    <input type="text" id="bloco" name="block" placeholder="Preenchido pela sala selecionada" maxlength="50" readonly>
                 </div>
 
                 <div class="acoes-cadastro-chaves">
                     <button class="button" type="button" data-cancel>Cancelar</button>
-                    <button class="button button--primary" type="submit">Salvar</button>
+                    <button class="button button--primary" type="submit" disabled>Salvar</button>
                 </div>
             </form>
         </section>
     </main>
 
-    <script src="../js/app-profile.js"></script>
-    <script src="../js/app-services.js"></script>
+    <script src="../js/app-profile.js?v=profile-matrix-2"></script>
+    <script src="../js/app-services.js?v=profile-matrix-2"></script>
     <script src="../js/page-access.js"></script>
-    <script src="../js/menu-lateral.js" defer></script>
+    <script src="../js/menu-lateral.js?v=profile-matrix-2" defer></script>
     <script src="../js/form-feedback.js"></script>
-    <script src="../js/cadastrodechaves.js?v=key-room-selection-1"></script>
+    <script src="../js/cadastrodechaves.js?v=key-room-selection-2"></script>
 </body>
 </html>

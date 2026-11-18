@@ -29,7 +29,8 @@ $nome = trim(is_string($_POST['nome'] ?? null) ? $_POST['nome'] : '');
 $numero = trim(is_string($_POST['numero'] ?? null) ? $_POST['numero'] : '');
 $bloco = trim(is_string($_POST['bloco'] ?? null) ? $_POST['bloco'] : '');
 if ($id === false || $id === null || $id < 1 || $nome === '' || $numero === '' || $bloco === '' ||
-    strlen($nome) > 100 || strlen($numero) > 20 || strlen($bloco) > 50) {
+    mb_strlen($nome, 'UTF-8') > 100 || mb_strlen($numero, 'UTF-8') > 20 ||
+    mb_strlen($bloco, 'UTF-8') > 50) {
     responderSalaEditar(400, ['ok' => false, 'message' => 'Dados da sala inválidos.']);
 }
 
@@ -60,5 +61,11 @@ try {
     responderSalaEditar(200, ['ok' => true, 'message' => 'Sala atualizada com sucesso.']);
 } catch (PDOException $erro) {
     error_log('Falha ao editar sala: ' . $erro->getMessage());
-    responderSalaEditar(500, ['ok' => false, 'message' => 'Não foi possível atualizar a sala.']);
+    $duplicada = isset($erro->errorInfo[1]) && (int) $erro->errorInfo[1] === 1062;
+    responderSalaEditar($duplicada ? 409 : 500, [
+        'ok' => false,
+        'message' => $duplicada
+            ? 'Já existe uma sala com esse número e bloco.'
+            : 'Não foi possível atualizar a sala.',
+    ]);
 }

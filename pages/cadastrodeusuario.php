@@ -77,10 +77,10 @@
         </div>
     </main>
 
-    <script src="../js/app-profile.js"></script>
-    <script src="../js/app-services.js"></script>
+    <script src="../js/app-profile.js?v=profile-matrix-2"></script>
+    <script src="../js/app-services.js?v=profile-matrix-2"></script>
     <script src="../js/page-access.js"></script>
-    <script src="../js/menu-lateral.js" defer></script>
+    <script src="../js/menu-lateral.js?v=profile-matrix-2" defer></script>
     <script src="../js/form-feedback.js"></script>
     <script src="../js/cadastrodeusuario.js"></script>
 </body>

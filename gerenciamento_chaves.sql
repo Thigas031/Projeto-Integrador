@@ -16,9 +16,10 @@ START TRANSACTION;
 CREATE TABLE `salas` (
   `id_sala` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) NOT NULL,
-  `numero` varchar(20) DEFAULT NULL,
-  `bloco` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id_sala`)
+  `numero` varchar(20) NOT NULL,
+  `bloco` varchar(50) NOT NULL,
+  PRIMARY KEY (`id_sala`),
+  UNIQUE KEY `uq_salas_numero_bloco` (`numero`, `bloco`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `salas` (`id_sala`, `nome`, `numero`, `bloco`) VALUES

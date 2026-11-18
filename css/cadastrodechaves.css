@@ -106,7 +106,8 @@ main {
     font-weight: 600;
 }
 
-.campo-formulario input {
+.campo-formulario input,
+.campo-formulario select {
     width: 100%;
     height: 46px;
     padding: 0 16px;
@@ -119,18 +120,43 @@ main {
     transition: border-color var(--transicao), box-shadow var(--transicao);
 }
 
-.campo-formulario input::placeholder {
+.campo-formulario input::placeholder,
+.campo-formulario select:invalid {
     color: #98a2b3;
 }
 
-.campo-formulario input:hover {
+.campo-formulario input:hover,
+.campo-formulario select:hover {
     border-color: #cbd5e1;
 }
 
-.campo-formulario input:focus {
+.campo-formulario input:focus,
+.campo-formulario select:focus {
     border-color: var(--azul-600);
     box-shadow: 0 0 0 4px rgba(11, 132, 214, 0.10), var(--sombra-sm);
     outline: 0;
+}
+
+.campo-formulario input[readonly] {
+    background: #f8fafc;
+}
+
+.room-management-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: var(--azul-800);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.room-management-link[hidden] {
+    display: none;
+}
+
+.button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
 }
 
 .form-feedback {

@@ -8,10 +8,6 @@ window.AppAccess.run(function () {
     const previousButton = document.querySelector('[data-page-action="previous"]');
     const nextButton = document.querySelector('[data-page-action="next"]');
     const feedback = document.getElementById("key-list-feedback");
-    const dialog = document.getElementById("manager-movement-dialog");
-    const movementForm = document.getElementById("manager-movement-form");
-    const movementUser = document.getElementById("manager-movement-user");
-    const movementFeedback = document.getElementById("manager-movement-feedback");
     const quickActions = document.querySelector(".acoes-rapidas");
     const statusLabels = {
         Disponivel: "Disponível",
@@ -23,27 +19,7 @@ window.AppAccess.run(function () {
     let totalKeys = 0;
     let pageCount = 0;
     let currentPage = 1;
-    let movementKeyId = "";
     let searchTimeout = null;
-    const dueFields = document.createElement("div");
-    const dueDateLabel = document.createElement("label");
-    const dueDate = document.createElement("input");
-    const dueTimeLabel = document.createElement("label");
-    const dueTime = document.createElement("input");
-
-    dueFields.className = "manager-due-fields";
-    dueDateLabel.textContent = "Data prevista de devolução";
-    dueDateLabel.htmlFor = "manager-movement-due-date";
-    dueDate.type = "date";
-    dueDate.id = "manager-movement-due-date";
-    dueDate.required = true;
-    dueTimeLabel.textContent = "Hora prevista de devolução";
-    dueTimeLabel.htmlFor = "manager-movement-due-time";
-    dueTime.type = "time";
-    dueTime.id = "manager-movement-due-time";
-    dueTime.required = true;
-    dueFields.append(dueDateLabel, dueDate, dueTimeLabel, dueTime);
-    movementForm.insertBefore(dueFields, movementForm.querySelector(".dialog-actions"));
 
     function setFeedback(element, message, type) {
         if (!message) {
@@ -78,13 +54,6 @@ window.AppAccess.run(function () {
         if (window.AppProfile.isAllowed("GERENTE")) {
             cell.append(
                 button("Editar", "edit", key.id),
-                button(
-                    key.status === "Disponivel" ? "Movimentar" : "Registrar devolução",
-                    "move",
-                    key.id,
-                    "",
-                    key.status === "Disponivel" ? "withdraw" : "return"
-                ),
                 button("Desativar", "delete", key.id, "danger")
             );
         }
@@ -152,40 +121,6 @@ window.AppAccess.run(function () {
         window.location.href = file + query;
     }
 
-    async function openManagerMovement(key) {
-        movementKeyId = key.id;
-        document.getElementById("manager-movement-key").textContent =
-            key.name + " — Nº " + key.number + " (" + (statusLabels[key.status] || key.status) + ")";
-        setFeedback(movementFeedback, "", "error");
-        movementUser.replaceChildren();
-        const placeholder = document.createElement("option");
-        placeholder.value = "";
-        placeholder.textContent = "Selecione um usuário cadastrado";
-        movementUser.appendChild(placeholder);
-
-        const isWithdrawal = key.status === "Disponivel";
-        movementUser.hidden = !isWithdrawal;
-        movementUser.required = isWithdrawal;
-        dueFields.hidden = !isWithdrawal;
-        dueDate.required = isWithdrawal;
-        dueTime.required = isWithdrawal;
-        dueDate.value = "";
-        dueTime.value = "";
-        if (isWithdrawal) {
-            const users = await window.AppServices.users.listForMovement();
-            users.forEach(function (user) {
-                const option = document.createElement("option");
-                option.value = user.id;
-                option.textContent = user.name;
-                movementUser.appendChild(option);
-            });
-            if (!users.length) {
-                setFeedback(movementFeedback, "Cadastre um usuário na área Usuários antes de registrar uma retirada.", "error");
-            }
-        }
-        dialog.showModal();
-    }
-
     async function handleAction(event) {
         const actionButton = event.target.closest("button[data-action]");
         if (!actionButton) return;
@@ -198,9 +133,6 @@ window.AppAccess.run(function () {
             switch (actionButton.dataset.action) {
                 case "edit":
                     window.location.href = "cadastrodechaves.php?id=" + encodeURIComponent(key.id);
-                    return;
-                case "move":
-                    await openManagerMovement(key);
                     return;
                 case "delete":
                     if (!window.confirm("Deseja desativar a chave " + key.name + " — Nº " + key.number + "?")) return;
@@ -258,7 +190,6 @@ window.AppAccess.run(function () {
     document.getElementById("nova-chave").addEventListener("click", function () {
         window.location.href = "cadastrodechaves.php";
     });
-    document.getElementById("nova-chave").hidden = !window.AppProfile.isAllowed("GERENTE");
     document.getElementById("retirar-chave").addEventListener("click", function () {
         if (window.AppProfile.isAllowed("PORTEIRO")) window.location.href = "retiradadechaves.php";
     });
@@ -288,39 +219,6 @@ window.AppAccess.run(function () {
     previousButton.addEventListener("click", function () { currentPage -= 1; loadKeys(); });
     nextButton.addEventListener("click", function () { currentPage += 1; loadKeys(); });
     document.getElementById("tabela-chaves").addEventListener("click", handleAction);
-    document.querySelector("[data-manager-movement-cancel]").addEventListener("click", function () {
-        dialog.close();
-    });
-    movementForm.addEventListener("submit", async function (event) {
-        event.preventDefault();
-        const key = keys.find(function (item) {
-            return String(item.id) === String(movementKeyId);
-        });
-        if (!key) return;
-        try {
-            if (key.status === "Disponivel") {
-                if (!dueDate.value || !dueTime.value || !movementUser.value) {
-                    window.AppFeedback.show(movementFeedback, "Informe usuário e previsão de devolução.", "error");
-                    return;
-                }
-                await window.AppServices.keys.withdraw(
-                    key.id,
-                    movementUser.value,
-                    "",
-                    { date: dueDate.value, time: dueTime.value },
-                    key.salaId
-                );
-                setFeedback(feedback, "Retirada registrada com sucesso.", "success");
-            } else {
-                await window.AppServices.keys.returnKey(key.id);
-                setFeedback(feedback, "Devolução registrada com sucesso.", "success");
-            }
-            dialog.close();
-            await loadKeys(true);
-        } catch (error) {
-            setFeedback(movementFeedback, error.message || "Não foi possível movimentar a chave.", "error");
-        }
-    });
 
     loadKeys();
 });
