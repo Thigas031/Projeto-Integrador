@@ -201,6 +201,15 @@
             requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar salas.");
             return apiData("../controllers/controller_sala_listar.php", "GET");
         },
+        prepareCreate(values) {
+            requireProfile("GERENTE", "Somente GERENTE pode cadastrar salas.");
+            // Contrato do formulário; o endpoint atual ainda exige bloco e não aceita descrição.
+            return {
+                nome_sala: String(values.name || "").trim(),
+                numero_sala: String(values.number || "").trim(),
+                descricao: String(values.description || "").trim()
+            };
+        },
         async create(values) {
             requireProfile("GERENTE", "Somente GERENTE pode cadastrar salas.");
             return apiData("../controllers/controller_sala_cadastrar.php", "POST", values);

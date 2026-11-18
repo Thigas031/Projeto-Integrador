@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../controllers/controller_profile_permissions.php';
 
 function exigir_login()
 {
@@ -10,7 +11,12 @@ function exigir_login()
 
 function exigir_cargo(array $cargos)
 {
-    if (!in_array($_SESSION['cargo'] ?? '', $cargos, true)) {
+    $permissions = getProfilePermissions($_SESSION['cargo'] ?? '');
+    $requiredPermissions = array_map(function ($cargo) {
+        return strtoupper(trim($cargo));
+    }, $cargos);
+
+    if (array_intersect($permissions, $requiredPermissions) === []) {
         http_response_code(403);
         exit('Acesso negado.');
     }

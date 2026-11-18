@@ -62,10 +62,26 @@
     background: var(--branco);
 }
 
+.metric-value {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
 .metric strong {
     font-size: 56px;
     font-weight: 500;
     line-height: 1;
+}
+
+.metric-icon {
+    width: 49px;
+    height: 49px;
+    flex: 0 0 49px;
+    align-self: center;
+    filter: var(--metric-icon-filter);
+    object-fit: contain;
 }
 
 .metric span {
@@ -73,16 +89,25 @@
     font-weight: 600;
 }
 
-.metric--available strong {
-    color: #005ca0;
+.metric--available {
+    --metric-tone: #005ca0;
+    --metric-icon-filter: invert(24%) sepia(97%) saturate(1657%) hue-rotate(179deg) brightness(91%) contrast(101%);
 }
 
-.metric--borrowed strong {
-    color: #ff9401;
+.metric--borrowed {
+    --metric-tone: #ff8a17;
+    --metric-icon-filter: invert(57%) sepia(82%) saturate(1585%) hue-rotate(349deg) brightness(100%) contrast(102%);
 }
 
+.metric--late {
+    --metric-tone: #cc0000;
+    --metric-icon-filter: brightness(0) saturate(100%) invert(10%) sepia(100%) saturate(7500%) hue-rotate(358deg) brightness(90%) contrast(115%);
+}
+
+.metric--available strong,
+.metric--borrowed strong,
 .metric--late strong {
-    color: #d40000;
+    color: var(--metric-tone);
 }
 
 .dashboard-grid {
@@ -182,12 +207,32 @@
     font-size: 18px;
 }
 
-.due-count {
+.due-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
     margin-top: 26px;
+}
+
+.due-icon {
+    width: 104px;
+    height: 104px;
+    flex: 0 0 auto;
+    filter: invert(47%) sepia(69%) saturate(683%) hue-rotate(131deg) brightness(88%) contrast(90%);
+    object-fit: contain;
+}
+
+.due-count {
+    margin-top: 0;
     color: #72d982;
     font-size: 56px;
     font-weight: 500;
     line-height: 1;
+}
+
+.due-summary p {
+    margin: 8px 0 0;
 }
 
 .side-panel p {
@@ -240,6 +285,12 @@
 
     .metric strong {
         font-size: 27px;
+    }
+
+    .metric-icon {
+        width: 32px;
+        height: 32px;
+        flex-basis: 32px;
     }
 
     .metric span {
@@ -324,13 +375,20 @@
         font-size: 15px;
     }
 
-    .due-count {
+    .due-summary {
         margin-top: 14px;
+    }
+
+    .due-icon {
+        width: 64px;
+        height: 64px;
+    }
+
+    .due-count {
         font-size: 42px;
     }
 
-    .side-panel p {
-        margin: 0;
+    .due-summary p {
         font-size: 13px;
     }
 

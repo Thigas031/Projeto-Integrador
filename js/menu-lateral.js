@@ -1,20 +1,14 @@
 (function () {
     function aplicarPerfil(menu, links, container, usuario) {
         const perfil = String(usuario.role || "").trim().toUpperCase();
-        if (!["GERENTE", "PORTEIRO"].includes(perfil)) {
+        if (!window.AppProfile.isAllowed("GERENTE,PORTEIRO")) {
             throw new Error("O servidor retornou um cargo não suportado pelo menu.");
         }
 
         container.dataset.profile = perfil;
         menu.dataset.profile = perfil;
         links.forEach(function (link) {
-            const roles = link.dataset.role || link.dataset.profiles || "";
-            let perfisPermitidos = roles.split(",")
-                .map(function (item) { return item.trim().toUpperCase(); });
-            if (link.dataset.page === "cadastro-chaves") {
-                perfisPermitidos = ["GERENTE"];
-            }
-            link.hidden = !perfisPermitidos.includes(perfil);
+            link.hidden = !window.AppProfile.isAllowed(link.dataset.profiles);
         });
 
         const name = menu.querySelector("[data-user-name]");

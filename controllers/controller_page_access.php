@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/controller_profile_permissions.php';
+
 function requirePageAccess(array $allowedProfiles)
 {
     if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -24,8 +26,9 @@ function requirePageAccess(array $allowedProfiles)
         $stmt->execute([':id' => $userId]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         $role = $user ? strtoupper($user['cargo']) : '';
+        $profilePermissions = getProfilePermissions($role);
 
-        if (!$user || !in_array($role, ['GERENTE', 'PORTEIRO'], true)) {
+        if (!$user || $profilePermissions === []) {
             $_SESSION = [];
             session_destroy();
             header('Location: login.html');
@@ -35,7 +38,8 @@ function requirePageAccess(array $allowedProfiles)
         $_SESSION['usuario'] = $user['nome'];
         $_SESSION['cargo'] = $role;
 
-        if (!in_array($role, $allowedProfiles, true)) {
+        $requiredPermissions = array_map('strtoupper', $allowedProfiles);
+        if (!array_intersect($profilePermissions, $requiredPermissions)) {
             header('Location: dashboard.php');
             exit;
         }

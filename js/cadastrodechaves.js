@@ -36,7 +36,7 @@ window.AppAccess.run(function () {
         blockField.readOnly = Boolean(room);
     }
 
-    if (editingId && window.AppProfile.get().role !== "GERENTE") {
+    if (editingId && !window.AppProfile.isAllowed("GERENTE")) {
         window.location.replace("listadechaves.php");
         return;
     }

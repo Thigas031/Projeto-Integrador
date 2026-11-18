@@ -78,7 +78,12 @@ main {
     border-radius: 50%;
     color: var(--branco);
     background: var(--azul-900);
-    font-size: 22px;
+}
+
+.key-icon img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
 }
 
 .form-cadastro-chaves {
@@ -231,7 +236,11 @@ main {
         width: 40px;
         height: 40px;
         flex-basis: 40px;
-        font-size: 19px;
+    }
+
+    .key-icon img {
+        width: 21px;
+        height: 21px;
     }
 
     .form-cadastro-chaves {

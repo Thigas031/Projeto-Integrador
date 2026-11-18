@@ -22,15 +22,24 @@
             <p id="dashboard-feedback" class="dashboard-feedback" role="status" aria-live="polite"></p>
             <section class="metrics" aria-label="Indicadores das chaves">
                 <article class="metric metric--available">
-                    <strong id="available">—</strong>
+                    <div class="metric-value">
+                        <strong id="available">—</strong>
+                        <img class="metric-icon" src="../assets/icons/Chave.svg" alt="" aria-hidden="true">
+                    </div>
                     <span>Chaves disponíveis</span>
                 </article>
                 <article class="metric metric--borrowed">
-                    <strong id="borrowed">—</strong>
+                    <div class="metric-value">
+                        <strong id="borrowed">—</strong>
+                        <img class="metric-icon" src="../assets/icons/Chave.svg" alt="" aria-hidden="true">
+                    </div>
                     <span>Emprestadas</span>
                 </article>
                 <article class="metric metric--late">
-                    <strong id="late">—</strong>
+                    <div class="metric-value">
+                        <strong id="late">—</strong>
+                        <img class="metric-icon" src="../assets/icons/Chave.svg" alt="" aria-hidden="true">
+                    </div>
                     <span>Atrasadas</span>
                 </article>
             </section>
@@ -47,10 +56,15 @@
                 </article>
 
                 <aside class="dashboard-side">
-                    <article class="panel side-panel">
-                        <h2>Chaves emprestadas</h2>
-                        <strong class="due-count" id="due">—</strong>
-                        <p>Chaves</p>
+                    <article class="panel side-panel side-panel--borrowed">
+                        <h2>Chaves para devolver hoje</h2>
+                        <div class="due-summary">
+                            <div>
+                                <strong class="due-count" id="due">—</strong>
+                                <p>Chaves</p>
+                            </div>
+                            <img class="due-icon" src="../assets/icons/leve-embora%204.svg" alt="" aria-hidden="true">
+                        </div>
                     </article>
 
                     <article class="panel side-panel side-panel--notes">

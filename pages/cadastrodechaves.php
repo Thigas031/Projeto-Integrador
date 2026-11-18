@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/menu-lateral.css">
     <link rel="stylesheet" href="../css/cadastrodechaves.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body data-profiles="GERENTE" data-auth-state="pending">
     <div id="menu-lateral-container" data-page="cadastro-chaves" data-menu-url="menu-lateral.html"></div>
@@ -18,7 +17,7 @@
             <header class="cadastro-chaves-header">
                 <img class="brand-logo" src="../assets/icons/Logo%20sistema%20de%20chaves.svg" alt="Sistema de gerenciamento de chaves">
                 <h1>Cadastro de chave</h1>
-                <span class="key-icon" aria-hidden="true"><i class="fa-solid fa-key"></i></span>
+                <span class="key-icon" aria-hidden="true"><img src="../assets/icons/Chave.svg" alt=""></span>
             </header>
 
             <form id="key-form" class="form-cadastro-chaves" novalidate>

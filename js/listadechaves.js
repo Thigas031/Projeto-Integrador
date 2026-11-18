@@ -1,7 +1,5 @@
 (function () {
-window.AppAccess.run(function (user) {
-
-    const profile = user;
+window.AppAccess.run(function () {
     const search = document.getElementById("busca");
     const body = document.getElementById("corpo-tabela");
     const emptyRow = document.getElementById("linha-sem-resultados");
@@ -55,10 +53,21 @@ window.AppAccess.run(function (user) {
         window.AppFeedback.show(element, message, type);
     }
 
-    function button(label, action, keyId, className) {
+    function button(label, action, keyId, className, icon) {
         const element = document.createElement("button");
         element.type = "button";
-        element.textContent = label;
+        if (icon) {
+            const image = document.createElement("img");
+            image.className = "key-action-icon";
+            image.src = icon === "withdraw"
+                ? "../assets/icons/retirar chave.svg"
+                : "../assets/icons/devolver chave.svg";
+            image.alt = "";
+            element.appendChild(image);
+        }
+        const text = document.createElement("span");
+        text.textContent = label;
+        element.appendChild(text);
         element.dataset.action = action;
         element.dataset.keyId = keyId;
         if (className) element.className = className;
@@ -66,17 +75,24 @@ window.AppAccess.run(function (user) {
     }
 
     function renderActions(key, cell) {
-        if (profile.role === "GERENTE") {
+        if (window.AppProfile.isAllowed("GERENTE")) {
             cell.append(
                 button("Editar", "edit", key.id),
-                button(key.status === "Disponivel" ? "Movimentar" : "Registrar devolução", "move", key.id),
+                button(
+                    key.status === "Disponivel" ? "Movimentar" : "Registrar devolução",
+                    "move",
+                    key.id,
+                    "",
+                    key.status === "Disponivel" ? "withdraw" : "return"
+                ),
                 button("Desativar", "delete", key.id, "danger")
             );
-            return;
         }
 
-        const action = key.status === "Disponivel" ? "withdraw" : "return";
-        cell.append(button(key.status === "Disponivel" ? "Retirar" : "Devolver", action, key.id));
+        if (window.AppProfile.isAllowed("PORTEIRO")) {
+            const action = key.status === "Disponivel" ? "withdraw" : "return";
+            cell.append(button(key.status === "Disponivel" ? "Retirar" : "Devolver", action, key.id, "", action));
+        }
     }
 
     function renderTable() {
@@ -242,14 +258,14 @@ window.AppAccess.run(function (user) {
     document.getElementById("nova-chave").addEventListener("click", function () {
         window.location.href = "cadastrodechaves.php";
     });
-    document.getElementById("nova-chave").hidden = profile.role !== "GERENTE";
+    document.getElementById("nova-chave").hidden = !window.AppProfile.isAllowed("GERENTE");
     document.getElementById("retirar-chave").addEventListener("click", function () {
-        if (profile.role === "PORTEIRO") window.location.href = "retiradadechaves.php";
+        if (window.AppProfile.isAllowed("PORTEIRO")) window.location.href = "retiradadechaves.php";
     });
     document.getElementById("devolver-chave").addEventListener("click", function () {
-        if (profile.role === "PORTEIRO") window.location.href = "devolucaodechaves.php";
+        if (window.AppProfile.isAllowed("PORTEIRO")) window.location.href = "devolucaodechaves.php";
     });
-    if (profile.role !== "PORTEIRO") quickActions.hidden = true;
+    if (!window.AppProfile.isAllowed("PORTEIRO")) quickActions.hidden = true;
     document.querySelectorAll("[data-profiles]").forEach(function (element) {
         element.hidden = !window.AppProfile.isAllowed(element.dataset.profiles);
     });

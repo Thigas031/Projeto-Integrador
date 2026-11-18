@@ -265,6 +265,10 @@ main {
 #tabela-chaves td.key-actions button {
     min-height: 34px;
     padding: 6px 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
     border: 1px solid var(--borda);
     border-radius: 8px;
     background: var(--branco);
@@ -273,6 +277,13 @@ main {
     font-size: 12px;
     white-space: nowrap;
     margin: 2px;
+}
+
+#tabela-chaves td.key-actions .key-action-icon {
+    width: 20px;
+    height: 15px;
+    flex: 0 0 auto;
+    object-fit: contain;
 }
 
 #tabela-chaves td.key-actions button:hover {
@@ -414,16 +425,21 @@ main {
     display: grid;
     place-items: center;
     border-radius: 13px;
-    color: var(--azul-800);
-    background: var(--azul-50);
+}
+
+.icone-retirar {
+    background: var(--verde-bg);
+}
+
+.icone-devolver {
+    background: var(--azul-100);
 }
 
 .icone-retirar img,
 .icone-devolver img {
-    width: 24px;
-    height: 24px;
+    width: 34px;
+    height: 26px;
     object-fit: contain;
-    filter: brightness(0) saturate(100%);
 }
 
 .acoes-rapidas strong {
@@ -565,7 +581,7 @@ main {
 
     .icone-retirar img,
     .icone-devolver img {
-        width: 20px;
+        width: 25px;
         height: 20px;
     }
 

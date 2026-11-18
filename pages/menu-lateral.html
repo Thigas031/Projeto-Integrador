@@ -1,22 +1,26 @@
 <aside class="menu-lateral" id="menu-principal">
     <button class="botao-menu" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="navegacao-principal">
-        <span class="icone-menu" aria-hidden="true">Icone menu</span>
+        <span class="icone-menu" aria-hidden="true"></span>
     </button>
 
     <nav id="navegacao-principal" aria-label="Navegação principal">
-        <a href="dashboard.php" data-page="dashboard" data-profiles="GERENTE,PORTEIRO" aria-label="Dashboard" hidden><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Dashboard</a>
-        <a href="listadechaves.php" data-page="lista-chaves" data-profiles="GERENTE,PORTEIRO" aria-label="Lista de chaves" hidden><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Lista de Chaves</a>
-        <a href="cadastrodechaves.php" data-page="cadastro-chaves" data-profiles="GERENTE,PORTEIRO" aria-label="Cadastrar chave" hidden><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Cadastrar Chave</a>
-        <a href="retiradadechaves.php" data-page="retirada-chaves" data-profiles="GERENTE,PORTEIRO" aria-label="Retirada de chaves" hidden><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Retirada de Chaves</a>
-        <a href="devolucaodechaves.php" data-page="devolucao-chaves" data-profiles="PORTEIRO" aria-label="Devolução de chaves" hidden><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Devolução de Chaves</a>
-        <a href="cadastrodeusuario.php" data-page="usuarios" data-profiles="GERENTE" aria-label="Usuários" hidden><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Usuários</a>
-        <a href="ocorrencias.php" data-page="ocorrencias" data-profiles="GERENTE,PORTEIRO" aria-label="Ocorrências" hidden><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">Ocorrências</a>
+        <a href="dashboard.php" data-page="dashboard" data-profiles="GERENTE,PORTEIRO" aria-label="Dashboard" hidden><img src="../assets/icons/casa-new.svg" alt="">Dashboard</a>
+        <a href="listadechaves.php" data-page="lista-chaves" data-profiles="GERENTE,PORTEIRO" aria-label="Lista de chaves" hidden><img src="../assets/icons/chavefull-new.svg" alt="">Lista de Chaves</a>
+        <a href="cadastrodechaves.php" data-page="cadastro-chaves" data-profiles="GERENTE" aria-label="Cadastrar chave" hidden><img src="../assets/icons/cadastrochave-new.svg" alt="">Cadastrar Chave</a>
+        <a href="cadastrodesalas.php" data-page="cadastro-salas" data-profiles="GERENTE" aria-label="Cadastrar sala" hidden><img src="../assets/icons/cadastrosala-new.svg" alt="">Cadastrar Sala</a>
+        <a href="retiradadechaves.php" data-page="retirada-chaves" data-profiles="GERENTE,PORTEIRO" aria-label="Retirada de chaves" hidden><img src="../assets/icons/retirar chave.svg" alt="">Retirada de Chaves</a>
+        <a href="devolucaodechaves.php" data-page="devolucao-chaves" data-profiles="PORTEIRO" aria-label="Devolução de chaves" hidden><img src="../assets/icons/devolver chave.svg" alt="">Devolução de Chaves</a>
+        <a href="cadastrodeusuario.php" data-page="usuarios" data-profiles="GERENTE" aria-label="Usuários" hidden><img src="../assets/icons/usuarios-new.svg" alt="">Usuários</a>
+        <a href="ocorrencias.php" data-page="ocorrencias" data-profiles="GERENTE,PORTEIRO" aria-label="Ocorrências" hidden><img src="../assets/icons/ocorrencias-new.svg" alt="">Ocorrências</a>
     </nav>
 
-    <button class="botao-sair" type="button" aria-label="Sair da conta">Sair</button>
+    <button class="botao-sair" type="button" aria-label="Sair da conta">
+        <img class="menu-logout-icon" src="../assets/icons/Sair.svg" alt="">
+        <span class="menu-logout-label">Sair</span>
+    </button>
 
     <div class="menu-user" aria-label="Usuário autenticado">
-        <img class="menu-user-avatar" data-user-avatar src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="">
+        <img class="menu-user-avatar" data-user-avatar src="../assets/icons/usuariopfp-new.svg" alt="">
         <div class="menu-user-info">
             <span class="menu-user-name" data-user-name></span>
             <span class="menu-user-role" data-user-role></span>

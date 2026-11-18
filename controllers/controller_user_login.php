@@ -11,8 +11,8 @@ session_set_cookie_params([
     'samesite' => 'Lax',
 ]);
 session_start();
-require_once("../config/config.php");
-
+require_once __DIR__ . '/controller_profile_permissions.php';
+require_once __DIR__ . '/../config/config.php';
 header('Cache-Control: no-store, private');
 
 function responderLogin($status, $payload)
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
         $perfil = $usuario ? strtoupper($usuario['cargo']) : '';
 
-        if (!$usuario || !in_array($perfil, ['GERENTE', 'PORTEIRO'], true)) {
+        if (!$usuario || getProfilePermissions($perfil) === []) {
             $_SESSION = [];
             session_destroy();
             responderLogin(401, ['ok' => false, 'message' => 'Sessão inválida ou expirada.']);
@@ -91,27 +91,37 @@ if (($_POST['acao'] ?? '') === 'logout') {
     responderLogin(200, ['ok' => true, 'message' => 'Sessão encerrada.']);
 }
 
-$cpf = $_POST['cpf'] ?? $_POST['identificador'] ?? '';
+$identificadorEntrada = $_POST['cpf'] ?? $_POST['identificador'] ?? '';
+$identificador = is_string($identificadorEntrada) ? trim($identificadorEntrada) : '';
 $senha = $_POST['senha'] ?? '';
 
-if (!is_string($cpf) || !preg_match('/^\d{11}$/D', $cpf) || !is_string($senha) || $senha === '') {
+if ($identificador === '' || !is_string($senha) || $senha === '') {
+    $_SESSION['erro_login'] = 'CPF ou senha incorretos.';
+    retornarLogin(401, 'CPF ou senha incorretos.');
+}
+
+$cpf = preg_replace('/\D/', '', $identificador);
+$cpf = strlen($cpf) === 11 && preg_match('/^[\d.\-\s]+$/', $identificador) ? $cpf : '';
+$email = filter_var($identificador, FILTER_VALIDATE_EMAIL) ? strtolower($identificador) : '';
+
+if ($cpf === '' && $email === '') {
     $_SESSION['erro_login'] = 'CPF ou senha incorretos.';
     retornarLogin(401, 'CPF ou senha incorretos.');
 }
 
 try {
     $stmt = $pdo->prepare(
-        "SELECT id_usuario, nome, cpf, cargo, senha
+        "SELECT id_usuario, nome, cpf, email, cargo, senha
          FROM usuarios
-         WHERE cpf = :cpf AND ativo = 1
+         WHERE ativo = 1 AND (cpf = :cpf OR email = :email)
          LIMIT 1"
     );
-    $stmt->execute([':cpf' => $cpf]);
+    $stmt->execute([':cpf' => $cpf, ':email' => $email]);
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
     $perfil = $usuario ? strtoupper($usuario['cargo']) : '';
 
     if (!$usuario || !password_verify($senha, $usuario['senha']) ||
-        !in_array($perfil, ['GERENTE', 'PORTEIRO'], true)) {
+        getProfilePermissions($perfil) === []) {
         $_SESSION['erro_login'] = 'CPF ou senha incorretos.';
         retornarLogin(401, 'CPF ou senha incorretos.');
     }
@@ -128,6 +138,8 @@ try {
         'user' => [
             'id' => $usuario['id_usuario'],
             'name' => $usuario['nome'],
+            'cpf' => $usuario['cpf'],
+            'email' => $usuario['email'],
             'role' => $perfil,
         ],
     ]);

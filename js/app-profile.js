@@ -1,9 +1,13 @@
 (function (global) {
-    const supportedProfiles = new Set(["GERENTE", "PORTEIRO"]);
+    const profilePermissions = {
+        GERENTE: ["GERENTE"],
+        PORTEIRO: ["PORTEIRO"],
+        OUTRO: ["GERENTE", "PORTEIRO"]
+    };
     let activeUser = null;
 
     function normalizeUser(user) {
-        if (!user || !supportedProfiles.has(String(user.role).toUpperCase()) ||
+        if (!user || !profilePermissions[String(user.role).toUpperCase()] ||
             !user.id || !String(user.name || "").trim()) {
             return null;
         }
@@ -47,9 +51,10 @@
 
     function isAllowed(allowedProfiles) {
         if (!activeUser) return false;
-        return allowedProfiles.split(",").map(function (item) {
-            return item.trim().toUpperCase();
-        }).includes(activeUser.role);
+        const permissions = profilePermissions[activeUser.role];
+        return String(allowedProfiles || "").split(",").some(function (item) {
+            return permissions.includes(item.trim().toUpperCase());
+        });
     }
 
     global.AppProfile = { ready: ready, get: get, isAllowed: isAllowed };

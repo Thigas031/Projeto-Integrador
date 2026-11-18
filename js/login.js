@@ -51,8 +51,8 @@
         try {
             const remember = document.getElementById("lembrar").checked;
             const response = await window.AppServices.auth.login(identifier, password, remember);
-            if (!response.user || !["GERENTE", "PORTEIRO"].includes(String(response.user.role).toUpperCase())) {
-                throw new Error("O servidor não retornou um perfil GERENTE ou PORTEIRO válido.");
+            if (!response.user || !["GERENTE", "PORTEIRO", "OUTRO"].includes(String(response.user.role).toUpperCase())) {
+                throw new Error("O servidor não retornou um perfil autorizado válido.");
             }
             window.location.replace("dashboard.php");
         } catch (error) {

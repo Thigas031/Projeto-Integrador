@@ -56,7 +56,7 @@ window.AppAccess.run(function (user) {
         }
     }
 
-    form.hidden = user.role !== "PORTEIRO";
+    form.hidden = !window.AppProfile.isAllowed("PORTEIRO");
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
         const text = document.getElementById("occurrence-text").value.trim();

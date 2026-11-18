@@ -56,7 +56,7 @@
                 <div class="field">
                     <label for="user-cpf">CPF</label>
                     <input id="user-cpf" type="text" inputmode="numeric" autocomplete="off" maxlength="14" placeholder="000.000.000-00" required>
-                    <small class="field-hint">A senha inicial será definida pelos 4 primeiros dígitos do CPF.</small>
+                    <small class="field-hint">A senha inicial usa os 4 últimos dígitos do CPF.</small>
                 </div>
 
                 <div class="field">

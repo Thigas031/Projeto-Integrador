@@ -53,12 +53,12 @@
 
         <section class="acoes-rapidas" data-profiles="PORTEIRO" hidden>
             <button id="retirar-chave" type="button" data-profiles="PORTEIRO">
-                <span class="icone-retirar" aria-hidden="true"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt=""></span>
+                <span class="icone-retirar" aria-hidden="true"><img src="../assets/icons/retirar chave.svg" alt=""></span>
                 <strong>Retirar a chave</strong>
                 <small>Registrar a retirada de uma chave</small>
             </button>
             <button id="devolver-chave" type="button" data-profiles="PORTEIRO">
-                <span class="icone-devolver" aria-hidden="true"><img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt=""></span>
+                <span class="icone-devolver" aria-hidden="true"><img src="../assets/icons/devolver chave.svg" alt=""></span>
                 <strong>Devolver chave</strong>
                 <small>Registrar a devolução de uma chave</small>
             </button>
