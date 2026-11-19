@@ -38,7 +38,7 @@ try {
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($usuario) {
-        $senhaInicial = substr($cpf, 0, 4);
+        $senhaInicial = substr($cpf, -4);
         $hash = password_hash($senhaInicial, PASSWORD_DEFAULT);
         $stmtAtualizar = $pdo->prepare(
             "UPDATE usuarios SET senha = :senha WHERE id_usuario = :id"
