@@ -49,3 +49,5 @@ GERENTE pode listar, cadastrar, editar e excluir salas pela administração. Nom
 A tabela `chaves` usa `id_sala` e `numero_chave`; nome e bloco vêm de `salas`. `movimentacoes.id_porteiro` é obrigatório mesmo para movimentações feitas por GERENTE, e `data_prevista` permanece opcional. O controller legado `controller_user_cadastro_adm.php` grava em `cadastros`, tabela que não existe neste esquema, e não é chamado pela página atual; não o utilize como endpoint de cadastro.
 
 O Login aceita CPF ou e-mail e os cargos GERENTE, PORTEIRO e OUTRO. `password_verify` valida o hash salvo em `usuarios.senha`; a sessão guarda ID, nome e cargo, e os três perfis autorizados iniciam no `dashboard.php`. O cadastro e a administração de usuários são atendidos pelos endpoints PHP do projeto.
+
+teste
