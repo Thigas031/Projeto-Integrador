@@ -46,8 +46,6 @@ Uma chave precisa estar associada a uma sala já cadastrada. O seletor carrega a
 
 GERENTE pode listar, cadastrar, editar e excluir salas pela administração. Nome, número e bloco são obrigatórios; a combinação número + bloco é única. A exclusão é recusada quando há chaves vinculadas. Para bancos existentes, verifique a migração `migrations/20261118_issue1_salas_constraints.sql` antes de aplicá-la.
 
-A tabela `chaves` usa `id_sala` e `numero_chave`; nome e bloco vêm de `salas`. `movimentacoes.id_porteiro` é obrigatório mesmo para movimentações feitas por GERENTE, e `data_prevista` permanece opcional. O controller legado `controller_user_cadastro_adm.php` grava em `cadastros`, tabela que não existe neste esquema, e não é chamado pela página atual; não o utilize como endpoint de cadastro.
+A tabela `chaves` usa `id_sala` e `numero_chave`; nome e bloco vêm de `salas`. `movimentacoes.id_porteiro` é obrigatório mesmo para movimentações feitas por GERENTE, e `data_prevista` permanece opcional. `controller_user_cadastro_adm.php` é um alias de compatibilidade que encaminha para `controller_usuario_cadastrar.php`; nenhuma página atual o chama diretamente.
 
 O Login aceita CPF ou e-mail e os cargos GERENTE, PORTEIRO e OUTRO. `password_verify` valida o hash salvo em `usuarios.senha`; a sessão guarda ID, nome e cargo, e os três perfis autorizados iniciam no `dashboard.php`. O cadastro e a administração de usuários são atendidos pelos endpoints PHP do projeto.
-
-teste
