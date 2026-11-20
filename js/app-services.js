@@ -149,6 +149,7 @@
                     id: movement.keyId,
                     name: movement.keyName,
                     number: movement.keyNumber,
+                    roomName: movement.roomName,
                     block: movement.block,
                     status: movement.status,
                     responsible: movement.userName
@@ -159,6 +160,7 @@
             requireProfile("GERENTE,PORTEIRO", "Somente GERENTE ou PORTEIRO pode cadastrar chaves.");
             return apiData("../controllers/controller_chave_cadastrar.php", "POST", {
                 sala: values.roomId,
+                nome_chave: values.name,
                 numero_chave: values.number
             });
         },
@@ -171,6 +173,7 @@
             return apiMutation("../controllers/controller_chave_editar.php", "POST", {
                 id_chave: id,
                 sala: values.roomId,
+                nome_chave: values.name,
                 numero_chave: values.number
             });
         },
@@ -178,12 +181,14 @@
             requireProfile("GERENTE", "Somente GERENTE pode desativar chaves.");
             return apiData("../controllers/controller_chave_desativar.php", "POST", { id_chave: id });
         },
-        async withdraw(id, userId, notes, due, roomId) {
+        async withdraw(id, userId, userName, userRole, notes, due, roomId) {
             requireProfile("PORTEIRO", "Somente PORTEIRO pode retirar chaves.");
             due = due || {};
             return apiData("../controllers/controller_movimentacao_retirar.php", "POST", {
                 sala: roomId,
                 usuario: userId,
+                nome_retirante: userName,
+                cargo_retirante: userRole,
                 chave: id,
                 data: due.withdrawnDate || "",
                 hora: due.withdrawnTime || "",

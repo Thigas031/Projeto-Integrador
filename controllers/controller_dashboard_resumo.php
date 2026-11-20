@@ -43,8 +43,11 @@ try {
     ];
 
     $sqlMovimentacoes = "SELECT m.id_movimentacao AS id, m.id_chave AS keyId,
-                                k.numero_chave AS keyNumber, s.nome AS keyName,
-                                m.id_usuario AS userId, u.nome AS userName,
+                                k.nome_chave AS keyName, k.numero_chave AS keyNumber,
+                                s.nome AS roomName,
+                                m.id_usuario AS userId,
+                                COALESCE(m.nome_retirante, u.nome) AS userName,
+                                COALESCE(m.cargo_retirante, u.cargo) AS userRole,
                                 p.nome AS porterName, m.data_retirada AS withdrawnAt,
                                 m.data_prevista AS dueAt, m.data_devolucao AS returnedAt,
                                 m.observacao AS notes,
@@ -56,7 +59,7 @@ try {
                          FROM movimentacoes m
                          INNER JOIN chaves k ON k.id_chave = m.id_chave
                          INNER JOIN salas s ON s.id_sala = k.id_sala
-                         INNER JOIN usuarios u ON u.id_usuario = m.id_usuario
+                         LEFT JOIN usuarios u ON u.id_usuario = m.id_usuario
                          INNER JOIN usuarios p ON p.id_usuario = m.id_porteiro
                          ORDER BY m.data_retirada DESC
                          LIMIT 10";
@@ -64,13 +67,16 @@ try {
     $stmtMovimentacoes->execute([]);
 
     $sqlAbertas = "SELECT m.id_movimentacao AS id, m.id_chave AS keyId,
-                          k.numero_chave AS keyNumber, s.nome AS keyName,
-                          u.nome AS userName, m.data_retirada AS withdrawnAt,
+                          k.nome_chave AS keyName, k.numero_chave AS keyNumber,
+                          s.nome AS roomName,
+                          COALESCE(m.nome_retirante, u.nome) AS userName,
+                          COALESCE(m.cargo_retirante, u.cargo) AS userRole,
+                          m.data_retirada AS withdrawnAt,
                           m.data_prevista AS dueAt
                    FROM movimentacoes m
                    INNER JOIN chaves k ON k.id_chave = m.id_chave
                    INNER JOIN salas s ON s.id_sala = k.id_sala
-                   INNER JOIN usuarios u ON u.id_usuario = m.id_usuario
+                   LEFT JOIN usuarios u ON u.id_usuario = m.id_usuario
                    WHERE m.data_devolucao IS NULL";
     $stmtHoje = $pdo->prepare(
         $sqlAbertas . " AND m.data_prevista >= CURDATE()

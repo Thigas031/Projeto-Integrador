@@ -1,11 +1,13 @@
 (function () {
 window.AppAccess.run(function () {
     const select = document.getElementById("return-key");
+    const keySummary = document.getElementById("key-selection-summary");
     const feedback = document.getElementById("return-feedback");
     const form = document.getElementById("return-form");
     const submitButton = form.querySelector('[type="submit"]');
     const fields = {
         user: document.getElementById("return-user"),
+        role: document.getElementById("return-role"),
         date: document.getElementById("return-date"),
         time: document.getElementById("return-time")
     };
@@ -24,10 +26,18 @@ window.AppAccess.run(function () {
     }
 
     function fillMovementDetails() {
+        const key = openKeys.find(function (item) {
+            return String(item.id) === select.value;
+        });
+        keySummary.replaceChildren();
+        keySummary.hidden = !key;
+        if (key) keySummary.appendChild(window.AppKeyDisplay.create(key));
+
         const movement = openMovements.find(function (item) {
             return String(item.keyId) === select.value;
         });
         fields.user.value = movement ? movement.userName : "";
+        fields.role.value = movement ? movement.userRole : "";
         fields.date.value = movement ? formatDate(movement.withdrawnAt) : "";
         fields.time.value = movement ? formatTime(movement.withdrawnAt) : "";
     }
@@ -48,7 +58,7 @@ window.AppAccess.run(function () {
             openKeys.forEach(function (key) {
                 const option = document.createElement("option");
                 option.value = key.id;
-                option.textContent = key.name + " — Nº " + key.number;
+                option.textContent = window.AppKeyDisplay.optionLabel(key);
                 select.appendChild(option);
             });
 

@@ -24,6 +24,11 @@
                 <p id="key-feedback" class="form-feedback" role="status"></p>
 
                 <div class="campo-formulario">
+                    <label for="nome-chave">Nome da chave</label>
+                    <input type="text" id="nome-chave" name="keyName" placeholder="Ex.: Chave da sala de reuniões" maxlength="100" required>
+                </div>
+
+                <div class="campo-formulario">
                     <label for="nome-sala">Sala cadastrada</label>
                     <select id="nome-sala" name="sala" required disabled>
                         <option value="">Carregando salas...</option>
@@ -52,10 +57,10 @@
     </main>
 
     <script src="../js/app-profile.js?v=profile-matrix-2"></script>
-    <script src="../js/app-services.js?v=profile-matrix-2"></script>
+    <script src="../js/app-services.js?v=key-name-1"></script>
     <script src="../js/page-access.js"></script>
     <script src="../js/menu-lateral.js?v=profile-matrix-2" defer></script>
     <script src="../js/form-feedback.js"></script>
-    <script src="../js/cadastrodechaves.js?v=key-room-selection-2"></script>
+    <script src="../js/cadastrodechaves.js?v=key-name-1"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Devolução de Chave</title>
-    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/global.css?v=key-identity-2">
     <link rel="stylesheet" href="../css/devolucaodechaves.css">
     <link rel="stylesheet" href="../css/menu-lateral.css">
 </head>
@@ -30,15 +30,20 @@
                             <select id="return-key" class="select-control" required>
                                 <option value="">Selecione uma chave</option>
                             </select>
+                            <div id="key-selection-summary" class="key-selection-summary" hidden aria-live="polite"></div>
                         </div>
                     </div>
                 </section>
 
                 <section class="return-section" aria-labelledby="user-section-title">
-                    <h2 id="user-section-title">Dados do usuário</h2>
+                    <h2 id="user-section-title">Dados da pessoa responsável</h2>
                     <div class="return-field">
-                        <label for="return-user">Usuário</label>
+                        <label for="return-user">Nome</label>
                         <input id="return-user" type="text" readonly>
+                    </div>
+                    <div class="return-field">
+                        <label for="return-role">Cargo</label>
+                        <input id="return-role" type="text" readonly>
                     </div>
                 </section>
 
@@ -66,10 +71,11 @@
     </main>
 
     <script src="../js/app-profile.js?v=profile-matrix-2"></script>
-    <script src="../js/app-services.js?v=profile-matrix-2"></script>
+    <script src="../js/app-services.js?v=key-name-1"></script>
+    <script src="../js/key-display.js?v=key-identity-2"></script>
     <script src="../js/page-access.js"></script>
     <script src="../js/menu-lateral.js?v=profile-matrix-2" defer></script>
     <script src="../js/form-feedback.js"></script>
-    <script src="../js/devolucaodechaves.js?v=withdrawal-actions-1"></script>
+    <script src="../js/devolucaodechaves.js?v=key-identity-2"></script>
 </body>
 </html>

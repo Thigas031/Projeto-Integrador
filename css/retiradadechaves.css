@@ -111,11 +111,47 @@ form {
     gap: 22px 24px;
 }
 
+.time-fields,
+.forecast-fields {
+    grid-column: 1 / -1;
+    min-width: 0;
+    margin: 0;
+    padding: 18px;
+    border: 1px solid #e5eaf0;
+    border-radius: 12px;
+}
+
+.time-fields legend,
+.forecast-fields legend {
+    padding: 0 6px;
+    color: #17202b;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.time-inputs,
+.forecast-inputs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 24px;
+}
+
+.forecast-help {
+    margin: 0 0 16px;
+    color: #667085;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
 
 .form-group {
     display: flex;
 
     flex-direction: column;
+}
+
+.form-group[hidden] {
+    display: none;
 }
 
 
@@ -210,6 +246,47 @@ textarea:focus {
 
 select {
     cursor: pointer;
+}
+
+.responsible-autocomplete {
+    position: relative;
+}
+
+.responsible-options {
+    position: absolute;
+    z-index: 5;
+    top: calc(100% + 4px);
+    right: 0;
+    left: 0;
+    max-height: 220px;
+    overflow-y: auto;
+    padding: 4px;
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 8px 20px rgba(16, 24, 40, 0.12);
+}
+
+.responsible-options[hidden] {
+    display: none;
+}
+
+.responsible-option {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--texto);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.responsible-option:hover,
+.responsible-option[aria-selected="true"] {
+    background: #f2f7fb;
 }
 
 
@@ -336,6 +413,18 @@ select {
     .form-grid {
         grid-template-columns: 1fr;
         gap: 18px;
+    }
+
+    .time-fields,
+    .forecast-fields {
+        grid-column: auto;
+        padding: 14px;
+    }
+
+    .time-inputs,
+    .forecast-inputs {
+        grid-template-columns: 1fr;
+        gap: 16px;
     }
 
     .page-header {

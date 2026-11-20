@@ -5,17 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de chaves</title>
-    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/global.css?v=key-identity-2">
     <link rel="stylesheet" href="../css/menu-lateral.css">
-    <link rel="stylesheet" href="../css/listadechaves.css">
+    <link rel="stylesheet" href="../css/listadechaves.css?v=key-identity-2">
 </head>
 <body data-profiles="GERENTE,PORTEIRO,OUTRO" data-auth-state="pending">
     <div id="menu-lateral-container" data-page="lista-chaves" data-menu-url="menu-lateral.html"></div>
     <main>
         <header class="cabecalho">
             <form id="form-busca">
-                <label for="busca">Pesquisar sala ou chave</label>
-                <input type="search" id="busca" name="busca" placeholder="Pesquisar sala ou chave...">
+                <label for="busca">Pesquisar nome, número ou sala</label>
+                <input type="search" id="busca" name="busca" placeholder="Pesquisar nome, número ou sala...">
             </form>
 
             <button id="nova-chave" type="button" data-profiles="GERENTE,PORTEIRO" hidden>Nova chave</button>
@@ -27,8 +27,7 @@
             <table id="tabela-chaves">
                 <thead>
                     <tr>
-                        <th>Nome da chave / sala</th>
-                        <th>Número</th>
+                        <th>Chave / localização</th>
                         <th>Status</th>
                         <th>Responsável</th>
                         <th>Ações</th>
@@ -36,7 +35,7 @@
                 </thead>
                 <tbody id="corpo-tabela" aria-live="polite">
                     <tr id="linha-sem-resultados" hidden>
-                        <td colspan="5">Nenhuma chave cadastrada.</td>
+                        <td colspan="4">Nenhuma chave cadastrada.</td>
                     </tr>
                 </tbody>
             </table>
@@ -69,10 +68,11 @@
     </main>
 
     <script src="../js/app-profile.js?v=profile-matrix-2"></script>
-    <script src="../js/app-services.js?v=profile-matrix-2"></script>
+    <script src="../js/app-services.js?v=key-name-1"></script>
+    <script src="../js/key-display.js?v=key-identity-2"></script>
     <script src="../js/page-access.js"></script>
     <script src="../js/form-feedback.js"></script>
     <script src="../js/menu-lateral.js?v=profile-matrix-2" defer></script>
-    <script src="../js/listadechaves.js?v=profile-matrix-2"></script>
+    <script src="../js/listadechaves.js?v=key-identity-2"></script>
 </body>
 </html>

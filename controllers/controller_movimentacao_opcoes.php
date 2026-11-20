@@ -28,16 +28,16 @@ try {
     $stmtSalas->execute([]);
 
     $stmtUsuarios = $pdo->prepare(
-        "SELECT id_usuario AS id, nome AS name
+        "SELECT id_usuario AS id, nome AS name, cargo AS role
          FROM usuarios
-         WHERE ativo = 1
+        WHERE ativo = 1 AND cargo <> 'Outro'
          ORDER BY nome ASC"
     );
     $stmtUsuarios->execute([]);
 
     $stmtChaves = $pdo->prepare(
-        "SELECT k.id_chave AS id, k.id_sala AS salaId, s.nome AS name,
-                s.numero AS roomNumber, s.bloco AS block,
+        "SELECT k.id_chave AS id, k.id_sala AS salaId, k.nome_chave AS name,
+                s.nome AS roomName, s.numero AS roomNumber, s.bloco AS block,
                 k.numero_chave AS number, k.status_chaves AS status
          FROM chaves k
          INNER JOIN salas s ON s.id_sala = k.id_sala

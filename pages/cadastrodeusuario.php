@@ -37,6 +37,7 @@
 
             <form id="user-form" class="user-form" novalidate>
                 <h2 id="user-form-title">Cadastrar usuário</h2>
+                <p id="user-edit-context" class="user-edit-context" hidden></p>
                 <p id="user-feedback" class="form-feedback" role="status"></p>
 
                 <div class="field">
@@ -48,8 +49,10 @@
                     <label for="user-role">Cargo</label>
                     <select id="user-role" class="select-control" required>
                         <option value="">Selecione o cargo</option>
-                        <option value="PROFESSOR">PROFESSOR</option>
+                        <option value="GERENTE">Gerente Geral</option>
                         <option value="PORTEIRO">PORTEIRO</option>
+                        <option value="PROFESSOR">Professor</option>
+                        <option value="OUTRO">Outro</option>
                     </select>
                 </div>
 
@@ -71,7 +74,7 @@
 
                 <div class="user-actions">
                     <button class="button" type="button" id="cancel-user-edit">Cancelar</button>
-                    <button class="button button--primary" type="submit">Salvar</button>
+                    <button class="button button--primary" id="save-user" type="submit">Cadastrar usuário</button>
                 </div>
             </form>
         </div>
@@ -82,6 +85,6 @@
     <script src="../js/page-access.js"></script>
     <script src="../js/menu-lateral.js?v=profile-matrix-2" defer></script>
     <script src="../js/form-feedback.js"></script>
-    <script src="../js/cadastrodeusuario.js"></script>
+    <script src="../js/cadastrodeusuario.js?v=role-options-1"></script>
 </body>
 </html>

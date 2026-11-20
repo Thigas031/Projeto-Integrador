@@ -9,13 +9,13 @@ As páginas administrativas e operacionais usam PHP e validam sessão, usuário 
 ### Executar localmente
 
 1. Abra o XAMPP Control Panel e inicie **Apache** e **MySQL**.
-2. Acesse `http://localhost/phpmyadmin`, abra **Importar** e selecione `gerenciamento_chaves.sql`. O arquivo cria/seleciona o banco `gerenciamento_chaves`; em uma instalação nova, não é necessário criar tabelas manualmente.
+2. Acesse `http://localhost/phpmyadmin`, abra **Importar** e selecione uma cópia autorizada do SQL completo de instalação. O arquivo cria/seleciona o banco `gerenciamento_chaves`; em uma instalação nova, não é necessário criar tabelas manualmente.
 3. Configure `config/config.php` com os parâmetros e credenciais do seu MySQL local.
 4. Acesse `http://localhost/PI/front-end/`; o `index.html` encaminha para a tela de Login.
 
 Como alternativa, instale PHP com `pdo_mysql` e inicie `php -S 127.0.0.1:8000` na raiz do projeto; depois abra `http://127.0.0.1:8000/pages/login.html`.
 
-O SQL cria o schema e inclui salas e chaves de exemplo, mas não insere usuários ou credenciais. Provisione uma conta autorizada separadamente, armazenando a senha com `password_hash`; não grave senhas em texto puro no repositório.
+O SQL completo de instalação não é versionado, pois inclui hashes de senha dos usuários de teste. Obtenha uma cópia confiável por um canal privado; não distribua esses dados em repositórios públicos.
 
 O `index.html` da raiz redireciona por caminho relativo a `pages/login.html`, preservando prefixos de publicação como `/nome-do-repositorio/`. Live Server e GitHub Pages são servidores estáticos e não executam PHP; a autenticação e as operações de dados exigem um servidor PHP e o banco configurado.
 
@@ -23,7 +23,7 @@ O `index.html` da raiz redireciona por caminho relativo a `pages/login.html`, pr
 
 `js/app-profile.js` obtém a sessão do controller PHP em cada carregamento, sem aceitar cargo de `localStorage`, `sessionStorage` ou configuração global. Páginas protegidas aguardam essa validação e redirecionam sessões ausentes ou incompatíveis. A identificação inferior do menu reutiliza o ícone de casa já usado nas opções de navegação e exibe nome e cargo recebidos da sessão quando expandida.
 
-O valor armazenado no ENUM `usuarios.cargo` é normalizado para `GERENTE`, `PORTEIRO` ou `OUTRO` na sessão e na interface. GERENTE administra usuários, salas e chaves, gera relatórios e consulta dashboard, lista de chaves e ocorrências. PORTEIRO consulta salas e chaves, cadastra chaves, registra retirada/devolução e observações. OUTRO mantém seu identificador próprio, mas recebe a união das permissões de GERENTE e PORTEIRO. As páginas `.php` e os endpoints validam as permissões no servidor.
+O valor armazenado no ENUM `usuarios.cargo` é normalizado para `GERENTE`, `PORTEIRO` ou `OUTRO` na sessão e na interface. GERENTE administra usuários, salas e chaves, gera relatórios e consulta dashboard, lista de chaves e ocorrências. PORTEIRO consulta salas e chaves, cadastra chaves, registra retirada/devolução e observações. OUTRO mantém seu identificador próprio, mas recebe a união das permissões de GERENTE e PORTEIRO. O usuário de teste OUTRO permanece no banco com essas permissões, mas não aparece na busca da retirada nem na listagem administrativa de usuários. As páginas `.php` e os endpoints validam as permissões no servidor.
 
 ## Serviços e integração de dados
 
@@ -33,10 +33,12 @@ Os campos consumidos pela interface são:
 
 - Usuário: `id`, `name`, `cpf`, `role`, `phone`, `email`.
 - Chave: `id`, `salaId`, `name`, `number`, `block`, `status`, `responsible`.
-- Movimentação: `id`, `keyId`, `keyName`, `keyNumber`, `userId`, `userName`, `withdrawnAt`, `returnedAt`, `notes`.
+- Movimentação: `id`, `keyId`, `keyName`, `keyNumber`, `userId`, `userName`, `userRole`, `withdrawnAt`, `returnedAt`, `notes`.
 - Ocorrência: `id`, `text`, `createdAt`, `createdBy`.
 
 O backend aplica autorização de sessão em cada operação, unicidade, transições de estado e preservação do histórico. A tabela `chaves` usa `id_sala`, `numero_chave`, `status_chaves` e `ativo`; o nome e bloco vêm de `salas`. `movimentacoes.id_porteiro` recebe o ID do PORTEIRO autenticado que registra a retirada. A data/hora prevista de devolução é informada no formulário de retirada e armazenada em `movimentacoes.data_prevista`; o horário efetivo da retirada é gerado pelo servidor. O status de movimentação é derivado de `data_devolucao`, sem coluna ou trigger.
+
+Na retirada, o campo de usuário funciona como busca: o porteiro seleciona um cadastro ou escolhe a opção especial `Outro` para informar o nome e o cargo de uma pessoa externa. Digitar um nome sem selecionar uma opção não registra a retirada. Pessoas externas não recebem conta e ficam registradas nos campos `nome_retirante` e `cargo_retirante`, com `id_usuario` nulo. O nome e o cargo são snapshots no empréstimo e continuam disponíveis após a devolução. Para bancos existentes, aplique uma vez `migrations/20261120_add_external_borrower.sql` antes de usar a nova funcionalidade; a migração também preenche snapshots para movimentações já registradas.
 
 Os controllers de salas e relatórios estão disponíveis no backend. A administração de salas usa uma lista e um formulário de criação/edição restritos a GERENTE; relatórios ainda não possuem tela própria.
 

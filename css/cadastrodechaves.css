@@ -94,6 +94,22 @@ main {
     padding: 26px;
 }
 
+.key-edit-summary {
+    width: min(560px, calc(100% - 52px));
+    margin: 22px auto 0;
+    padding: 16px 18px;
+    border: 1px solid #cfe5f3;
+    border-radius: 12px;
+    color: var(--azul-900);
+    background: #f0f8ff;
+    line-height: 1.5;
+}
+
+.key-edit-summary strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
 .campo-formulario {
     width: 100%;
 }
@@ -271,6 +287,11 @@ main {
 
     .form-cadastro-chaves {
         padding: 20px;
+    }
+
+    .key-edit-summary {
+        width: calc(100% - 40px);
+        margin-top: 18px;
     }
 
     .acoes-cadastro-chaves {

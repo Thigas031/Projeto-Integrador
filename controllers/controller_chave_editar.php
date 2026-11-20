@@ -26,10 +26,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $idChave = filter_var($_POST['id_chave'] ?? null, FILTER_VALIDATE_INT);
 $idSala = filter_var($_POST['sala'] ?? null, FILTER_VALIDATE_INT);
+$nome = trim(is_string($_POST['nome_chave'] ?? null) ? $_POST['nome_chave'] : '');
 $numero = trim(is_string($_POST['numero_chave'] ?? null) ? $_POST['numero_chave'] : '');
 
 if ($idChave === false || $idChave === null || $idChave < 1 ||
-    $idSala === false || $idSala === null || $idSala < 1 || $numero === '' || strlen($numero) > 30) {
+    $idSala === false || $idSala === null || $idSala < 1 || $nome === '' ||
+    mb_strlen($nome, 'UTF-8') > 100 || $numero === '' || strlen($numero) > 30) {
     responderChaveEditar(400, ['ok' => false, 'message' => 'Dados da chave inválidos.']);
 }
 
@@ -52,10 +54,10 @@ try {
 
     $stmt = $pdo->prepare(
         "UPDATE chaves
-         SET id_sala = :sala, numero_chave = :numero
+         SET id_sala = :sala, nome_chave = :nome, numero_chave = :numero
          WHERE id_chave = :id AND ativo = 1"
     );
-    $stmt->execute([':sala' => $idSala, ':numero' => $numero, ':id' => $idChave]);
+    $stmt->execute([':sala' => $idSala, ':nome' => $nome, ':numero' => $numero, ':id' => $idChave]);
     if ($stmt->rowCount() === 0) {
         $stmtExiste = $pdo->prepare("SELECT id_chave FROM chaves WHERE id_chave = :id AND ativo = 1 LIMIT 1");
         $stmtExiste->execute([':id' => $idChave]);

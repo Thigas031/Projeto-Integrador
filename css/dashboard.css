@@ -47,8 +47,8 @@
 .metrics {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 28px;
-    margin: 30px 0 28px;
+    gap: clamp(14px, 2vw, 24px);
+    margin: 28px 0 26px;
 }
 
 .metric {
@@ -114,6 +114,11 @@
     display: grid;
     grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
     gap: 24px;
+    align-items: start;
+}
+
+.dashboard-grid > * {
+    min-width: 0;
 }
 
 .panel {
@@ -144,10 +149,10 @@
 
 .movement {
     display: grid;
-    grid-template-columns: 48px minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) auto auto;
     align-items: center;
-    gap: 14px;
-    padding: 18px 20px;
+    gap: 12px 18px;
+    padding: 18px 22px;
     border-bottom: 1px solid var(--borda);
 }
 
@@ -171,8 +176,17 @@
     filter: brightness(0) saturate(100%) invert(27%) sepia(23%) saturate(1434%) hue-rotate(137deg) brightness(91%) contrast(91%);
 }
 
-.movement strong {
+.movement-detail {
+    min-width: 0;
+}
+
+.movement .key-identity-name {
     font-size: 16px;
+}
+
+.movement-person {
+    color: var(--texto);
+    overflow-wrap: anywhere;
 }
 
 .movement p {
@@ -185,10 +199,12 @@
     border-radius: 6px;
     color: #66b975;
     background: #d9f4db;
+    white-space: nowrap;
 }
 
 .movement time {
     color: #858585;
+    white-space: nowrap;
 }
 
 .dashboard-side {
@@ -316,29 +332,18 @@
     }
 
     .movement {
-        grid-template-columns: 34px minmax(0, 1fr) auto;
+        grid-template-columns: minmax(0, 1fr) auto;
         grid-template-rows: auto auto;
-        gap: 4px 10px;
-        padding: 12px;
-    }
-
-    .movement-avatar {
-        grid-row: 1 / 3;
-        width: 32px;
-        height: 32px;
-    }
-
-    .movement-avatar img {
-        width: 18px;
-        height: 18px;
+        gap: 6px 12px;
+        padding: 14px;
     }
 
     .movement > div {
-        grid-column: 2;
+        grid-column: 1;
         grid-row: 1 / 3;
     }
 
-    .movement strong {
+    .movement-key {
         font-size: 14px;
     }
 
@@ -348,7 +353,7 @@
     }
 
     .movement-status {
-        grid-column: 3;
+        grid-column: 2;
         grid-row: 1;
         justify-self: end;
         padding: 5px 9px;
@@ -356,7 +361,7 @@
     }
 
     .movement time {
-        grid-column: 3;
+        grid-column: 2;
         grid-row: 2;
         font-size: 11px;
         white-space: nowrap;

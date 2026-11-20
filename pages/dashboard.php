@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/global.css?v=key-identity-2">
+    <link rel="stylesheet" href="../css/dashboard.css?v=key-identity-2">
     <link rel="stylesheet" href="../css/menu-lateral.css">
 </head>
 <body data-profiles="GERENTE,PORTEIRO,OUTRO" data-auth-state="pending">
@@ -78,10 +78,11 @@
     </main>
 
     <script src="../js/app-profile.js?v=profile-matrix-2"></script>
-    <script src="../js/app-services.js?v=profile-matrix-2"></script>
+    <script src="../js/app-services.js?v=key-name-1"></script>
+    <script src="../js/key-display.js?v=key-identity-2"></script>
     <script src="../js/page-access.js"></script>
     <script src="../js/form-feedback.js"></script>
     <script src="../js/menu-lateral.js?v=profile-matrix-2" defer></script>
-    <script src="../js/dashboard.js"></script>
+    <script src="../js/dashboard.js?v=key-identity-2"></script>
 </body>
 </html>

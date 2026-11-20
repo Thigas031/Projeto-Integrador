@@ -3,23 +3,48 @@ window.AppAccess.run(function () {
     const form = document.getElementById("withdrawal-form");
     const feedback = document.getElementById("withdrawal-feedback");
     const roomSelect = document.getElementById("sala");
-    const userSelect = document.getElementById("usuario");
+    const userSearchInput = document.getElementById("usuario-busca");
+    const userIdInput = document.getElementById("usuario");
+    const externalNameField = document.getElementById("external-name-field");
+    const externalNameInput = document.getElementById("nome-retirante");
+    const externalRoleField = document.getElementById("external-role-field");
+    const userRoleInput = document.getElementById("cargo-retirante");
+    const userOptions = document.getElementById("responsible-options");
     const keySelect = document.getElementById("chave");
+    const keySummary = document.getElementById("key-selection-summary");
     const submitButton = form.querySelector('[type="submit"]');
     const requestedKey = new URLSearchParams(window.location.search).get("chave");
+    const dataPrevistaField = document.getElementById("data-prevista");
+    const horaPrevistaField = document.getElementById("hora-prevista");
     let availableKeys = [];
+    let activeUsers = [];
+    let previsaoAlteradaManualmente = false;
+    let highlightedUserIndex = -1;
+    let borrowerType = "";
 
-    function setLocalDateTime() {
-        const now = new Date();
-        const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-        const valorLocal = local.toISOString();
-        document.getElementById("data").value = valorLocal.slice(0, 10);
-        document.getElementById("hora").value = valorLocal.slice(11, 16);
+    function formatDate(value) {
+        return value.getFullYear() + "-" +
+            String(value.getMonth() + 1).padStart(2, "0") + "-" +
+            String(value.getDate()).padStart(2, "0");
+    }
+
+    function formatTime(value) {
+        return String(value.getHours()).padStart(2, "0") + ":" +
+            String(value.getMinutes()).padStart(2, "0");
+    }
+
+    function setLocalDateTime(now) {
+        document.getElementById("data").value = formatDate(now);
+        document.getElementById("hora").value = formatTime(now);
+    }
+
+    function setDefaultReturnForecast(withdrawalTime) {
+        const due = new Date(withdrawalTime.getTime() + 50 * 60 * 1000);
+        dataPrevistaField.value = formatDate(due);
+        horaPrevistaField.value = formatTime(due);
     }
 
     function atualizarMinimoPrevisto() {
-        const dataPrevista = document.getElementById("data-prevista");
-        const horaPrevista = document.getElementById("hora-prevista");
         const agora = new Date();
         const localAgora = new Date(agora.getTime() - agora.getTimezoneOffset() * 60000);
         const limiteHora = new Date(agora.getTime());
@@ -27,11 +52,11 @@ window.AppAccess.run(function () {
         limiteHora.setMinutes(limiteHora.getMinutes() + 2);
         const localLimite = new Date(limiteHora.getTime() - limiteHora.getTimezoneOffset() * 60000);
 
-        dataPrevista.min = localAgora.toISOString().slice(0, 10);
-        if (dataPrevista.value === dataPrevista.min) {
-            horaPrevista.min = localLimite.toISOString().slice(11, 16);
+        dataPrevistaField.min = localAgora.toISOString().slice(0, 10);
+        if (dataPrevistaField.value === dataPrevistaField.min) {
+            horaPrevistaField.min = localLimite.toISOString().slice(11, 16);
         } else {
-            horaPrevista.removeAttribute("min");
+            horaPrevistaField.removeAttribute("min");
         }
     }
 
@@ -65,17 +90,147 @@ window.AppAccess.run(function () {
         });
     }
 
+    function normalizarBusca(value) {
+        return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR");
+    }
+
+    function fecharOpcoes() {
+        userOptions.hidden = true;
+        userSearchInput.setAttribute("aria-expanded", "false");
+        userSearchInput.removeAttribute("aria-activedescendant");
+        highlightedUserIndex = -1;
+    }
+
+    function renderizarUsuariosCorrespondentes() {
+        const termoOriginal = userSearchInput.value.trim();
+        const termo = normalizarBusca(termoOriginal);
+        userOptions.replaceChildren();
+        highlightedUserIndex = -1;
+
+        const correspondencias = (termo
+            ? activeUsers.filter(function (user) {
+                return normalizarBusca(user.name).includes(termo);
+            })
+            : activeUsers
+        ).slice(0, 8);
+
+        correspondencias.forEach(function (user, index) {
+            const option = document.createElement("button");
+            option.type = "button";
+            option.id = "responsible-option-" + user.id;
+            option.className = "responsible-option";
+            option.role = "option";
+            option.dataset.userId = String(user.id);
+            option.setAttribute("aria-selected", "false");
+            option.textContent = user.name + (user.role ? " - " + user.role : "");
+            option.addEventListener("mousedown", function (event) {
+                event.preventDefault();
+                selecionarUsuario(user);
+            });
+            userOptions.appendChild(option);
+            if (index === 0) userSearchInput.setAttribute("aria-activedescendant", option.id);
+        });
+
+        const outraOpcao = document.createElement("button");
+        outraOpcao.type = "button";
+        outraOpcao.id = "responsible-option-other";
+        outraOpcao.className = "responsible-option";
+        outraOpcao.role = "option";
+        outraOpcao.dataset.optionType = "other";
+        outraOpcao.setAttribute("aria-label", "Outro, pessoa sem cadastro");
+        outraOpcao.setAttribute("aria-selected", "false");
+        outraOpcao.textContent = "Outro";
+        outraOpcao.addEventListener("mousedown", function (event) {
+            event.preventDefault();
+            selecionarOutro(termoOriginal);
+        });
+        userOptions.appendChild(outraOpcao);
+
+        if (!correspondencias.length) {
+            userSearchInput.setAttribute("aria-activedescendant", outraOpcao.id);
+        }
+        userOptions.hidden = false;
+        userSearchInput.setAttribute("aria-expanded", "true");
+    }
+
+    function selecionarUsuario(user) {
+        borrowerType = "registered";
+        userSearchInput.value = user.name + (user.role ? " - " + user.role : "");
+        userIdInput.value = String(user.id);
+        configurarCamposExternos(false);
+        fecharOpcoes();
+    }
+
+    function selecionarOutro(nomeDigitado) {
+        borrowerType = "external";
+        userSearchInput.value = "Outro";
+        userIdInput.value = "";
+        configurarCamposExternos(true);
+        externalNameInput.value = nomeDigitado && normalizarBusca(nomeDigitado) !== "outro"
+            ? nomeDigitado
+            : "";
+        fecharOpcoes();
+        window.setTimeout(function () { externalNameInput.focus(); }, 0);
+    }
+
+    function configurarCamposExternos(exibir) {
+        externalNameField.hidden = !exibir;
+        externalRoleField.hidden = !exibir;
+        externalNameInput.required = exibir;
+        userRoleInput.required = exibir;
+        if (!exibir) {
+            externalNameInput.value = "";
+            userRoleInput.value = "";
+        }
+    }
+
+    function limparSelecaoUsuario() {
+        borrowerType = "";
+        userIdInput.value = "";
+        configurarCamposExternos(false);
+    }
+
+    function destacarOpcaoUsuario(index) {
+        const options = Array.from(userOptions.querySelectorAll('[role="option"]'));
+        if (!options.length) return;
+        highlightedUserIndex = (index + options.length) % options.length;
+        options.forEach(function (option, optionIndex) {
+            option.setAttribute("aria-selected", optionIndex === highlightedUserIndex ? "true" : "false");
+        });
+        userSearchInput.setAttribute("aria-activedescendant", options[highlightedUserIndex].id);
+    }
+
+    function confirmarOpcaoDestacada() {
+        if (highlightedUserIndex < 0) return false;
+        const option = userOptions.querySelectorAll('[role="option"]')[highlightedUserIndex];
+        if (option && option.dataset.optionType === "other") {
+            selecionarOutro(userSearchInput.value.trim());
+            return true;
+        }
+        const user = activeUsers.find(function (item) { return option && String(item.id) === option.dataset.userId; });
+        if (!user) return false;
+        selecionarUsuario(user);
+        return true;
+    }
+
+    function updateKeySummary() {
+        const key = availableKeys.find(function (item) {
+            return String(item.id) === keySelect.value;
+        });
+        keySummary.replaceChildren();
+        keySummary.hidden = !key;
+        if (key) keySummary.appendChild(window.AppKeyDisplay.create(key));
+    }
+
     async function initialize() {
         try {
             const options = await window.AppServices.movements.options();
             availableKeys = options.chaves;
-            const users = options.usuarios;
+            activeUsers = options.usuarios;
+            if (document.activeElement === userSearchInput) renderizarUsuariosCorrespondentes();
             populate(roomSelect, "Selecione uma sala", options.salas, function (room) {
                 return room.name + " — Nº " + room.numero + " — Bloco " + room.bloco;
             });
-            populate(userSelect, users.length ? "Selecione o usuário cadastrado" : "Nenhum usuário cadastrado", users,
-                function (user) { return user.name; });
-
             const chaveSolicitada = availableKeys.find(function (key) {
                 return String(key.id) === requestedKey;
             });
@@ -89,11 +244,9 @@ window.AppAccess.run(function () {
                 }
             }
 
-            submitButton.disabled = !availableKeys.length || !users.length;
+            submitButton.disabled = !availableKeys.length;
             if (!availableKeys.length) {
                 window.AppFeedback.show(feedback, "Não há chaves disponíveis para retirada.", "error");
-            } else if (!users.length) {
-                window.AppFeedback.show(feedback, "Cadastre o usuário responsável antes de registrar a retirada.", "error");
             }
         } catch (error) {
             submitButton.disabled = true;
@@ -109,20 +262,48 @@ window.AppAccess.run(function () {
             ? chavesDaSala.length ? "Selecione uma chave disponível" : "Nenhuma chave disponível"
             : chavesDaSala.length ? "Selecione uma chave disponível" : "Nenhuma chave disponível nesta sala";
         populate(keySelect, placeholder, chavesDaSala, function (key) {
-            return key.name + " — Nº " + key.number;
+            return window.AppKeyDisplay.optionLabel(key);
         });
         keySelect.disabled = !chavesDaSala.length;
         if (idChaveSelecionada !== undefined) {
             keySelect.value = String(idChaveSelecionada);
         }
+        updateKeySummary();
     }
 
     roomSelect.addEventListener("change", function () {
         carregarChaves(roomSelect.value);
     });
-    document.getElementById("data-prevista").addEventListener("change", atualizarMinimoPrevisto);
+    userSearchInput.addEventListener("input", function () {
+        limparSelecaoUsuario();
+        renderizarUsuariosCorrespondentes();
+    });
+    userSearchInput.addEventListener("focus", renderizarUsuariosCorrespondentes);
+    userSearchInput.addEventListener("keydown", function (event) {
+        if (event.key === "ArrowDown" && !userOptions.hidden) {
+            event.preventDefault();
+            destacarOpcaoUsuario(highlightedUserIndex + 1);
+        } else if (event.key === "ArrowUp" && !userOptions.hidden) {
+            event.preventDefault();
+            destacarOpcaoUsuario(highlightedUserIndex < 0 ? 0 : highlightedUserIndex - 1);
+        } else if (event.key === "Enter" && !userOptions.hidden) {
+            if (highlightedUserIndex < 0) destacarOpcaoUsuario(0);
+            if (confirmarOpcaoDestacada()) event.preventDefault();
+        } else if (event.key === "Escape") {
+            fecharOpcoes();
+        }
+    });
+    userSearchInput.addEventListener("blur", function () {
+        window.setTimeout(fecharOpcoes, 100);
+    });
+    dataPrevistaField.addEventListener("input", function () { previsaoAlteradaManualmente = true; });
+    horaPrevistaField.addEventListener("input", function () { previsaoAlteradaManualmente = true; });
+    dataPrevistaField.addEventListener("change", atualizarMinimoPrevisto);
     keySelect.addEventListener("change", function () {
-        if (!keySelect.value) return;
+        if (!keySelect.value) {
+            updateKeySummary();
+            return;
+        }
         const key = availableKeys.find(function (item) {
             return String(item.id) === keySelect.value;
         });
@@ -130,6 +311,7 @@ window.AppAccess.run(function () {
             roomSelect.value = String(key.salaId);
             carregarChaves(roomSelect.value, key.id);
         }
+        updateKeySummary();
     });
     form.querySelector("[data-cancel]").addEventListener("click", function () {
         window.location.href = "listadechaves.php";
@@ -137,13 +319,32 @@ window.AppAccess.run(function () {
 
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
-        if (!roomSelect.value || !keySelect.value || !userSelect.value) {
-            window.AppFeedback.show(feedback, "Selecione uma sala, uma chave disponível e o usuário responsável.", "error");
+        const withdrawalTime = new Date();
+        setLocalDateTime(withdrawalTime);
+        if (!previsaoAlteradaManualmente) {
+            setDefaultReturnForecast(withdrawalTime);
+        }
+        atualizarMinimoPrevisto();
+
+        if (!roomSelect.value || !keySelect.value) {
+            window.AppFeedback.show(feedback, "Selecione uma sala e uma chave disponível.", "error");
+            return;
+        }
+        if (borrowerType === "") {
+            window.AppFeedback.show(feedback, "Selecione um usuário cadastrado ou a opção Outro.", "error");
+            return;
+        }
+        if (borrowerType === "external" && !externalNameInput.value.trim()) {
+            window.AppFeedback.show(feedback, "Informe o nome da pessoa não cadastrada.", "error");
+            return;
+        }
+        if (borrowerType === "external" && !userRoleInput.value.trim()) {
+            window.AppFeedback.show(feedback, "Informe o cargo da pessoa não cadastrada.", "error");
             return;
         }
 
-        const dataPrevista = document.getElementById("data-prevista").value;
-        const horaPrevista = document.getElementById("hora-prevista").value;
+        const dataPrevista = dataPrevistaField.value;
+        const horaPrevista = horaPrevistaField.value;
         if (!dataPrevista || !horaPrevista) {
             window.AppFeedback.show(feedback, "Informe a data e a hora previstas para a devolução.", "error");
             return;
@@ -159,7 +360,6 @@ window.AppAccess.run(function () {
         }
 
         try {
-            setLocalDateTime();
             const key = availableKeys.find(function (item) {
                 return String(item.id) === keySelect.value;
             });
@@ -169,11 +369,13 @@ window.AppAccess.run(function () {
             }
             await window.AppServices.keys.withdraw(
                 key.id,
-                userSelect.value,
+                borrowerType === "registered" ? userIdInput.value : "",
+                borrowerType === "external" ? externalNameInput.value.trim() : "",
+                borrowerType === "external" ? userRoleInput.value.trim() : "",
                 document.getElementById("observacoes").value,
                 {
-                    date: document.getElementById("data-prevista").value,
-                    time: document.getElementById("hora-prevista").value
+                    date: dataPrevistaField.value,
+                    time: horaPrevistaField.value
                 },
                 roomSelect.value
             );
@@ -185,7 +387,9 @@ window.AppAccess.run(function () {
         }
     });
 
-    setLocalDateTime();
+    const initialWithdrawalTime = new Date();
+    setLocalDateTime(initialWithdrawalTime);
+    setDefaultReturnForecast(initialWithdrawalTime);
     atualizarMinimoPrevisto();
     initialize();
 });

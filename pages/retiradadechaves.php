@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Retirada de Chave</title>
 
-    <link rel="stylesheet" href="../css/retiradadechaves.css">
+    <link rel="stylesheet" href="../css/retiradadechaves.css?v=external-borrower-1">
     <link rel="stylesheet" href="../css/menu-lateral.css">
 
     <!-- Ícones -->
@@ -14,7 +14,7 @@
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     >
-    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/global.css?v=key-identity-2">
 </head>
 
 <body data-profiles="PORTEIRO" data-auth-state="pending">
@@ -76,105 +76,115 @@
                     </div>
 
 
-                    <!-- USUÁRIO -->
+                    <!-- RESPONSÁVEL -->
                     <div class="form-group">
 
-                        <label for="usuario">
-                            Usuário
-                        </label>
+                        <label for="usuario-busca">Usuário responsável</label>
 
+                        <div class="responsible-autocomplete">
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-user"></i>
+                                <input
+                                    id="usuario-busca"
+                                    type="text"
+                                    placeholder="Busque e selecione um usuário ou Outro"
+                                    autocomplete="off"
+                                    role="combobox"
+                                    aria-autocomplete="list"
+                                    aria-expanded="false"
+                                    aria-controls="responsible-options"
+                                    required
+                                >
+                            </div>
+                            <input id="usuario" name="usuario" type="hidden">
+                            <div id="responsible-options" class="responsible-options" role="listbox" hidden></div>
+                        </div>
+
+                    </div>
+
+                    <div id="external-name-field" class="form-group" hidden>
+                        <label for="nome-retirante">Nome da pessoa</label>
                         <div class="input-wrapper">
                             <i class="fa-solid fa-user"></i>
-
-                            <select id="usuario" name="usuario" class="select-control" required>
-                                <option value="">Selecione o usuário cadastrado</option>
-                            </select>
+                            <input
+                                id="nome-retirante"
+                                name="nome_retirante"
+                                type="text"
+                                maxlength="100"
+                                placeholder="Digite o nome da pessoa"
+                            >
                         </div>
+                    </div>
 
+                    <div id="external-role-field" class="form-group" hidden>
+                        <label for="cargo-retirante">Cargo</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-briefcase"></i>
+                            <input
+                                id="cargo-retirante"
+                                name="cargo_retirante"
+                                type="text"
+                                maxlength="100"
+                                placeholder="Cargo da pessoa"
+                            >
+                        </div>
                     </div>
 
 
-                    <!-- NÚMERO DA CHAVE -->
+                    <!-- CHAVE -->
                     <div class="form-group">
 
-                        <label for="chave">
-                            Número da chave
-                        </label>
+                        <label for="chave">Chave</label>
 
                         <div class="input-wrapper">
-
                             <i class="fa-solid fa-key"></i>
-
                             <select id="chave" name="chave" class="select-control" required>
-
                                 <option value="">Selecione uma chave disponível</option>
                             </select>
-
                         </div>
-
+                        <div id="key-selection-summary" class="key-selection-summary" hidden aria-live="polite"></div>
                     </div>
 
-
-                    <!-- DATA -->
-                    <div class="form-group">
-
-                        <label for="data">
-                            Data
-                        </label>
-
-                        <div class="input-wrapper">
-
-                            <i class="fa-solid fa-calendar"></i>
-
-                            <input
-                                type="date"
-                                id="data"
-                                name="data"
-                                readonly
-                            >
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- HORA -->
-                    <div class="form-group">
-
-                        <label for="hora">
-                            Hora
-                        </label>
-
-                        <div class="input-wrapper">
-
-                            <i class="fa-solid fa-clock"></i>
-
-                            <input
-                                type="time"
-                                id="hora"
-                                name="hora"
-                                readonly
-                            >
-
-                        </div>
-
-                        <div class="form-group">
-                            <label for="data-prevista">Data prevista de devolução</label>
-                            <div class="input-wrapper">
-                                <i class="fa-solid fa-calendar"></i>
-                                <input type="date" id="data-prevista" name="data_prevista" required>
+                    <fieldset class="form-group time-fields">
+                        <legend>Data e horário da retirada</legend>
+                        <div class="time-inputs">
+                            <div class="form-group">
+                                <label for="data">Data</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-calendar"></i>
+                                    <input type="date" id="data" name="data" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="hora">Hora</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-clock"></i>
+                                    <input type="time" id="hora" name="hora" readonly>
+                                </div>
                             </div>
                         </div>
+                    </fieldset>
 
-                        <div class="form-group">
-                            <label for="hora-prevista">Hora prevista de devolução</label>
-                            <div class="input-wrapper">
-                                <i class="fa-solid fa-clock"></i>
-                                <input type="time" id="hora-prevista" name="hora_prevista" required>
+                    <fieldset class="form-group forecast-fields">
+                        <legend>Previsão de devolução</legend>
+                        <p class="forecast-help">Definida inicialmente para 50 minutos após a retirada. Você pode alterar a data e o horário.</p>
+                        <div class="forecast-inputs">
+                            <div class="form-group">
+                                <label for="data-prevista">Data prevista</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-calendar"></i>
+                                    <input type="date" id="data-prevista" name="data_prevista" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="hora-prevista">Horário previsto</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-clock"></i>
+                                    <input type="time" id="hora-prevista" name="hora_prevista" required>
+                                </div>
                             </div>
                         </div>
-
-                    </div>
+                    </fieldset>
 
                 </div>
 
@@ -227,10 +237,11 @@
 </div>
 
 <script src="../js/app-profile.js?v=profile-matrix-2"></script>
-<script src="../js/app-services.js?v=profile-matrix-2"></script>
+<script src="../js/app-services.js?v=key-name-1"></script>
+<script src="../js/key-display.js?v=key-identity-2"></script>
 <script src="../js/page-access.js"></script>
 <script src="../js/menu-lateral.js?v=profile-matrix-2" defer></script>
 <script src="../js/form-feedback.js"></script>
-<script src="../js/retiradadechaves.js?v=withdrawal-actions-1"></script>
+<script src="../js/retiradadechaves.js?v=external-borrower-1"></script>
 </body>
 </html>

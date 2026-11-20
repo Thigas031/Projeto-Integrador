@@ -34,6 +34,8 @@ $cargos = [
     'GERENTE' => 'Gerente',
     'GERENTE GERAL' => 'Gerente',
     'PORTEIRO' => 'Porteiro',
+    'PROFESSOR' => 'Professor',
+    'OUTRO' => 'Outro',
 ];
 $cargo = is_string($cargoEntrada) ? ($cargos[strtoupper(trim($cargoEntrada))] ?? '') : '';
 $telefone = $telefoneEntrada === '' ? null : $telefoneEntrada;

@@ -82,20 +82,20 @@ window.AppAccess.run(function () {
                 const row = document.createElement("tr");
                 row.dataset.keyId = key.id;
                 const name = document.createElement("td");
-                name.textContent = key.name;
-                const number = document.createElement("td");
-                number.textContent = "Nº " + key.number;
+                name.appendChild(window.AppKeyDisplay.create(key));
                 const status = document.createElement("td");
                 const badge = document.createElement("span");
                 badge.className = String(key.status || "").toLowerCase();
                 badge.textContent = statusLabels[key.status] || "Indisponível";
                 status.appendChild(badge);
                 const responsible = document.createElement("td");
-                responsible.textContent = key.responsible || "—";
+                responsible.textContent = key.responsible
+                    ? key.responsible + (key.responsibleRole ? " — " + key.responsibleRole : "")
+                    : "—";
                 const actions = document.createElement("td");
                 actions.className = "key-actions";
                 renderActions(key, actions);
-                row.append(name, number, status, responsible, actions);
+                row.append(name, status, responsible, actions);
                 body.appendChild(row);
             });
         }
@@ -132,10 +132,10 @@ window.AppAccess.run(function () {
         try {
             switch (actionButton.dataset.action) {
                 case "edit":
-                    window.location.href = "cadastrodechaves.php?id=" + encodeURIComponent(key.id);
+                    window.location.href = "editarchave.php?id=" + encodeURIComponent(key.id);
                     return;
                 case "delete":
-                    if (!window.confirm("Deseja desativar a chave " + key.name + " — Nº " + key.number + "?")) return;
+                    if (!window.confirm("Deseja desativar a chave " + window.AppKeyDisplay.optionLabel(key) + "?")) return;
                     await window.AppServices.keys.delete(key.id);
                     setFeedback(feedback, "Chave desativada. O histórico de movimentações foi preservado.", "success");
                     await loadKeys(true);
@@ -157,7 +157,7 @@ window.AppAccess.run(function () {
     async function loadKeys(preserveFeedback) {
         body.replaceChildren();
         const loading = document.createElement("tr");
-        loading.innerHTML = '<td colspan="5">Carregando chaves...</td>';
+        loading.innerHTML = '<td colspan="4">Carregando chaves...</td>';
         body.appendChild(loading);
         try {
             const resultado = await window.AppServices.keys.listPage({
@@ -179,7 +179,7 @@ window.AppAccess.run(function () {
             body.replaceChildren();
             const row = document.createElement("tr");
             const cell = document.createElement("td");
-            cell.colSpan = 5;
+            cell.colSpan = 4;
             cell.textContent = "Não foi possível carregar as chaves.";
             row.appendChild(cell);
             body.appendChild(row);

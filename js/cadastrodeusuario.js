@@ -8,6 +8,8 @@ window.AppAccess.run(function () {
     const newUserButton = document.getElementById("new-user");
     const cancelButton = document.getElementById("cancel-user-edit");
     const title = document.getElementById("user-form-title");
+    const editContext = document.getElementById("user-edit-context");
+    const saveButton = document.getElementById("save-user");
     const fields = {
         name: document.getElementById("user-name"),
         role: document.getElementById("user-role"),
@@ -22,7 +24,9 @@ window.AppAccess.run(function () {
     [
         { value: "", label: "Selecione o cargo" },
         { value: "GERENTE", label: "Gerente Geral" },
-        { value: "PORTEIRO", label: "PORTEIRO" }
+        { value: "PORTEIRO", label: "Porteiro" },
+        { value: "PROFESSOR", label: "Professor" },
+        { value: "OUTRO", label: "Outro" }
     ].forEach(function (cargo) {
         const option = document.createElement("option");
         option.value = cargo.value;
@@ -47,6 +51,10 @@ window.AppAccess.run(function () {
     function startEditing(user) {
         editingId = user ? user.id : "";
         title.textContent = user ? "Editar usuário" : "Cadastrar usuário";
+        editContext.textContent = user ? "Editando: " + user.name + " · " + (user.role || "Cargo não informado") : "";
+        editContext.hidden = !user;
+        form.classList.toggle("user-form--editing", Boolean(user));
+        saveButton.textContent = user ? "Salvar alterações" : "Cadastrar usuário";
         form.reset();
         if (user) {
             fields.name.value = user.name;
@@ -73,7 +81,12 @@ window.AppAccess.run(function () {
             row.append(
                 createCell(user.name),
                 createCell(formatCpf(user.cpf)),
-                createCell(user.role === "GERENTE" ? "Gerente Geral" : user.role),
+                createCell({
+                    GERENTE: "Gerente Geral",
+                    PORTEIRO: "Porteiro",
+                    PROFESSOR: "Professor",
+                    OUTRO: "Outro"
+                }[user.role] || user.role),
                 createCell(user.phone),
                 createCell(user.email)
             );
@@ -137,6 +150,9 @@ window.AppAccess.run(function () {
         form.reset();
         form.hidden = true;
         editingId = "";
+        editContext.hidden = true;
+        form.classList.remove("user-form--editing");
+        saveButton.textContent = "Cadastrar usuário";
         window.AppFeedback.clear(feedback);
     });
 

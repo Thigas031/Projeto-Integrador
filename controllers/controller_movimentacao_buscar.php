@@ -59,9 +59,12 @@ if ($abertas !== '1' && $idChave === '' && $numero === '' && $sala === '') {
 try {
     $stmt = $pdo->prepare(
         "SELECT m.id_movimentacao AS id, m.id_chave AS keyId,
-                k.numero_chave AS keyNumber, s.nome AS keyName,
+                k.nome_chave AS keyName, k.numero_chave AS keyNumber,
+                s.nome AS roomName,
                 s.bloco AS block, m.id_usuario AS userId,
-                u.nome AS userName, m.data_retirada AS withdrawnAt,
+                COALESCE(m.nome_retirante, u.nome) AS userName,
+                COALESCE(m.cargo_retirante, u.cargo) AS userRole,
+                m.data_retirada AS withdrawnAt,
                 m.data_prevista AS dueAt, m.data_devolucao AS returnedAt,
                 m.observacao AS notes,
                 CASE
@@ -71,7 +74,7 @@ try {
          FROM movimentacoes m
          INNER JOIN chaves k ON k.id_chave = m.id_chave
          INNER JOIN salas s ON s.id_sala = k.id_sala
-         INNER JOIN usuarios u ON u.id_usuario = m.id_usuario
+         LEFT JOIN usuarios u ON u.id_usuario = m.id_usuario
          WHERE " . implode(' AND ', $where) . "
          ORDER BY m.data_retirada DESC"
     );

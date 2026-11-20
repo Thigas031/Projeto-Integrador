@@ -50,7 +50,7 @@ if ($inicio !== '' && $fim !== '' && $inicio > $fim) {
 $filtros = [];
 $parametros = [];
 if ($usuario !== '') {
-    $filtros[] = '(u.nome LIKE :usuario_nome OR u.cpf LIKE :usuario_cpf)';
+    $filtros[] = '(COALESCE(m.nome_retirante, u.nome) LIKE :usuario_nome OR u.cpf LIKE :usuario_cpf)';
     $parametros[':usuario_nome'] = '%' . $usuario . '%';
     $parametros[':usuario_cpf'] = '%' . preg_replace('/\D/', '', $usuario) . '%';
 }
@@ -81,8 +81,12 @@ $where = $filtros ? 'WHERE ' . implode(' AND ', $filtros) : '';
 try {
     $stmt = $pdo->prepare(
         "SELECT m.id_movimentacao AS id, m.id_chave AS keyId,
-                k.numero_chave AS keyNumber, s.nome AS keyName,
-                m.id_usuario AS userId, u.nome AS userName, u.cpf AS userCpf,
+                k.nome_chave AS keyName, k.numero_chave AS keyNumber,
+                s.nome AS roomName,
+                m.id_usuario AS userId,
+                COALESCE(m.nome_retirante, u.nome) AS userName,
+                COALESCE(m.cargo_retirante, u.cargo) AS userRole,
+                u.cpf AS userCpf,
                 p.nome AS porterName, m.data_retirada AS withdrawnAt,
                 m.data_prevista AS dueAt, m.data_devolucao AS returnedAt,
                 m.observacao AS notes,
@@ -94,7 +98,7 @@ try {
          FROM movimentacoes m
          INNER JOIN chaves k ON k.id_chave = m.id_chave
          INNER JOIN salas s ON s.id_sala = k.id_sala
-         INNER JOIN usuarios u ON u.id_usuario = m.id_usuario
+         LEFT JOIN usuarios u ON u.id_usuario = m.id_usuario
          INNER JOIN usuarios p ON p.id_usuario = m.id_porteiro
          $where
          ORDER BY m.data_retirada DESC"

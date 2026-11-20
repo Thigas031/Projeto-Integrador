@@ -42,8 +42,10 @@ $filtros = ['k.ativo = 1'];
 $parametros = [];
 
 if ($busca !== '') {
-    $filtros[] = '(s.nome LIKE :busca_nome OR s.numero LIKE :busca_numero OR k.numero_chave LIKE :busca_chave)';
+    $filtros[] = '(k.nome_chave LIKE :busca_nome_chave OR s.nome LIKE :busca_nome OR
+                   s.numero LIKE :busca_numero OR k.numero_chave LIKE :busca_chave)';
     $termo = '%' . $busca . '%';
+    $parametros[':busca_nome_chave'] = $termo;
     $parametros[':busca_nome'] = $termo;
     $parametros[':busca_numero'] = $termo;
     $parametros[':busca_chave'] = $termo;
@@ -97,7 +99,8 @@ try {
         }
 
         $stmt = $pdo->prepare(
-            "SELECT k.id_chave AS id, k.id_sala AS salaId, s.nome AS name,
+            "SELECT k.id_chave AS id, k.id_sala AS salaId, k.nome_chave AS name,
+                    s.nome AS roomName,
                     s.numero AS roomNumber, s.bloco AS block,
                     k.numero_chave AS number,
                     CASE
@@ -105,7 +108,8 @@ try {
                         WHEN m.data_prevista IS NOT NULL AND m.data_prevista < NOW() THEN 'Atrasada'
                         ELSE 'Emprestada'
                     END AS status,
-                    u.nome AS responsible
+                    COALESCE(m.nome_retirante, u.nome) AS responsible,
+                    COALESCE(m.cargo_retirante, u.cargo) AS responsibleRole
              $sqlBase AND k.id_chave = :id
              LIMIT 1"
         );
@@ -124,7 +128,8 @@ try {
     $offset = ($pagina - 1) * 5;
 
     $stmt = $pdo->prepare(
-        "SELECT k.id_chave AS id, k.id_sala AS salaId, s.nome AS name,
+        "SELECT k.id_chave AS id, k.id_sala AS salaId, k.nome_chave AS name,
+                s.nome AS roomName,
                 s.numero AS roomNumber, s.bloco AS block,
                 k.numero_chave AS number,
                 CASE
@@ -132,7 +137,8 @@ try {
                     WHEN m.data_prevista IS NOT NULL AND m.data_prevista < NOW() THEN 'Atrasada'
                     ELSE 'Emprestada'
                 END AS status,
-                u.nome AS responsible
+                COALESCE(m.nome_retirante, u.nome) AS responsible,
+                COALESCE(m.cargo_retirante, u.cargo) AS responsibleRole
          $sqlBase
          ORDER BY s.nome ASC, k.numero_chave ASC
          LIMIT :limite OFFSET :deslocamento"

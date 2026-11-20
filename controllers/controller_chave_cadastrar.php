@@ -26,10 +26,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $idSala = filter_var($_POST['sala'] ?? null, FILTER_VALIDATE_INT);
+$nome = trim(is_string($_POST['nome_chave'] ?? null) ? $_POST['nome_chave'] : '');
 $numero = trim(is_string($_POST['numero_chave'] ?? null) ? $_POST['numero_chave'] : '');
 
-if ($idSala === false || $idSala === null || $idSala < 1 || $numero === '' || strlen($numero) > 30) {
-    responderChaveCadastrar(400, ['ok' => false, 'message' => 'Informe uma sala e um número de chave válidos.']);
+if ($idSala === false || $idSala === null || $idSala < 1 || $nome === '' ||
+    mb_strlen($nome, 'UTF-8') > 100 || $numero === '' || strlen($numero) > 30) {
+    responderChaveCadastrar(400, ['ok' => false, 'message' => 'Informe nome, sala e número válidos para a chave.']);
 }
 
 try {
@@ -46,10 +48,10 @@ try {
     }
 
     $stmt = $pdo->prepare(
-        "INSERT INTO chaves (id_sala, numero_chave, status_chaves, responsavel, ativo)
-         VALUES (:sala, :numero, 'Disponivel', NULL, 1)"
+        "INSERT INTO chaves (id_sala, nome_chave, numero_chave, status_chaves, responsavel, ativo)
+         VALUES (:sala, :nome, :numero, 'Disponivel', NULL, 1)"
     );
-    $stmt->execute([':sala' => $idSala, ':numero' => $numero]);
+    $stmt->execute([':sala' => $idSala, ':nome' => $nome, ':numero' => $numero]);
     responderChaveCadastrar(201, [
         'ok' => true,
         'message' => 'Chave cadastrada com sucesso.',

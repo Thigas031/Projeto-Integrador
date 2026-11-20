@@ -35,6 +35,21 @@
     padding: 26px;
 }
 
+.user-edit-context {
+    margin: -4px 0 18px;
+    padding: 12px 14px;
+    border: 1px solid #cfe5f3;
+    border-radius: 9px;
+    color: var(--azul-900);
+    background: #f0f8ff;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.user-edit-context[hidden] {
+    display: none;
+}
+
 .user-form[hidden] { display: none; }
 .user-form h2 { margin: 0 0 20px; color: var(--texto); font-size: 19px; }
 

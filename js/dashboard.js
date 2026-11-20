@@ -23,19 +23,20 @@ window.AppAccess.run(function (user) {
         const row = document.createElement("article");
         row.className = "movement";
         const detail = document.createElement("div");
-        const title = document.createElement("strong");
-        const keyName = movement.keyName;
-        const keyNumber = movement.keyNumber;
-        title.textContent = keyName ? keyName + (keyNumber ? " — Nº " + keyNumber : "") : "Chave";
+        const keyIdentity = window.AppKeyDisplay.create(movement);
         const person = document.createElement("p");
-        person.textContent = movement.userName || "Responsável não informado";
+        person.className = "movement-person";
+        person.textContent = movement.userName
+            ? movement.userName + (movement.userRole ? " — " + movement.userRole : "")
+            : "Responsável não informado";
         const status = document.createElement("span");
         status.className = "movement-status";
         status.textContent = movement.status || (movement.returnedAt ? "Devolvida" : "Retirada");
         const date = document.createElement("time");
         date.dateTime = movement.returnedAt || movement.withdrawnAt;
         date.textContent = formatDate(movement.returnedAt || movement.withdrawnAt);
-        detail.append(title, person);
+        detail.className = "movement-detail";
+        detail.append(keyIdentity, person);
         row.append(detail, status, date);
         movementList.appendChild(row);
     }

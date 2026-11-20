@@ -44,16 +44,40 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $idSala = filter_var($_POST['sala'] ?? null, FILTER_VALIDATE_INT);
-$idUsuario = filter_var($_POST['usuario'] ?? $_POST['id_usuario'] ?? null, FILTER_VALIDATE_INT);
+$idUsuarioEntrada = $_POST['usuario'] ?? $_POST['id_usuario'] ?? '';
+$idUsuario = null;
+if (!is_string($idUsuarioEntrada)) {
+    responderMovimentacaoRetirar(400, ['ok' => false, 'message' => 'Identificação da pessoa responsável inválida.']);
+}
+$idUsuarioEntrada = trim($idUsuarioEntrada);
+if ($idUsuarioEntrada !== '') {
+    $idUsuario = filter_var($idUsuarioEntrada, FILTER_VALIDATE_INT);
+}
 $idChave = filter_var($_POST['chave'] ?? $_POST['id_chave'] ?? null, FILTER_VALIDATE_INT);
+$nomeRetiranteEntrada = $_POST['nome_retirante'] ?? '';
+$cargoRetiranteEntrada = $_POST['cargo_retirante'] ?? '';
 $observacaoEntrada = $_POST['observacao'] ?? '';
 $observacao = is_string($observacaoEntrada) ? trim($observacaoEntrada) : '';
 
 if ($idSala === false || $idSala === null || $idSala < 1 ||
-    $idUsuario === false || $idUsuario === null || $idUsuario < 1 ||
+    ($idUsuario !== null && ($idUsuario === false || $idUsuario < 1)) ||
     $idChave === false || $idChave === null || $idChave < 1 ||
     !is_string($observacaoEntrada) || strlen($observacao) > 500) {
-    responderMovimentacaoRetirar(400, ['ok' => false, 'message' => 'Selecione uma sala, um usuário ativo e uma chave disponível.']);
+    responderMovimentacaoRetirar(400, ['ok' => false, 'message' => 'Selecione uma sala, uma pessoa responsável válida e uma chave disponível.']);
+}
+
+if (!is_string($nomeRetiranteEntrada) || !is_string($cargoRetiranteEntrada)) {
+    responderMovimentacaoRetirar(400, ['ok' => false, 'message' => 'Informe um nome e um cargo válidos para a pessoa responsável.']);
+}
+$nomeRetiranteEntrada = trim($nomeRetiranteEntrada);
+$cargoRetiranteEntrada = trim($cargoRetiranteEntrada);
+$comprimentoTexto = function ($texto) {
+    return function_exists('mb_strlen') ? mb_strlen($texto, 'UTF-8') : strlen($texto);
+};
+if ($idUsuario === null &&
+    ($nomeRetiranteEntrada === '' || $cargoRetiranteEntrada === '' ||
+        $comprimentoTexto($nomeRetiranteEntrada) > 100 || $comprimentoTexto($cargoRetiranteEntrada) > 100)) {
+    responderMovimentacaoRetirar(400, ['ok' => false, 'message' => 'Para pessoas não cadastradas, informe nome e cargo com até 100 caracteres.']);
 }
 
 try {
@@ -100,31 +124,42 @@ try {
         responderMovimentacaoRetirar(409, ['ok' => false, 'message' => 'A chave não está disponível para retirada.']);
     }
 
-    $stmtUsuario = $pdo->prepare(
-        "SELECT id_usuario
-         FROM usuarios
-         WHERE id_usuario = :id AND ativo = 1
-         LIMIT 1"
-    );
-    $stmtUsuario->execute([':id' => $idUsuario]);
-    if (!$stmtUsuario->fetch(PDO::FETCH_ASSOC)) {
-        $pdo->rollBack();
-        responderMovimentacaoRetirar(400, ['ok' => false, 'message' => 'O usuário selecionado não está ativo.']);
+    if ($idUsuario !== null) {
+        $stmtUsuario = $pdo->prepare(
+            "SELECT nome, cargo
+             FROM usuarios
+             WHERE id_usuario = :id AND ativo = 1
+             LIMIT 1"
+        );
+        $stmtUsuario->execute([':id' => $idUsuario]);
+        $usuario = $stmtUsuario->fetch(PDO::FETCH_ASSOC);
+        if (!$usuario) {
+            $pdo->rollBack();
+            responderMovimentacaoRetirar(400, ['ok' => false, 'message' => 'O usuário selecionado não está ativo.']);
+        }
+        $nomeRetirante = $usuario['nome'];
+        $cargoRetirante = $usuario['cargo'];
+    } else {
+        $nomeRetirante = $nomeRetiranteEntrada;
+        $cargoRetirante = $cargoRetiranteEntrada;
     }
 
     $stmt = $pdo->prepare(
         "INSERT INTO movimentacoes
-            (id_chave, id_usuario, id_porteiro, data_retirada, data_prevista, observacao)
+            (id_chave, id_usuario, nome_retirante, cargo_retirante, id_porteiro,
+             data_retirada, data_prevista, observacao)
          VALUES
-            (:chave, :usuario, :porteiro, NOW(), :prevista, :observacao)"
+            (:chave, :usuario, :nome_retirante, :cargo_retirante, :porteiro,
+             NOW(), :prevista, :observacao)"
     );
-    $stmt->execute([
-        ':chave' => $idChave,
-        ':usuario' => $idUsuario,
-        ':porteiro' => $_SESSION['id'],
-        ':prevista' => $dataPrevista,
-        ':observacao' => $observacao === '' ? null : $observacao,
-    ]);
+    $stmt->bindValue(':chave', $idChave, PDO::PARAM_INT);
+    $stmt->bindValue(':usuario', $idUsuario, $idUsuario === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+    $stmt->bindValue(':nome_retirante', $nomeRetirante, PDO::PARAM_STR);
+    $stmt->bindValue(':cargo_retirante', $cargoRetirante, PDO::PARAM_STR);
+    $stmt->bindValue(':porteiro', $_SESSION['id'], PDO::PARAM_INT);
+    $stmt->bindValue(':prevista', $dataPrevista, PDO::PARAM_STR);
+    $stmt->bindValue(':observacao', $observacao === '' ? null : $observacao, $observacao === '' ? PDO::PARAM_NULL : PDO::PARAM_STR);
+    $stmt->execute();
     $idMovimentacao = (int) $pdo->lastInsertId();
 
     $stmtAtualizar = $pdo->prepare(
@@ -132,7 +167,9 @@ try {
          SET status_chaves = 'Emprestada', responsavel = :usuario
          WHERE id_chave = :chave"
     );
-    $stmtAtualizar->execute([':usuario' => $idUsuario, ':chave' => $idChave]);
+    $stmtAtualizar->bindValue(':usuario', $idUsuario, $idUsuario === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+    $stmtAtualizar->bindValue(':chave', $idChave, PDO::PARAM_INT);
+    $stmtAtualizar->execute();
     $pdo->commit();
 
     responderMovimentacaoRetirar(201, [

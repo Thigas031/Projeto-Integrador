@@ -24,6 +24,7 @@ try {
         "SELECT id_usuario AS id, nome AS name, cpf, cargo AS role,
                 telefone AS phone, email, ativo AS active
          FROM usuarios
+        WHERE cargo <> 'Outro'
          ORDER BY nome ASC"
     );
     $stmt->execute([]);

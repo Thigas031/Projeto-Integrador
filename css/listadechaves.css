@@ -208,12 +208,6 @@ main {
     text-align: center;
 }
 
-#tabela-chaves td:nth-child(1),
-#tabela-chaves td:nth-child(2) {
-    color: var(--texto);
-    font-weight: 650;
-}
-
 .disponivel,
 .emprestada,
 .atrasada {
@@ -509,13 +503,12 @@ main {
         background: #f8fafc;
     }
 
-    #tabela-chaves th:nth-child(1), #tabela-chaves td:nth-child(1) { width: 28%; padding-left: 6px; }
-    #tabela-chaves th:nth-child(2), #tabela-chaves td:nth-child(2) { width: 16%; }
-    #tabela-chaves th:nth-child(3), #tabela-chaves td:nth-child(3) { width: 25%; }
-    #tabela-chaves th:nth-child(4), #tabela-chaves td:nth-child(4) { width: 19%; }
-    #tabela-chaves th:nth-child(5), #tabela-chaves td:nth-child(5) { width: 12%; }
+    #tabela-chaves th:nth-child(1), #tabela-chaves td:nth-child(1) { width: 40%; padding-left: 6px; }
+    #tabela-chaves th:nth-child(2), #tabela-chaves td:nth-child(2) { width: 20%; }
+    #tabela-chaves th:nth-child(3), #tabela-chaves td:nth-child(3) { width: 20%; }
+    #tabela-chaves th:nth-child(4), #tabela-chaves td:nth-child(4) { width: 20%; }
 
-    #tabela-chaves td:nth-child(4) {
+    #tabela-chaves td:nth-child(3) {
         padding-inline: 2px;
     }
 
@@ -523,7 +516,7 @@ main {
         font-size: 0;
     }
 
-    #tabela-chaves th:nth-child(4) {
+    #tabela-chaves th:nth-child(3) {
         font-size: 10px;
     }
 
