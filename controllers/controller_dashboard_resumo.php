@@ -72,7 +72,12 @@ try {
                           COALESCE(m.nome_retirante, u.nome) AS userName,
                           COALESCE(m.cargo_retirante, u.cargo) AS userRole,
                           m.data_retirada AS withdrawnAt,
-                          m.data_prevista AS dueAt
+                          m.data_prevista AS dueAt,
+                          CASE
+                              WHEN m.data_prevista IS NOT NULL AND m.data_prevista < NOW()
+                                  THEN TIMESTAMPDIFF(SECOND, m.data_prevista, NOW())
+                              ELSE 0
+                          END AS lateSeconds
                    FROM movimentacoes m
                    INNER JOIN chaves k ON k.id_chave = m.id_chave
                    INNER JOIN salas s ON s.id_sala = k.id_sala

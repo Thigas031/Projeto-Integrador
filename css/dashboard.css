@@ -147,6 +147,111 @@
     text-decoration: none;
 }
 
+.panel-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 14px;
+}
+
+.overdue-panel {
+    margin-bottom: 24px;
+    overflow: hidden;
+    border-color: #f0c4ca;
+    background: #fffafa;
+}
+
+.overdue-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    border-bottom: 1px solid #f4dadd;
+}
+
+.overdue-heading h2 {
+    margin: 0;
+    color: #8f1d2c;
+    font-size: 18px;
+}
+
+.overdue-count {
+    min-width: 32px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    color: #8f1d2c;
+    background: #feecef;
+    font-weight: 700;
+    text-align: center;
+}
+
+.overdue-panel.is-clear {
+    border-color: var(--borda);
+    background: var(--branco);
+}
+
+.overdue-panel.is-clear .overdue-heading {
+    border-bottom-color: var(--borda);
+}
+
+.overdue-panel.is-clear .overdue-heading h2,
+.overdue-panel.is-clear .overdue-count {
+    color: var(--verde);
+}
+
+.overdue-panel.is-clear .overdue-count {
+    background: var(--verde-bg);
+}
+
+.overdue-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px 20px;
+    padding: 16px 22px;
+    border-bottom: 1px solid #f4dadd;
+}
+
+.overdue-item:last-child {
+    border-bottom: 0;
+}
+
+.overdue-actions {
+    display: grid;
+    justify-items: end;
+    gap: 5px;
+}
+
+.overdue-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.overdue-meta {
+    color: var(--texto-suave);
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.overdue-delay {
+    margin: 0;
+    color: #a51d2d;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: right;
+}
+
+.overdue-return {
+    color: #005ca0;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
 .movement {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto auto;
@@ -329,6 +434,34 @@
 
     .panel-title a {
         font-size: 14px;
+    }
+
+    .panel-actions {
+        gap: 8px;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .overdue-heading {
+        padding: 14px 16px;
+    }
+
+    .overdue-heading h2 {
+        font-size: 16px;
+    }
+
+    .overdue-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 14px 16px;
+    }
+
+    .overdue-delay {
+        text-align: left;
+    }
+
+    .overdue-actions {
+        justify-items: start;
     }
 
     .movement {

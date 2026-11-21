@@ -23,7 +23,7 @@ O `index.html` da raiz redireciona por caminho relativo a `pages/login.html`, pr
 
 `js/app-profile.js` obtém a sessão do controller PHP em cada carregamento, sem aceitar cargo de `localStorage`, `sessionStorage` ou configuração global. Páginas protegidas aguardam essa validação e redirecionam sessões ausentes ou incompatíveis. A identificação inferior do menu reutiliza o ícone de casa já usado nas opções de navegação e exibe nome e cargo recebidos da sessão quando expandida.
 
-O valor armazenado no ENUM `usuarios.cargo` é normalizado para `GERENTE`, `PORTEIRO` ou `OUTRO` na sessão e na interface. GERENTE administra usuários, salas e chaves, gera relatórios e consulta dashboard, lista de chaves e ocorrências. PORTEIRO consulta salas e chaves, cadastra chaves, registra retirada/devolução e observações. OUTRO mantém seu identificador próprio, mas recebe a união das permissões de GERENTE e PORTEIRO. O usuário de teste OUTRO permanece no banco com essas permissões, mas não aparece na busca da retirada nem na listagem administrativa de usuários. As páginas `.php` e os endpoints validam as permissões no servidor.
+O valor armazenado no ENUM `usuarios.cargo` é normalizado para `GERENTE`, `PORTEIRO` ou `OUTRO` na sessão e na interface. GERENTE administra usuários, salas e chaves, gera relatórios e consulta dashboard, lista de chaves, histórico e ocorrências. PORTEIRO consulta salas e chaves, cadastra chaves, registra retirada/devolução, consulta o histórico e registra observações. OUTRO mantém seu identificador próprio, mas recebe a união das permissões de GERENTE e PORTEIRO. O usuário de teste OUTRO permanece no banco com essas permissões, mas não aparece na busca da retirada nem na listagem administrativa de usuários. As páginas `.php` e os endpoints validam as permissões no servidor.
 
 ## Serviços e integração de dados
 
@@ -36,11 +36,17 @@ Os campos consumidos pela interface são:
 - Movimentação: `id`, `keyId`, `keyName`, `keyNumber`, `userId`, `userName`, `userRole`, `withdrawnAt`, `returnedAt`, `notes`.
 - Ocorrência: `id`, `text`, `createdAt`, `createdBy`.
 
+## Histórico, auditoria e atrasos
+
+GERENTE, PORTEIRO e OUTRO (pela união de permissões já definida) consultam `pages/historico.php` a partir do link **Ver histórico completo** na Dashboard. Sala, pessoa, período da retirada e status podem ser combinados; os filtros e as opções são carregados pelo endpoint de relatórios com dados do banco. O botão **Gerar relatório** usa os filtros aplicados e abre uma versão própria para impressão ou salvamento em PDF.
+
+A Dashboard consulta as movimentações em aberto com horário previsto vencido e atualiza o alerta ao receber foco e a cada minuto. O atraso é calculado no MySQL a partir de `data_prevista` e `data_devolucao`/`NOW()`. Não foram necessárias novas colunas ou tabelas: o schema atual já contém os horários, snapshots de pessoa/cargo e responsável pelo registro.
+
 O backend aplica autorização de sessão em cada operação, unicidade, transições de estado e preservação do histórico. A tabela `chaves` usa `id_sala`, `numero_chave`, `status_chaves` e `ativo`; o nome e bloco vêm de `salas`. `movimentacoes.id_porteiro` recebe o ID do PORTEIRO autenticado que registra a retirada. A data/hora prevista de devolução é informada no formulário de retirada e armazenada em `movimentacoes.data_prevista`; o horário efetivo da retirada é gerado pelo servidor. O status de movimentação é derivado de `data_devolucao`, sem coluna ou trigger.
 
 Na retirada, o campo de usuário funciona como busca: o porteiro seleciona um cadastro ou escolhe a opção especial `Outro` para informar o nome e o cargo de uma pessoa externa. Digitar um nome sem selecionar uma opção não registra a retirada. Pessoas externas não recebem conta e ficam registradas nos campos `nome_retirante` e `cargo_retirante`, com `id_usuario` nulo. O nome e o cargo são snapshots no empréstimo e continuam disponíveis após a devolução. Para bancos existentes, aplique uma vez `migrations/20261120_add_external_borrower.sql` antes de usar a nova funcionalidade; a migração também preenche snapshots para movimentações já registradas.
 
-Os controllers de salas e relatórios estão disponíveis no backend. A administração de salas usa uma lista e um formulário de criação/edição restritos a GERENTE; relatórios ainda não possuem tela própria.
+Os controllers de salas e relatórios estão disponíveis no backend. A administração de salas usa uma lista e um formulário de criação/edição restritos a GERENTE; o relatório completo de movimentações está disponível na tela Histórico / Auditoria.
 
 ## Cadastro de chaves e salas
 

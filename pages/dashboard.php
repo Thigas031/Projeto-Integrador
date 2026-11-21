@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard</title>
     <link rel="stylesheet" href="../css/global.css?v=key-identity-2">
-    <link rel="stylesheet" href="../css/dashboard.css?v=key-identity-2">
+    <link rel="stylesheet" href="../css/dashboard.css?v=history-alerts-1">
     <link rel="stylesheet" href="../css/menu-lateral.css">
 </head>
 <body data-profiles="GERENTE,PORTEIRO,OUTRO" data-auth-state="pending">
@@ -44,11 +44,24 @@
                 </article>
             </section>
 
+            <section class="panel overdue-panel" aria-labelledby="overdue-title">
+                <header class="overdue-heading">
+                    <h2 id="overdue-title">Alertas de atraso</h2>
+                    <span id="overdue-count" class="overdue-count">—</span>
+                </header>
+                <div id="overdue-list" class="overdue-list" aria-live="polite">
+                    <p class="data-state" data-state="loading">Consultando devoluções atrasadas...</p>
+                </div>
+            </section>
+
             <section class="dashboard-grid">
                 <article class="panel movements-panel">
                     <header class="panel-title">
                         <h2>Últimas movimentações</h2>
-                        <a href="listadechaves.php">Ver chaves</a>
+                        <div class="panel-actions">
+                            <a href="historico.php">Ver histórico completo</a>
+                            <a href="listadechaves.php">Ver chaves</a>
+                        </div>
                     </header>
                     <div id="movements" class="movement-list" aria-live="polite">
                         <p class="data-state" data-state="loading">Carregando movimentações...</p>
@@ -78,11 +91,11 @@
     </main>
 
     <script src="../js/app-profile.js?v=profile-matrix-2"></script>
-    <script src="../js/app-services.js?v=key-name-1"></script>
+    <script src="../js/app-services.js?v=history-audit-1"></script>
     <script src="../js/key-display.js?v=key-identity-2"></script>
     <script src="../js/page-access.js"></script>
     <script src="../js/form-feedback.js"></script>
     <script src="../js/menu-lateral.js?v=profile-matrix-2" defer></script>
-    <script src="../js/dashboard.js?v=key-identity-2"></script>
+    <script src="../js/dashboard.js?v=history-alerts-1"></script>
 </body>
 </html>

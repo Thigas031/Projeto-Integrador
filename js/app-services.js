@@ -267,6 +267,10 @@
         async generate(filters) {
             requireProfile("GERENTE", "Somente GERENTE pode gerar relatórios.");
             return apiData("../controllers/controller_relatorio_gerar.php", "GET", filters || {});
+        },
+        async history(filters) {
+            requireProfile("GERENTE,PORTEIRO,OUTRO", "Perfil sem permissão para consultar o histórico.");
+            return requestData("../controllers/controller_relatorio_gerar.php", "GET", filters || {});
         }
     };
 
