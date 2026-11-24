@@ -50,12 +50,12 @@ O login aceita CPF ou e-mail. Para novos usuários cadastrados pela aplicação,
 
 | Perfil | CPF | Senha |
 | --- | --- | --- |
-| Gerente de Teste | `98765432100` | `9876` |
-| Claudio (Porteiro) | `10553182404` | `1055` |
-| Jeremy (Porteiro) | `10698654306` | `1069` |
-| Vini (Porteiro) | `65898709809` | `6589` |
+| Gerente de Teste | `11111111111` | `1111` |
+| Porteiro Teste 1 | `22222222222` | `2222` |
+| Porteiro Teste 2 | `33333333333` | `3333` |
+| Porteiro Teste 3 | `44444444444` | `4444` |
 
-O SQL também mantém contas genéricas com hashes pré-gerados; use as contas listadas acima para testar a regra dos quatro primeiros dígitos. Não use contas de demonstração em produção. As senhas são armazenadas como hashes e verificadas com `password_verify`.
+Use as contas listadas para testar a regra dos quatro primeiros dígitos. Não use contas de demonstração em produção. As senhas são armazenadas como hashes e verificadas com `password_verify`.
 
 O formulário de cadastro permite selecionar os cargos Gerente, Porteiro, Professor e Outro. Embora `Professor` exista no `ENUM` e possa ser cadastrado, ele não está mapeado na política de permissões e não pode entrar no sistema. `Outro` é reconhecido e recebe a união das permissões de gerente e porteiro.
 

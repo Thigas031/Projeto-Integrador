@@ -46,11 +46,15 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `usuarios` (`id_usuario`, `nome`, `cargo`, `cpf`, `telefone`, `email`, `senha`, `ativo`) VALUES
-(1, 'Usuario demonstracao gerente', 'Gerente', '00000000001', NULL, 'gerente@example.invalid', '$2y$12$yITZemk9QbIx/K0Mvam1kOrvp.2YujzcHn3AH2p/U1Cw0KMg0iLk6', 1),
-(2, 'Usuario demonstracao porteiro', 'Porteiro', '00000000002', NULL, 'porteiro@example.invalid', '$2y$12$CsNzST6FobqYAKdKaUaXROOexop1qDtgUelSiBdGzmLH8mA8vBUM2', 1),
-(3, 'Usuario demonstracao professor', 'Professor', '00000000003', NULL, 'professor@example.invalid', '$2y$12$0oBvCHS73wuNQ5oH4H.xMujKWAtZG9F/glu1rrpIkPf8l4U3U/c3W', 1),
-(4, 'Usuario demonstracao outro', 'Outro', '00000000004', NULL, 'outro@example.invalid', '$2y$12$xjoJ9zcU4YIeBvhE2t3lsO7k3zoayJ/wVgnUbFW79zl.6rKalcLOC', 1)
+-- Usuários de teste conforme os registros utilizados no desenvolvimento.
+-- A senha inicial é formada pelos primeiros 4 dígitos do CPF.
+INSERT INTO `usuarios`
+  (`id_usuario`, `nome`, `cargo`, `cpf`, `telefone`, `email`, `senha`, `ativo`)
+VALUES
+  (23, 'Gerente de Teste', 'Gerente', '11111111111', NULL, 'gerente.teste@example.test', '$2y$10$D.6SuQ1gap5j7UgBrfV4o.2KpZg36jSQA25ym4Um8UjYUpULSrkTC', 1),
+  (24, 'Porteiro Teste 1', 'Porteiro', '22222222222', NULL, 'porteiro1@example.test', '$2y$10$gj/5HR5GjtfxRne3Utt8kOsQn3cN.XymQOQ7K4y5h8w3kD2RBh/dq', 1),
+  (30, 'Porteiro Teste 2', 'Porteiro', '33333333333', NULL, 'porteiro2@example.test', '$2y$10$f54.xWHRRWZnjJo0kzw8humFknAL0QHQ1wX0rb3ewyFfQjCVSQQeC', 1),
+  (33, 'Porteiro Teste 3', 'Porteiro', '44444444444', NULL, 'porteiro3@example.test', '$2y$10$dcwZ1ID8iNUKUxvloKhZOevKlwTt8qps98UKvzzQnU6K7owFcQW22', 1)
 ON DUPLICATE KEY UPDATE
   `nome` = VALUES(`nome`),
   `cargo` = VALUES(`cargo`),
