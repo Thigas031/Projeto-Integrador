@@ -9,13 +9,13 @@ As páginas administrativas e operacionais usam PHP e validam sessão, usuário 
 ### Executar localmente
 
 1. Abra o XAMPP Control Panel e inicie **Apache** e **MySQL**.
-2. Acesse `http://localhost/phpmyadmin`, abra **Importar** e selecione uma cópia autorizada do SQL completo de instalação. O arquivo cria/seleciona o banco `gerenciamento_chaves`; em uma instalação nova, não é necessário criar tabelas manualmente.
+2. Acesse `http://localhost/phpmyadmin`, abra **Importar** e selecione `gerenciamento_chaves_atualizado.sql`. O arquivo cria/seleciona o banco `gerenciamento_chaves`; em uma instalação nova, não é necessário criar tabelas manualmente.
 3. Configure `config/config.php` com os parâmetros e credenciais do seu MySQL local.
 4. Acesse `http://localhost/PI/front-end/`; o `index.html` encaminha para a tela de Login.
 
 Como alternativa, instale PHP com `pdo_mysql` e inicie `php -S 127.0.0.1:8000` na raiz do projeto; depois abra `http://127.0.0.1:8000/pages/login.html`.
 
-O SQL completo de instalação não é versionado, pois inclui hashes de senha dos usuários de teste. Obtenha uma cópia confiável por um canal privado; não distribua esses dados em repositórios públicos.
+O SQL versionado usa usuários fictícios inativos, sem hashes de senha utilizáveis ou dados pessoais. Eles não podem iniciar sessão. Configure a primeira conta no ambiente local com uma senha própria e um hash gerado pela aplicação antes de ativar o acesso; não coloque credenciais ou dados pessoais no script.
 
 O `index.html` da raiz redireciona por caminho relativo a `pages/login.html`, preservando prefixos de publicação como `/nome-do-repositorio/`. Live Server e GitHub Pages são servidores estáticos e não executam PHP; a autenticação e as operações de dados exigem um servidor PHP e o banco configurado.
 
@@ -23,7 +23,7 @@ O `index.html` da raiz redireciona por caminho relativo a `pages/login.html`, pr
 
 `js/app-profile.js` obtém a sessão do controller PHP em cada carregamento, sem aceitar cargo de `localStorage`, `sessionStorage` ou configuração global. Páginas protegidas aguardam essa validação e redirecionam sessões ausentes ou incompatíveis. A identificação inferior do menu reutiliza o ícone de casa já usado nas opções de navegação e exibe nome e cargo recebidos da sessão quando expandida.
 
-O valor armazenado no ENUM `usuarios.cargo` é normalizado para `GERENTE`, `PORTEIRO` ou `OUTRO` na sessão e na interface. GERENTE administra usuários, salas e chaves, gera relatórios e consulta dashboard, lista de chaves, histórico e ocorrências. PORTEIRO consulta salas e chaves, cadastra chaves, registra retirada/devolução, consulta o histórico e registra observações. OUTRO mantém seu identificador próprio, mas recebe a união das permissões de GERENTE e PORTEIRO. O usuário de teste OUTRO permanece no banco com essas permissões, mas não aparece na busca da retirada nem na listagem administrativa de usuários. As páginas `.php` e os endpoints validam as permissões no servidor.
+O valor armazenado no ENUM `usuarios.cargo` é normalizado para `GERENTE`, `PORTEIRO` ou `OUTRO` na sessão e na interface. GERENTE administra usuários, salas e chaves, gera relatórios e consulta dashboard, lista de chaves, histórico e ocorrências. PORTEIRO consulta salas e chaves, cadastra chaves, registra retirada/devolução, consulta o histórico e registra observações. OUTRO mantém seu identificador próprio, mas recebe a união das permissões de GERENTE e PORTEIRO quando ativo. Esse perfil não aparece na busca da retirada nem na listagem administrativa de usuários. As páginas `.php` e os endpoints validam as permissões no servidor.
 
 ## Serviços e integração de dados
 
