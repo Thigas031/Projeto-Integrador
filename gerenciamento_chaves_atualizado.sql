@@ -1,5 +1,6 @@
--- Schema completo do sistema de gerenciamento de chaves para MySQL/MariaDB (XAMPP).
--- Baseado no dump original, com as colunas consumidas pelo sistema e retiradas externas.
+-- Inicialização do banco gerenciamento_chaves para MySQL/MariaDB (XAMPP).
+-- Cria o banco se necessário; importe este arquivo uma vez em uma instalação nova.
+-- Inclui contas fictícias para demonstração; não use essas contas em produção.
 
 CREATE DATABASE IF NOT EXISTS `gerenciamento_chaves`
   CHARACTER SET utf8mb4
@@ -12,7 +13,7 @@ SET time_zone = "+00:00";
 
 START TRANSACTION;
 
-CREATE TABLE `salas` (
+CREATE TABLE IF NOT EXISTS `salas` (
   `id_sala` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) NOT NULL,
   `numero` varchar(20) NOT NULL,
@@ -25,9 +26,13 @@ INSERT INTO `salas` (`id_sala`, `nome`, `numero`, `bloco`) VALUES
 (1, 'Sala 01', '01', 'A'),
 (2, 'Sala 02', '02', 'A'),
 (3, 'Laboratório', '03', 'B'),
-(4, 'Inovaê', '04', 'B');
+(4, 'Inovaê', '04', 'B')
+ON DUPLICATE KEY UPDATE
+  `nome` = VALUES(`nome`),
+  `numero` = VALUES(`numero`),
+  `bloco` = VALUES(`bloco`);
 
-CREATE TABLE `usuarios` (
+CREATE TABLE IF NOT EXISTS `usuarios` (
   `id_usuario` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) NOT NULL,
   `cargo` enum('Gerente','Porteiro','Professor','Outro') NOT NULL,
@@ -45,9 +50,17 @@ INSERT INTO `usuarios` (`id_usuario`, `nome`, `cargo`, `cpf`, `telefone`, `email
 (1, 'Usuario demonstracao gerente', 'Gerente', '00000000001', NULL, 'gerente@example.invalid', '$2y$12$yITZemk9QbIx/K0Mvam1kOrvp.2YujzcHn3AH2p/U1Cw0KMg0iLk6', 1),
 (2, 'Usuario demonstracao porteiro', 'Porteiro', '00000000002', NULL, 'porteiro@example.invalid', '$2y$12$CsNzST6FobqYAKdKaUaXROOexop1qDtgUelSiBdGzmLH8mA8vBUM2', 1),
 (3, 'Usuario demonstracao professor', 'Professor', '00000000003', NULL, 'professor@example.invalid', '$2y$12$0oBvCHS73wuNQ5oH4H.xMujKWAtZG9F/glu1rrpIkPf8l4U3U/c3W', 1),
-(4, 'Usuario demonstracao outro', 'Outro', '00000000004', NULL, 'outro@example.invalid', '$2y$12$xjoJ9zcU4YIeBvhE2t3lsO7k3zoayJ/wVgnUbFW79zl.6rKalcLOC', 1);
+(4, 'Usuario demonstracao outro', 'Outro', '00000000004', NULL, 'outro@example.invalid', '$2y$12$xjoJ9zcU4YIeBvhE2t3lsO7k3zoayJ/wVgnUbFW79zl.6rKalcLOC', 1)
+ON DUPLICATE KEY UPDATE
+  `nome` = VALUES(`nome`),
+  `cargo` = VALUES(`cargo`),
+  `cpf` = VALUES(`cpf`),
+  `telefone` = VALUES(`telefone`),
+  `email` = VALUES(`email`),
+  `senha` = VALUES(`senha`),
+  `ativo` = VALUES(`ativo`);
 
-CREATE TABLE `chaves` (
+CREATE TABLE IF NOT EXISTS `chaves` (
   `id_chave` int(11) NOT NULL AUTO_INCREMENT,
   `id_sala` int(11) NOT NULL,
   `numero_chave` varchar(30) NOT NULL,
@@ -68,9 +81,15 @@ INSERT INTO `chaves` (`id_chave`, `id_sala`, `numero_chave`, `status_chaves`, `r
 (2, 2, '002', 'Disponivel', NULL, 1),
 (3, 3, '003', 'Disponivel', NULL, 1),
 (4, 1, '004', 'Disponivel', NULL, 1),
-(5, 4, '005', 'Disponivel', NULL, 1);
+(5, 4, '005', 'Disponivel', NULL, 1)
+ON DUPLICATE KEY UPDATE
+  `id_sala` = VALUES(`id_sala`),
+  `numero_chave` = VALUES(`numero_chave`),
+  `status_chaves` = VALUES(`status_chaves`),
+  `responsavel` = VALUES(`responsavel`),
+  `ativo` = VALUES(`ativo`);
 
-CREATE TABLE `movimentacoes` (
+CREATE TABLE IF NOT EXISTS `movimentacoes` (
   `id_movimentacao` int(11) NOT NULL AUTO_INCREMENT,
   `id_chave` int(11) NOT NULL,
   `id_usuario` int(11) DEFAULT NULL,
@@ -90,7 +109,7 @@ CREATE TABLE `movimentacoes` (
   CONSTRAINT `movimentacoes_ibfk_3` FOREIGN KEY (`id_porteiro`) REFERENCES `usuarios` (`id_usuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `observacoes` (
+CREATE TABLE IF NOT EXISTS `observacoes` (
   `id_observacao` int(11) NOT NULL AUTO_INCREMENT,
   `id_porteiro` int(11) NOT NULL,
   `data_hora` datetime NOT NULL DEFAULT current_timestamp(),

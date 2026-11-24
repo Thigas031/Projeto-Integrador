@@ -1,59 +1,96 @@
 # Projeto Integrador — Gerenciamento de salas e chaves
 
-## Login e sessão
+Aplicação web para administrar salas, chaves e empréstimos. O backend usa PHP e MySQL/MariaDB; o frontend usa HTML, CSS e JavaScript.
 
-O acesso ao sistema exige uma sessão PHP válida. A tela `pages/login.html` envia CPF ou e-mail e senha por `POST` para `controllers/controller_user_login.php`; o controller consulta `usuarios`, valida o hash com `password_verify`, regenera o ID da sessão e grava nome e cargo. A opção "Lembrar de mim" mantém o cookie por sete dias. Uma solicitação `GET` ao mesmo controller devolve os dados do usuário ativo da sessão ou HTTP 401. O endpoint `controller_sessao.php` devolve nome, cargo e mensagens flash de uso único. O menu encerra a sessão por `controller_user_logout.php`.
+## Requisitos
 
-As páginas administrativas e operacionais usam PHP e validam sessão, usuário ativo e cargo no servidor antes de entregar o HTML. O frontend confirma a sessão para obter nome e cargo e configurar o menu; os controles no navegador complementam, mas não substituem, autorização em cada endpoint de dados. GERENTE, PORTEIRO e OUTRO são reconhecidos explicitamente; perfis desconhecidos e sessões inválidas são negados.
+- XAMPP (Apache, MySQL/MariaDB e PHP) ou ambiente equivalente.
+- PHP com `PDO`, `pdo_mysql` e `session` habilitados.
+- Navegador moderno.
 
-### Executar localmente
+O projeto precisa ser servido por um servidor PHP. Abrir arquivos diretamente (`file://`) ou usar Live Server/GitHub Pages não executa os controllers PHP.
 
-1. Abra o XAMPP Control Panel e inicie **Apache** e **MySQL**.
-2. Acesse `http://localhost/phpmyadmin`, abra **Importar** e selecione `gerenciamento_chaves_atualizado.sql`. O arquivo cria/seleciona o banco `gerenciamento_chaves`; em uma instalação nova, não é necessário criar tabelas manualmente.
-3. Configure `config/config.php` com os parâmetros e credenciais do seu MySQL local.
-4. Acesse `http://localhost/PI/front-end/`; o `index.html` encaminha para a tela de Login.
+## Instalação local com XAMPP
 
-Como alternativa, instale PHP com `pdo_mysql` e inicie `php -S 127.0.0.1:8000` na raiz do projeto; depois abra `http://127.0.0.1:8000/pages/login.html`.
+1. Copie ou clone o repositório para `C:\xampp\htdocs\Projeto-Integrador`.
+2. No XAMPP Control Panel, inicie **Apache** e **MySQL**.
+3. Em `http://localhost/phpmyadmin`, abra **Importar** e importe `gerenciamento_chaves_atualizado.sql`. O script cria o banco `gerenciamento_chaves`, as tabelas e os dados de demonstração.
+4. Acesse `http://localhost/Projeto-Integrador/` ou `http://localhost/Projeto-Integrador/pages/login.html`.
 
-O SQL inclui contas fictícias ativas para teste local. Para os perfis reconhecidos pelo sistema, use o CPF e a senha formada pelos quatro últimos dígitos do CPF. A conta `Professor` permanece sem acesso porque esse perfil não é reconhecido pela política de permissões atual. Esses dados são exclusivamente para teste; troque as senhas antes de qualquer implantação e não reutilize esses CPFs ou senhas.
+Também é possível usar o servidor embutido do PHP com `pdo_mysql`: na raiz do projeto, execute `php -S 127.0.0.1:8000` e abra `http://127.0.0.1:8000/pages/login.html`.
 
-O `index.html` da raiz redireciona por caminho relativo a `pages/login.html`, preservando prefixos de publicação como `/nome-do-repositorio/`. Live Server e GitHub Pages são servidores estáticos e não executam PHP; a autenticação e as operações de dados exigem um servidor PHP e o banco configurado.
+### Conexão com o banco
 
-## Perfil do usuário e menu
+`config/config.php` aceita estas variáveis de ambiente:
 
-`js/app-profile.js` obtém a sessão do controller PHP em cada carregamento, sem aceitar cargo de `localStorage`, `sessionStorage` ou configuração global. Páginas protegidas aguardam essa validação e redirecionam sessões ausentes ou incompatíveis. A identificação inferior do menu reutiliza o ícone de casa já usado nas opções de navegação e exibe nome e cargo recebidos da sessão quando expandida.
+| Variável | Padrão |
+| --- | --- |
+| `DB_HOST` | `127.0.0.1` |
+| `DB_PORTA` | `3306` |
+| `DB_NOME` | `gerenciamento_chaves` |
+| `DB_USER` | `root` |
+| `DB_SENHA` | vazia |
 
-O valor armazenado no ENUM `usuarios.cargo` é normalizado para `GERENTE`, `PORTEIRO` ou `OUTRO` na sessão e na interface. GERENTE administra usuários, salas e chaves, gera relatórios e consulta dashboard, lista de chaves, histórico e ocorrências. PORTEIRO consulta salas e chaves, cadastra chaves, registra retirada/devolução, consulta o histórico e registra observações. OUTRO mantém seu identificador próprio, mas recebe a união das permissões de GERENTE e PORTEIRO quando ativo. Esse perfil não aparece na busca da retirada nem na listagem administrativa de usuários. As páginas `.php` e os endpoints validam as permissões no servidor.
+Defina-as para o processo do PHP/Apache antes de iniciar o servidor se sua instalação usa outras credenciais. Não grave credenciais reais no repositório.
 
-## Serviços e integração de dados
+## Login, contas de teste e sessão
 
-`js/app-services.js` centraliza as chamadas HTTP e aponta para os controllers PHP. As respostas seguem `{ "ok": true, "data": ... }`; erros usam status HTTP apropriado e `{ "ok": false, "message": "..." }`. As listas de chaves recebem `busca`, `status` e `pagina` e retornam cinco itens, `total` e `pagina`. As escritas são enviadas como formulário codificado para preencher `$_POST`.
+O login aceita CPF ou e-mail. O SQL inclui estas contas fictícias; as senhas são os quatro últimos dígitos do CPF:
 
-Os campos consumidos pela interface são:
+| Perfil | CPF | Senha |
+| --- | --- | --- |
+| Gerente | `00000000001` | `0001` |
+| Porteiro | `00000000002` | `0002` |
+| Professor (sem acesso) | `00000000003` | `0003` |
+| Outro | `00000000004` | `0004` |
 
-- Usuário: `id`, `name`, `cpf`, `role`, `phone`, `email`.
-- Chave: `id`, `salaId`, `name`, `number`, `block`, `status`, `responsible`.
-- Movimentação: `id`, `keyId`, `keyName`, `keyNumber`, `userId`, `userName`, `userRole`, `withdrawnAt`, `returnedAt`, `notes`.
-- Ocorrência: `id`, `text`, `createdAt`, `createdBy`.
+Não use essas contas em produção. As senhas são armazenadas como hashes e verificadas com `password_verify`.
 
-## Histórico, auditoria e atrasos
+O cadastro de usuários cria contas de gerente ou porteiro. A senha inicial e a senha definida pela recuperação correspondem aos quatro primeiros dígitos do CPF.
 
-GERENTE, PORTEIRO e OUTRO (pela união de permissões já definida) consultam `pages/historico.php` a partir do link **Ver histórico completo** na Dashboard. Sala, pessoa, período da retirada e status podem ser combinados; os filtros e as opções são carregados pelo endpoint de relatórios com dados do banco. O botão **Gerar relatório** usa os filtros aplicados e abre uma versão própria para impressão ou salvamento em PDF.
+O login regenera o ID da sessão; a opção **Lembrar de mim** mantém o cookie por sete dias. As páginas protegidas e os endpoints validam no servidor se a sessão ainda pertence a um usuário ativo e autorizado. Os controles de perfil no JavaScript ajustam a interface, mas não substituem a autorização do backend.
 
-A Dashboard consulta as movimentações em aberto com horário previsto vencido e atualiza o alerta ao receber foco e a cada minuto. O atraso é calculado no MySQL a partir de `data_prevista` e `data_devolucao`/`NOW()`. Não foram necessárias novas colunas ou tabelas: o schema atual já contém os horários, snapshots de pessoa/cargo e responsável pelo registro.
+## Funcionalidades e perfis
 
-O backend aplica autorização de sessão em cada operação, unicidade, transições de estado e preservação do histórico. A tabela `chaves` usa `id_sala`, `numero_chave`, `status_chaves` e `ativo`; o nome e bloco vêm de `salas`. `movimentacoes.id_porteiro` recebe o ID do PORTEIRO autenticado que registra a retirada. A data/hora prevista de devolução é informada no formulário de retirada e armazenada em `movimentacoes.data_prevista`; o horário efetivo da retirada é gerado pelo servidor. O status de movimentação é derivado de `data_devolucao`, sem coluna ou trigger.
+- **GERENTE:** administra usuários e salas, cadastra/edita/desativa chaves, consulta o dashboard e ocorrências e acessa o histórico e relatórios.
+- **PORTEIRO:** consulta salas e chaves, cadastra chaves, registra retiradas/devoluções, ocorrências e consulta o histórico.
+- **OUTRO:** perfil reconhecido com a união das permissões de gerente e porteiro. Não aparece na busca de pessoas para retirada nem na tela administrativa de usuários.
 
-Na retirada, o campo de usuário funciona como busca: o porteiro seleciona um cadastro ou escolhe a opção especial `Outro` para informar o nome e o cargo de uma pessoa externa. Digitar um nome sem selecionar uma opção não registra a retirada. Pessoas externas não recebem conta e ficam registradas nos campos `nome_retirante` e `cargo_retirante`, com `id_usuario` nulo. O nome e o cargo são snapshots no empréstimo e continuam disponíveis após a devolução. Para bancos existentes, aplique uma vez `migrations/20261120_add_external_borrower.sql` antes de usar a nova funcionalidade; a migração também preenche snapshots para movimentações já registradas.
+O cargo `Professor` existe no `ENUM` do banco, mas não é reconhecido pela política de permissões e não pode entrar no sistema.
 
-Os controllers de salas e relatórios estão disponíveis no backend. A administração de salas usa uma lista e um formulário de criação/edição restritos a GERENTE; o relatório completo de movimentações está disponível na tela Histórico / Auditoria.
+### Histórico e retirada para pessoa externa
 
-## Cadastro de chaves e salas
+A tela `pages/historico.php` permite filtrar movimentações por sala, pessoa, período e status. O relatório pode ser impresso ou salvo como PDF. A Dashboard calcula atrasos com base na data prevista e na devolução registrada.
 
-Uma chave precisa estar associada a uma sala já cadastrada. O seletor carrega as salas existentes e apresenta nome, número e bloco; o formulário envia o ID da opção selecionada. Na edição, a sala atual é pré-selecionada. O número da chave é único.
+Na retirada, o porteiro pode selecionar um usuário cadastrado ou informar uma pessoa externa usando a opção **Outro**. Pessoas externas não recebem conta; nome e cargo são armazenados como snapshots da movimentação.
 
-GERENTE pode listar, cadastrar, editar e excluir salas pela administração. Nome, número e bloco são obrigatórios; a combinação número + bloco é única. A exclusão é recusada quando há chaves vinculadas. Para bancos existentes, verifique a migração `migrations/20261118_issue1_salas_constraints.sql` antes de aplicá-la.
+## Banco de dados e migrações
 
-A tabela `chaves` usa `id_sala` e `numero_chave`; nome e bloco vêm de `salas`. `movimentacoes.id_porteiro` é obrigatório mesmo para movimentações feitas por GERENTE, e `data_prevista` permanece opcional. `controller_user_cadastro_adm.php` é um alias de compatibilidade que encaminha para `controller_usuario_cadastrar.php`; nenhuma página atual o chama diretamente.
+O schema contém `salas`, `usuarios`, `chaves`, `movimentacoes` e `observacoes`. Uma chave pertence a uma sala; movimentações guardam a chave, o usuário que a retirou, o porteiro responsável e as datas.
 
-O Login aceita CPF ou e-mail e os cargos GERENTE, PORTEIRO e OUTRO. `password_verify` valida o hash salvo em `usuarios.senha`; a sessão guarda ID, nome e cargo, e os três perfis autorizados iniciam no `dashboard.php`. O cadastro e a administração de usuários são atendidos pelos endpoints PHP do projeto.
+O SQL usa `CREATE TABLE IF NOT EXISTS` e `ON DUPLICATE KEY UPDATE` para permitir reaplicar os dados de demonstração. **Atenção:** ao reimportar, registros de exemplo com IDs ou chaves únicas conflitantes podem ser atualizados para os valores do arquivo. Faça backup e não reimporte em um banco com dados que deseja preservar.
+
+Para um banco existente, faça backup e aplique apenas as migrações cujas alterações ainda não estejam presentes:
+
+- `migrations/20261118_add_nome_chave.sql`: adiciona o nome descritivo da chave.
+- `migrations/20261120_add_external_borrower.sql`: permite retirada por pessoa externa e preserva nome/cargo nas movimentações. Esta migração altera a tabela; não a execute novamente após aplicá-la.
+- `migrations/20261118_issue1_salas_constraints.sql`: exige número e bloco e cria a restrição de unicidade da combinação.
+
+Uma instalação nova deve usar o SQL principal, que já contém as colunas atuais.
+
+## Estrutura
+
+- `config/`: conexão ao banco e autenticação.
+- `controllers/`: endpoints de login, sessão e operações do sistema.
+- `pages/`: telas.
+- `js/` e `css/`: interface e estilos.
+- `assets/`: ícones e imagens.
+- `gerenciamento_chaves_atualizado.sql`: schema e dados de demonstração.
+- `migrations/`: alterações para bancos já existentes.
+
+## Solução de problemas
+
+- **Erro de banco:** confirme que MySQL está iniciado, o banco foi importado, as credenciais estão corretas e `pdo_mysql` está ativo.
+- **PHP não executa:** acesse pela URL do Apache/PHP, não abra o arquivo diretamente.
+- **Login negado:** confira CPF/e-mail, senha, status ativo da conta e se o perfil é `GERENTE`, `PORTEIRO` ou `OUTRO`.
+- **Erro em uma tela ou operação:** verifique os logs do Apache/PHP e as abas **Console** e **Rede** do navegador.

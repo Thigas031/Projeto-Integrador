@@ -6,11 +6,17 @@ const DB_NOME  = 'gerenciamento_chaves';
 const DB_USER  = 'root';
 const DB_SENHA = '';
 
+$dbHost = getenv('DB_HOST') ?: DB_HOST;
+$dbPorta = getenv('DB_PORTA') ?: DB_PORTA;
+$dbNome = getenv('DB_NOME') ?: DB_NOME;
+$dbUser = getenv('DB_USER') ?: DB_USER;
+$dbSenha = getenv('DB_SENHA') !== false ? getenv('DB_SENHA') : DB_SENHA;
+
 try {
     $pdo = new PDO(
-        'mysql:host=' . DB_HOST . ';port=' . DB_PORTA . ';dbname=' . DB_NOME . ';charset=utf8mb4',
-        DB_USER,
-        DB_SENHA,
+        'mysql:host=' . $dbHost . ';port=' . $dbPorta . ';dbname=' . $dbNome . ';charset=utf8mb4',
+        $dbUser,
+        $dbSenha,
         [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
