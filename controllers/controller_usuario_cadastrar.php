@@ -58,7 +58,7 @@ try {
         responderUsuarioCadastrar(409, ['ok' => false, 'message' => 'Já existe um usuário com esse e-mail.']);
     }
 
-    $senhaInicial = substr($cpf, -4);
+    $senhaInicial = substr($cpf, 0, 4);
     $hash = password_hash($senhaInicial, PASSWORD_DEFAULT);
     $stmt = $pdo->prepare(
         "INSERT INTO usuarios (nome, cargo, cpf, telefone, email, senha, ativo)

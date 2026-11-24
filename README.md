@@ -19,6 +19,17 @@ O projeto precisa ser servido por um servidor PHP. Abrir arquivos diretamente (`
 
 Também é possível usar o servidor embutido do PHP com `pdo_mysql`: na raiz do projeto, execute `php -S 127.0.0.1:8000` e abra `http://127.0.0.1:8000/pages/login.html`.
 
+### Acesso por outros computadores na rede local
+
+Para várias pessoas usarem a mesma instalação e o mesmo banco, mantenha Apache, PHP e MySQL em um computador servidor:
+
+1. Conecte o servidor e os computadores clientes à mesma rede local.
+2. No servidor, descubra o endereço IPv4 com `ipconfig`.
+3. Nos clientes, acesse `http://<IP-DO-SERVIDOR>/Projeto-Integrador/` (por exemplo, substituindo o marcador pelo IPv4 encontrado). `localhost` aponta para o próprio computador cliente, não para o servidor.
+4. Se a conexão for bloqueada, permita conexões de entrada para Apache/HTTP na porta 80 no Firewall do Windows e use uma rede confiável.
+
+Com Apache, PHP e MySQL no mesmo servidor, mantenha `DB_HOST=127.0.0.1`: é o PHP no servidor que conecta ao banco; os navegadores clientes não precisam acessar MySQL diretamente. Não exponha a porta 3306 à rede sem uma necessidade específica e configuração segura. Instalar o projeto separadamente em cada computador cria bancos independentes; para compartilhar os mesmos dados, use um único servidor central.
+
 ### Conexão com o banco
 
 `config/config.php` aceita estas variáveis de ambiente:
@@ -35,18 +46,18 @@ Defina-as para o processo do PHP/Apache antes de iniciar o servidor se sua insta
 
 ## Login, contas de teste e sessão
 
-O login aceita CPF ou e-mail. O SQL inclui estas contas fictícias; as senhas são os quatro últimos dígitos do CPF:
+O login aceita CPF ou e-mail. Para novos usuários cadastrados pela aplicação, a senha inicial é formada pelos quatro primeiros dígitos do CPF (incluindo zeros à esquerda). A recuperação de senha redefine a senha usando os mesmos quatro dígitos. As senhas existentes não mudam automaticamente.
 
 | Perfil | CPF | Senha |
 | --- | --- | --- |
-| Gerente | `00000000001` | `0001` |
-| Porteiro | `00000000002` | `0002` |
-| Professor (sem acesso) | `00000000003` | `0003` |
-| Outro | `00000000004` | `0004` |
+| Gerente de Teste | `98765432100` | `9876` |
+| Claudio (Porteiro) | `10553182404` | `1055` |
+| Jeremy (Porteiro) | `10698654306` | `1069` |
+| Vini (Porteiro) | `65898709809` | `6589` |
 
-Não use essas contas em produção. As senhas são armazenadas como hashes e verificadas com `password_verify`.
+O SQL também mantém contas genéricas com hashes pré-gerados; use as contas listadas acima para testar a regra dos quatro primeiros dígitos. Não use contas de demonstração em produção. As senhas são armazenadas como hashes e verificadas com `password_verify`.
 
-O cadastro de usuários cria contas de gerente ou porteiro. A senha inicial e a senha definida pela recuperação correspondem aos quatro primeiros dígitos do CPF.
+O formulário de cadastro permite selecionar os cargos Gerente, Porteiro, Professor e Outro. Embora `Professor` exista no `ENUM` e possa ser cadastrado, ele não está mapeado na política de permissões e não pode entrar no sistema. `Outro` é reconhecido e recebe a união das permissões de gerente e porteiro.
 
 O login regenera o ID da sessão; a opção **Lembrar de mim** mantém o cookie por sete dias. As páginas protegidas e os endpoints validam no servidor se a sessão ainda pertence a um usuário ativo e autorizado. Os controles de perfil no JavaScript ajustam a interface, mas não substituem a autorização do backend.
 
@@ -55,8 +66,6 @@ O login regenera o ID da sessão; a opção **Lembrar de mim** mantém o cookie 
 - **GERENTE:** administra usuários e salas, cadastra/edita/desativa chaves, consulta o dashboard e ocorrências e acessa o histórico e relatórios.
 - **PORTEIRO:** consulta salas e chaves, cadastra chaves, registra retiradas/devoluções, ocorrências e consulta o histórico.
 - **OUTRO:** perfil reconhecido com a união das permissões de gerente e porteiro. Não aparece na busca de pessoas para retirada nem na tela administrativa de usuários.
-
-O cargo `Professor` existe no `ENUM` do banco, mas não é reconhecido pela política de permissões e não pode entrar no sistema.
 
 ### Histórico e retirada para pessoa externa
 
