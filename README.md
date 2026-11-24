@@ -15,7 +15,7 @@ As páginas administrativas e operacionais usam PHP e validam sessão, usuário 
 
 Como alternativa, instale PHP com `pdo_mysql` e inicie `php -S 127.0.0.1:8000` na raiz do projeto; depois abra `http://127.0.0.1:8000/pages/login.html`.
 
-O SQL versionado usa usuários fictícios inativos, sem hashes de senha utilizáveis ou dados pessoais. Eles não podem iniciar sessão. Configure a primeira conta no ambiente local com uma senha própria e um hash gerado pela aplicação antes de ativar o acesso; não coloque credenciais ou dados pessoais no script.
+O SQL inclui contas fictícias ativas para teste local. Para os perfis reconhecidos pelo sistema, use o CPF e a senha formada pelos quatro últimos dígitos do CPF. A conta `Professor` permanece sem acesso porque esse perfil não é reconhecido pela política de permissões atual. Esses dados são exclusivamente para teste; troque as senhas antes de qualquer implantação e não reutilize esses CPFs ou senhas.
 
 O `index.html` da raiz redireciona por caminho relativo a `pages/login.html`, preservando prefixos de publicação como `/nome-do-repositorio/`. Live Server e GitHub Pages são servidores estáticos e não executam PHP; a autenticação e as operações de dados exigem um servidor PHP e o banco configurado.
 

@@ -42,10 +42,10 @@ CREATE TABLE `usuarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `usuarios` (`id_usuario`, `nome`, `cargo`, `cpf`, `telefone`, `email`, `senha`, `ativo`) VALUES
-(1, 'Usuario demonstracao gerente', 'Gerente', '00000000001', NULL, 'gerente@example.invalid', '!demo-account-disabled!', 0),
-(2, 'Usuario demonstracao porteiro', 'Porteiro', '00000000002', NULL, 'porteiro@example.invalid', '!demo-account-disabled!', 0),
-(3, 'Usuario demonstracao professor', 'Professor', '00000000003', NULL, 'professor@example.invalid', '!demo-account-disabled!', 0),
-(4, 'Usuario demonstracao outro', 'Outro', '00000000004', NULL, 'outro@example.invalid', '!demo-account-disabled!', 0);
+(1, 'Usuario demonstracao gerente', 'Gerente', '00000000001', NULL, 'gerente@example.invalid', '$2y$12$yITZemk9QbIx/K0Mvam1kOrvp.2YujzcHn3AH2p/U1Cw0KMg0iLk6', 1),
+(2, 'Usuario demonstracao porteiro', 'Porteiro', '00000000002', NULL, 'porteiro@example.invalid', '$2y$12$CsNzST6FobqYAKdKaUaXROOexop1qDtgUelSiBdGzmLH8mA8vBUM2', 1),
+(3, 'Usuario demonstracao professor', 'Professor', '00000000003', NULL, 'professor@example.invalid', '$2y$12$0oBvCHS73wuNQ5oH4H.xMujKWAtZG9F/glu1rrpIkPf8l4U3U/c3W', 1),
+(4, 'Usuario demonstracao outro', 'Outro', '00000000004', NULL, 'outro@example.invalid', '$2y$12$xjoJ9zcU4YIeBvhE2t3lsO7k3zoayJ/wVgnUbFW79zl.6rKalcLOC', 1);
 
 CREATE TABLE `chaves` (
   `id_chave` int(11) NOT NULL AUTO_INCREMENT,
