@@ -26,7 +26,8 @@ window.AppAccess.run(function () {
         { value: "GERENTE", label: "Gerente Geral" },
         { value: "PORTEIRO", label: "Porteiro" },
         { value: "PROFESSOR", label: "Professor" },
-        { value: "OUTRO", label: "Outro" }
+        { value: "COORDENACAO", label: "Coordenação" },
+        { value: "FUNCIONARIO", label: "Funcionário" }
     ].forEach(function (cargo) {
         const option = document.createElement("option");
         option.value = cargo.value;
@@ -85,7 +86,8 @@ window.AppAccess.run(function () {
                     GERENTE: "Gerente Geral",
                     PORTEIRO: "Porteiro",
                     PROFESSOR: "Professor",
-                    OUTRO: "Outro"
+                    COORDENACAO: "Coordenação",
+                    FUNCIONARIO: "Funcionário"
                 }[user.role] || user.role),
                 createCell(user.phone),
                 createCell(user.email)

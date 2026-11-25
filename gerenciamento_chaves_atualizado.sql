@@ -35,7 +35,7 @@ ON DUPLICATE KEY UPDATE
 CREATE TABLE IF NOT EXISTS `usuarios` (
   `id_usuario` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) NOT NULL,
-  `cargo` enum('Gerente','Porteiro','Professor','Outro') NOT NULL,
+  `cargo` enum('Gerente','Porteiro','Professor','Coordenacao','Funcionario') NOT NULL,
   `cpf` char(11) NOT NULL,
   `telefone` varchar(20) DEFAULT NULL,
   `email` varchar(150) NOT NULL,
@@ -46,15 +46,16 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Usuários de teste conforme os registros utilizados no desenvolvimento.
+-- Uma conta de teste para cada cargo que pode ser cadastrado.
 -- A senha inicial é formada pelos primeiros 4 dígitos do CPF.
 INSERT INTO `usuarios`
   (`id_usuario`, `nome`, `cargo`, `cpf`, `telefone`, `email`, `senha`, `ativo`)
 VALUES
   (23, 'Gerente de Teste', 'Gerente', '11111111111', NULL, 'gerente.teste@example.test', '$2y$10$D.6SuQ1gap5j7UgBrfV4o.2KpZg36jSQA25ym4Um8UjYUpULSrkTC', 1),
-  (24, 'Porteiro Teste 1', 'Porteiro', '22222222222', NULL, 'porteiro1@example.test', '$2y$10$gj/5HR5GjtfxRne3Utt8kOsQn3cN.XymQOQ7K4y5h8w3kD2RBh/dq', 1),
-  (30, 'Porteiro Teste 2', 'Porteiro', '33333333333', NULL, 'porteiro2@example.test', '$2y$10$f54.xWHRRWZnjJo0kzw8humFknAL0QHQ1wX0rb3ewyFfQjCVSQQeC', 1),
-  (33, 'Porteiro Teste 3', 'Porteiro', '44444444444', NULL, 'porteiro3@example.test', '$2y$10$dcwZ1ID8iNUKUxvloKhZOevKlwTt8qps98UKvzzQnU6K7owFcQW22', 1)
+  (24, 'Porteiro de Teste', 'Porteiro', '22222222222', NULL, 'porteiro.teste@example.test', '$2y$10$gj/5HR5GjtfxRne3Utt8kOsQn3cN.XymQOQ7K4y5h8w3kD2RBh/dq', 1),
+  (30, 'Professor de Teste', 'Professor', '33333333333', NULL, 'professor.teste@example.test', '$2y$10$f54.xWHRRWZnjJo0kzw8humFknAL0QHQ1wX0rb3ewyFfQjCVSQQeC', 1),
+  (33, 'Coordenação de Teste', 'Coordenacao', '44444444444', NULL, 'coordenacao.teste@example.test', '$2y$10$dcwZ1ID8iNUKUxvloKhZOevKlwTt8qps98UKvzzQnU6K7owFcQW22', 1),
+  (34, 'Funcionário de Teste', 'Funcionario', '55555555555', NULL, 'funcionario.teste@example.test', '$2y$10$gf8k6Y.pC3sX561weWSmJOXxJqsd1abft6SS/d5/LYiRqaiRxvDum', 1)
 ON DUPLICATE KEY UPDATE
   `nome` = VALUES(`nome`),
   `cargo` = VALUES(`cargo`),

@@ -87,6 +87,14 @@
         };
     }
 
+    function formatRole(role) {
+        const labels = {
+            COORDENACAO: "Coordenação",
+            FUNCIONARIO: "Funcionário"
+        };
+        return labels[String(role || "").trim().toUpperCase()] || role;
+    }
+
     const users = {
         async list() {
             requireProfile("GERENTE", "Somente GERENTE pode consultar a área administrativa de usuários.");
@@ -123,12 +131,12 @@
 
     const keys = {
         async list() {
-            requireProfile("GERENTE,PORTEIRO,OUTRO", "Perfil sem permissão para consultar as chaves.");
+            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar as chaves.");
             const result = await keys.listPage({ pagina: 1 });
             return result.items;
         },
         async listPage(filters) {
-            requireProfile("GERENTE,PORTEIRO,OUTRO", "Perfil sem permissão para consultar as chaves.");
+            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar as chaves.");
             const body = await requestData(
                 "../controllers/controller_chave_listar.php",
                 "GET",
@@ -258,7 +266,7 @@
 
     const dashboard = {
         async summary() {
-            requireProfile("GERENTE,PORTEIRO,OUTRO", "Perfil sem permissão para consultar o dashboard.");
+            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar o dashboard.");
             return apiData("../controllers/controller_dashboard_resumo.php", "GET");
         }
     };
@@ -269,7 +277,7 @@
             return apiData("../controllers/controller_relatorio_gerar.php", "GET", filters || {});
         },
         async history(filters) {
-            requireProfile("GERENTE,PORTEIRO,OUTRO", "Perfil sem permissão para consultar o histórico.");
+            requireProfile("GERENTE,PORTEIRO", "Perfil sem permissão para consultar o histórico.");
             return requestData("../controllers/controller_relatorio_gerar.php", "GET", filters || {});
         }
     };
@@ -305,5 +313,15 @@
         }
     };
 
-    global.AppServices = { users, keys, movements: movementsService, occurrences, rooms, dashboard, reports, auth };
+    global.AppServices = {
+        users,
+        keys,
+        movements: movementsService,
+        occurrences,
+        rooms,
+        dashboard,
+        reports,
+        auth,
+        formatRole
+    };
 }(window));

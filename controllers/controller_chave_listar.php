@@ -4,7 +4,6 @@ require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/auth.php';
 
 exigir_login();
-exigir_login();
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -29,9 +28,7 @@ if (!is_string($statusFiltro) || !is_string($busca) || !is_string($idChave) ||
     responderChaveListar(400, ['ok' => false, 'message' => 'Filtros inválidos.']);
 }
 
-exigir_cargo($idChave === ''
-    ? ['GERENTE', 'PORTEIRO', 'OUTRO']
-    : ['GERENTE', 'PORTEIRO']);
+exigir_cargo(['GERENTE', 'PORTEIRO']);
 
 $statusPermitidos = ['', 'Disponivel', 'Emprestada', 'Atrasada', 'Abertas'];
 if (!in_array($statusFiltro, $statusPermitidos, true)) {

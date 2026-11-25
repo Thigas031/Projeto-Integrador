@@ -4,7 +4,7 @@ require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/auth.php';
 
 exigir_login();
-exigir_cargo(['GERENTE', 'PORTEIRO', 'OUTRO']);
+exigir_cargo(['GERENTE', 'PORTEIRO']);
 
 header('Content-Type: application/json; charset=utf-8');
 

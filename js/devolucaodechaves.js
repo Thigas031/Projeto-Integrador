@@ -37,7 +37,7 @@ window.AppAccess.run(function () {
             return String(item.keyId) === select.value;
         });
         fields.user.value = movement ? movement.userName : "";
-        fields.role.value = movement ? movement.userRole : "";
+        fields.role.value = movement ? window.AppServices.formatRole(movement.userRole) : "";
         fields.date.value = movement ? formatDate(movement.withdrawnAt) : "";
         fields.time.value = movement ? formatTime(movement.withdrawnAt) : "";
     }

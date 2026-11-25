@@ -51,13 +51,14 @@ O login aceita CPF ou e-mail. Para novos usuários cadastrados pela aplicação,
 | Perfil | CPF | Senha |
 | --- | --- | --- |
 | Gerente de Teste | `11111111111` | `1111` |
-| Porteiro Teste 1 | `22222222222` | `2222` |
-| Porteiro Teste 2 | `33333333333` | `3333` |
-| Porteiro Teste 3 | `44444444444` | `4444` |
+| Porteiro de Teste | `22222222222` | `2222` |
+| Professor de Teste | `33333333333` | `3333` |
+| Coordenação de Teste | `44444444444` | `4444` |
+| Funcionário de Teste | `55555555555` | `5555` |
 
 Use as contas listadas para testar a regra dos quatro primeiros dígitos. Não use contas de demonstração em produção. As senhas são armazenadas como hashes e verificadas com `password_verify`.
 
-O formulário de cadastro permite selecionar os cargos Gerente, Porteiro, Professor e Outro. Embora `Professor` exista no `ENUM` e possa ser cadastrado, ele não está mapeado na política de permissões e não pode entrar no sistema. `Outro` é reconhecido e recebe a união das permissões de gerente e porteiro.
+Somente os cargos **Gerente** e **Porteiro** podem entrar no sistema. O cadastro também permite **Professor**, **Coordenação** e **Funcionário**; esses perfis não recebem acesso, mas podem ser selecionados como responsáveis por uma retirada de chave. A opção “Outro” existe somente no formulário de retirada para registrar uma pessoa sem cadastro.
 
 O login regenera o ID da sessão; a opção **Lembrar de mim** mantém o cookie por sete dias. As páginas protegidas e os endpoints validam no servidor se a sessão ainda pertence a um usuário ativo e autorizado. Os controles de perfil no JavaScript ajustam a interface, mas não substituem a autorização do backend.
 
@@ -65,7 +66,7 @@ O login regenera o ID da sessão; a opção **Lembrar de mim** mantém o cookie 
 
 - **GERENTE:** administra usuários e salas, cadastra/edita/desativa chaves, consulta o dashboard e ocorrências e acessa o histórico e relatórios.
 - **PORTEIRO:** consulta salas e chaves, cadastra chaves, registra retiradas/devoluções, ocorrências e consulta o histórico.
-- **OUTRO:** perfil reconhecido com a união das permissões de gerente e porteiro. Não aparece na busca de pessoas para retirada nem na tela administrativa de usuários.
+- **Demais cargos:** não podem iniciar sessão nem acessar páginas ou endpoints protegidos; usuários ativos com esses cargos aparecem na busca para atribuição da retirada da chave.
 
 ### Histórico e retirada para pessoa externa
 
@@ -84,6 +85,7 @@ Para um banco existente, faça backup e aplique apenas as migrações cujas alte
 - `migrations/20261118_add_nome_chave.sql`: adiciona o nome descritivo da chave.
 - `migrations/20261120_add_external_borrower.sql`: permite retirada por pessoa externa e preserva nome/cargo nas movimentações. Esta migração altera a tabela; não a execute novamente após aplicá-la.
 - `migrations/20261118_issue1_salas_constraints.sql`: exige número e bloco e cria a restrição de unicidade da combinação.
+- `migrations/20261125_restrict_login_and_add_staff_roles.sql`: adiciona Coordenação e Funcionário, converte contas antigas de Outro para Funcionário e remove Outro dos cargos cadastráveis.
 
 Uma instalação nova deve usar o SQL principal, que já contém as colunas atuais.
 
@@ -101,5 +103,5 @@ Uma instalação nova deve usar o SQL principal, que já contém as colunas atua
 
 - **Erro de banco:** confirme que MySQL está iniciado, o banco foi importado, as credenciais estão corretas e `pdo_mysql` está ativo.
 - **PHP não executa:** acesse pela URL do Apache/PHP, não abra o arquivo diretamente.
-- **Login negado:** confira CPF/e-mail, senha, status ativo da conta e se o perfil é `GERENTE`, `PORTEIRO` ou `OUTRO`.
+- **Login negado:** confira CPF/e-mail, senha e status ativo. Apenas `GERENTE` e `PORTEIRO` têm acesso ao sistema.
 - **Erro em uma tela ou operação:** verifique os logs do Apache/PHP e as abas **Console** e **Rede** do navegador.

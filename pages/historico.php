@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../css/menu-lateral.css">
     <link rel="stylesheet" href="../css/historico.css?v=history-audit-1">
 </head>
-<body data-profiles="GERENTE,PORTEIRO,OUTRO" data-auth-state="pending">
+<body data-profiles="GERENTE,PORTEIRO" data-auth-state="pending">
     <div id="menu-lateral-container" data-page="historico" data-menu-url="menu-lateral.html"></div>
 
     <main class="app-page">
@@ -96,12 +96,12 @@
         </div>
     </main>
 
-    <script src="../js/app-profile.js?v=profile-matrix-2"></script>
-    <script src="../js/app-services.js?v=history-audit-1"></script>
+    <script src="../js/app-profile.js?v=staff-access-1"></script>
+    <script src="../js/app-services.js?v=staff-role-label-1"></script>
     <script src="../js/key-display.js?v=key-identity-2"></script>
     <script src="../js/page-access.js"></script>
     <script src="../js/form-feedback.js"></script>
-    <script src="../js/menu-lateral.js?v=profile-matrix-2" defer></script>
-    <script src="../js/historico.js?v=history-audit-1"></script>
+    <script src="../js/menu-lateral.js?v=staff-access-1" defer></script>
+    <script src="../js/historico.js?v=staff-role-label-1"></script>
 </body>
 </html>

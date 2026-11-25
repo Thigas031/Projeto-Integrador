@@ -1,7 +1,7 @@
 (function () {
     function aplicarPerfil(menu, links, container, usuario) {
         const perfil = String(usuario.role || "").trim().toUpperCase();
-        if (!window.AppProfile.isAllowed("GERENTE,PORTEIRO,OUTRO")) {
+        if (!window.AppProfile.isAllowed("GERENTE,PORTEIRO")) {
             throw new Error("O servidor retornou um cargo não suportado pelo menu.");
         }
 

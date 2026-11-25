@@ -71,8 +71,8 @@ window.AppAccess.run(function () {
                 keyName: movement.keyName || "Chave"
             })));
             row.appendChild(keyCell);
-            addTextCell(row, movement.userName, movement.userRole);
-            addTextCell(row, movement.porterName, movement.porterRole);
+            addTextCell(row, movement.userName, window.AppServices.formatRole(movement.userRole));
+            addTextCell(row, movement.porterName, window.AppServices.formatRole(movement.porterRole));
             addTextCell(row, formatDateTime(movement.withdrawnAt));
             addTextCell(row, formatDateTime(movement.dueAt));
             addTextCell(row, formatDateTime(movement.returnedAt));
@@ -161,7 +161,9 @@ window.AppAccess.run(function () {
                 response.options.usuarios,
                 "Todas as pessoas",
                 function (user) { return user.filterId; },
-                function (user) { return user.name + (user.role ? " — " + user.role : ""); },
+                function (user) {
+                    return user.name + (user.role ? " — " + window.AppServices.formatRole(user.role) : "");
+                },
                 filters.usuario
             );
 
@@ -207,9 +209,15 @@ window.AppAccess.run(function () {
     }
 
     function reportRow(movement) {
-        const person = [movement.userName || "Responsável não informado", movement.userRole]
+        const person = [
+            movement.userName || "Responsável não informado",
+            window.AppServices.formatRole(movement.userRole)
+        ]
             .filter(Boolean).join(" — ");
-        const porter = [movement.porterName || "Não informado", movement.porterRole]
+        const porter = [
+            movement.porterName || "Não informado",
+            window.AppServices.formatRole(movement.porterRole)
+        ]
             .filter(Boolean).join(" — ");
         const room = [movement.roomName, movement.roomNumber, movement.roomBlock]
             .filter(Boolean).join(" · ");

@@ -30,10 +30,19 @@ try {
     $stmtUsuarios = $pdo->prepare(
         "SELECT id_usuario AS id, nome AS name, cargo AS role
          FROM usuarios
-        WHERE ativo = 1 AND cargo <> 'Outro'
+         WHERE ativo = 1
          ORDER BY nome ASC"
     );
     $stmtUsuarios->execute([]);
+    $usuarios = $stmtUsuarios->fetchAll(PDO::FETCH_ASSOC);
+    $rotulosCargo = [
+        'Coordenacao' => 'Coordenação',
+        'Funcionario' => 'Funcionário',
+    ];
+    foreach ($usuarios as &$usuario) {
+        $usuario['role'] = $rotulosCargo[$usuario['role']] ?? $usuario['role'];
+    }
+    unset($usuario);
 
     $stmtChaves = $pdo->prepare(
         "SELECT k.id_chave AS id, k.id_sala AS salaId, k.nome_chave AS name,
@@ -55,7 +64,7 @@ try {
         'ok' => true,
         'data' => [
             'salas' => $stmtSalas->fetchAll(PDO::FETCH_ASSOC),
-            'usuarios' => $stmtUsuarios->fetchAll(PDO::FETCH_ASSOC),
+            'usuarios' => $usuarios,
             'chaves' => $stmtChaves->fetchAll(PDO::FETCH_ASSOC),
         ],
     ]);

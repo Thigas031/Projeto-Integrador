@@ -4,7 +4,7 @@ require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/auth.php';
 
 exigir_login();
-exigir_cargo(['GERENTE', 'PORTEIRO', 'OUTRO']);
+exigir_cargo(['GERENTE', 'PORTEIRO']);
 
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     http_response_code(405);

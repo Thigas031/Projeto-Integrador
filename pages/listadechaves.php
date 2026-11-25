@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . '/../controllers/controller_page_access.php'; requirePageAccess(['GERENTE', 'PORTEIRO', 'OUTRO']); ?>
+<?php require_once __DIR__ . '/../controllers/controller_page_access.php'; requirePageAccess(['GERENTE', 'PORTEIRO']); ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../css/menu-lateral.css">
     <link rel="stylesheet" href="../css/listadechaves.css?v=key-identity-2">
 </head>
-<body data-profiles="GERENTE,PORTEIRO,OUTRO" data-auth-state="pending">
+<body data-profiles="GERENTE,PORTEIRO" data-auth-state="pending">
     <div id="menu-lateral-container" data-page="lista-chaves" data-menu-url="menu-lateral.html"></div>
     <main>
         <header class="cabecalho">
@@ -67,12 +67,12 @@
 
     </main>
 
-    <script src="../js/app-profile.js?v=profile-matrix-2"></script>
-    <script src="../js/app-services.js?v=key-name-1"></script>
+    <script src="../js/app-profile.js?v=staff-access-1"></script>
+    <script src="../js/app-services.js?v=staff-access-1"></script>
     <script src="../js/key-display.js?v=key-identity-2"></script>
     <script src="../js/page-access.js"></script>
     <script src="../js/form-feedback.js"></script>
-    <script src="../js/menu-lateral.js?v=profile-matrix-2" defer></script>
+    <script src="../js/menu-lateral.js?v=staff-access-1" defer></script>
     <script src="../js/listadechaves.js?v=key-identity-2"></script>
 </body>
 </html>

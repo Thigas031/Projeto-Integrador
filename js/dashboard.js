@@ -93,7 +93,7 @@ window.AppAccess.run(function (user) {
         const person = document.createElement("p");
         person.className = "movement-person";
         person.textContent = movement.userName
-            ? movement.userName + (movement.userRole ? " — " + movement.userRole : "")
+            ? movement.userName + (movement.userRole ? " — " + window.AppServices.formatRole(movement.userRole) : "")
             : "Responsável não informado";
         const status = document.createElement("span");
         status.className = "movement-status";
